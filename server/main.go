@@ -5,12 +5,24 @@ package main
 import (
 	"net/http"
 
+	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/thinkerou/favicon"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var router *gin.Engine
+
+func deinit(sigs chan os.Signal) {
+	fmt.Println("Deinit daemon start")
+	sig := <-sigs
+	fmt.Println(sig)
+	fmt.Println("db disconnect")
+	os.Exit(1)
+}
 
 func main() {
 	// Set Gin to production mode
@@ -32,6 +44,11 @@ func main() {
 
 	// Initialize the routes
 	initializeRoutes()
+
+	// add deinit when Ctrl+C to term process
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	go deinit(sigs)
 
 	// Start serving the application
 	router.Run(":3000")
