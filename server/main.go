@@ -3,6 +3,8 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"fmt"
@@ -14,7 +16,13 @@ import (
 	"syscall"
 )
 
+// global variable
+var gConfigSetting map[string]interface{}
 var router *gin.Engine
+
+const (
+	configFile = "config.json"
+)
 
 func deinit(sigs chan os.Signal) {
 	fmt.Println("Deinit daemon start")
@@ -24,7 +32,40 @@ func deinit(sigs chan os.Signal) {
 	os.Exit(1)
 }
 
+func configParse() {
+	// check config file size
+	configInfo, err := os.Lstat(configFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// open config.json
+	file, err := os.OpenFile(configFile, os.O_RDONLY, 0)
+	defer file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// read all to data
+	data := make([]byte, configInfo.Size())
+	count, err := file.Read(data)
+	if err != nil {
+		log.Fatal(err, count)
+	}
+
+	//fmt.Printf("read %d bytes: %q\n", count, data[:count])
+
+	if err := json.Unmarshal(data, &gConfigSetting); err != nil {
+		panic(err)
+	}
+	fmt.Println(gConfigSetting["APP_NAME"])
+	fmt.Println(gConfigSetting["DB_HOST"])
+}
+
 func main() {
+	// config parser
+	configParse()
+
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
 
