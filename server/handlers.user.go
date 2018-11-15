@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/pborman/uuid"
-	//"log"
+	"log"
 )
 
 func generateSessionToken() string {
@@ -74,6 +74,7 @@ func (cws *careWorkerServer) logout(c *gin.Context) {
 
 func (cws *careWorkerServer) showRegistrationPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
+	log.Println("showRegistrationPage")
 	render(c, gin.H{
 		"title": "Register"}, "register.html")
 }
@@ -82,6 +83,19 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	// Obtain the POSTed username and password values
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+
+	log.Printf("register POST username:%s, password:%s\n", username, password)
+	// Obtain the POSTed JSON username and password values
+	if username == "" && password == "" {
+		objA := user{Username: username, Password: password, Salt: ""}
+		if err := c.ShouldBindJSON(&objA); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		log.Printf("register JSON username:%s, password:%s\n", objA.Username, objA.Password)
+		username = objA.Username
+		password = objA.Password
+	}
 
 	if _, err := registerNewUser(cws, username, password); err == nil {
 		// If the user is created, set the token in a cookie and log the user in
@@ -94,7 +108,7 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 		session.Set("username", username)
 		session.Save()
 
-		//log.Printf("username %s\n", username)
+		log.Printf("%s: register success\n", username)
 
 		render(c, gin.H{
 			"title": "Successful registration & Login"}, "login-successful.html")

@@ -5,10 +5,18 @@ package main
 import (
 	"errors"
 	"gopkg.in/mgo.v2/bson"
+	"log"
 	"strings"
 	"time"
 )
 
+/*
+// Binding from JSON
+type Login struct {
+	User     string `form:"user" json:"user" xml:"user"  binding:"required"`
+	Password string `form:"password" json:"password" xml:"password" binding:"required"`
+}
+*/
 type user struct {
 	Id       bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 	Username string        `json:"username" form:"username" binding:"required" bson:"username"`
@@ -35,8 +43,10 @@ func isUserValid(cws *careWorkerServer, username, password string) bool {
 // NOTE: For this demo, we
 func registerNewUser(cws *careWorkerServer, username, password string) (*user, error) {
 	if strings.TrimSpace(password) == "" {
+		log.Printf("registerNewUser password null\n")
 		return nil, errors.New("The password can't be empty")
 	} else if !isUsernameAvailable(cws, username) {
+		log.Printf("registerNewUser username exlist\n")
 		return nil, errors.New("The username isn't available")
 	}
 
@@ -48,6 +58,7 @@ func registerNewUser(cws *careWorkerServer, username, password string) (*user, e
 
 	cws.users.Insert(&u)
 
+	log.Printf("registerNewUser success\n")
 	return &u, nil
 }
 

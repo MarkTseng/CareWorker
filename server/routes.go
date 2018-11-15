@@ -9,7 +9,7 @@ func initializeRoutes(cws *careWorkerServer) {
 	cws.router.Use(cws.setUserStatus())
 
 	// Handle the index route
-	cws.router.GET("/", cws.showIndexPage)
+	//cws.router.GET("/", cws.showIndexPage)
 
 	// Handle css static file
 	cws.router.Static("/css", "public/static/css")

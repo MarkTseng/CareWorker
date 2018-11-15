@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/thinkerou/favicon"
@@ -118,8 +119,11 @@ func main() {
 	cws.router.Use(favicon.New("public/static/photos/favicon.ico"))
 
 	// Set sessions for keeping user info
-	store := sessions.NewCookieStore([]byte("secret"))
-	cws.router.Use(sessions.Sessions("mysession", store))
+	store := sessions.NewCookieStore([]byte("secretSession"))
+	cws.router.Use(sessions.Sessions("careWorkerSession", store))
+
+	// static html and angularjs
+	cws.router.Use(static.Serve("/", static.LocalFile("public", true)))
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
