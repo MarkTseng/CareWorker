@@ -3,96 +3,138 @@
 package main
 
 import (
+	"bytes"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
-	"log"
-	"net/http"
-
 	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/thinkerou/favicon"
+	"gopkg.in/mgo.v2"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-// global variable
-var gConfigSetting map[string]interface{}
-var router *gin.Engine
-
+// global const variable
 const (
 	configFile = "config.json"
+	MongoDBUrl = "mongodb://localhost:27017/articles_demo_dev"
 )
 
-func deinit(sigs chan os.Signal) {
+type careWorkerServer struct {
+	// mgo objs
+	db        *mgo.Database
+	dbSession *mgo.Session
+	articles  *mgo.Collection
+	users     *mgo.Collection
+	counters  *mgo.Collection
+	// gin objs
+	router        *gin.Engine
+	userRoutes    *gin.RouterGroup
+	articleRoutes *gin.RouterGroup
+	// private objs
+	ConfigSetting map[string]interface{}
+}
+
+func deinit(sigs chan os.Signal, cws *careWorkerServer) {
 	fmt.Println("Deinit daemon start")
 	sig := <-sigs
 	fmt.Println(sig)
 	fmt.Println("db disconnect")
+	cws.dbSession.Close()
 	os.Exit(1)
 }
 
-func configParse() {
-	// check config file size
-	configInfo, err := os.Lstat(configFile)
+func DBconnect(cws *careWorkerServer) {
+	session, err := mgo.Dial(MongoDBUrl)
+	if err != nil {
+		panic(err)
+		os.Exit(2)
+	}
+
+	cws.dbSession = session
+	dbName := fmt.Sprintf("%s", cws.ConfigSetting["DB_DATABASE"])
+	db := session.DB(dbName)
+	cws.db = db
+	cws.articles = cws.db.C("articles")
+	cws.users = cws.db.C("users")
+	cws.counters = cws.db.C("counters")
+}
+
+func configParse(cws *careWorkerServer) {
+	content, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		log.Fatal(err)
+		os.Exit(1)
 	}
 
-	// open config.json
-	file, err := os.OpenFile(configFile, os.O_RDONLY, 0)
-	defer file.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// read all to data
-	data := make([]byte, configInfo.Size())
-	count, err := file.Read(data)
-	if err != nil {
-		log.Fatal(err, count)
-	}
-
-	//fmt.Printf("read %d bytes: %q\n", count, data[:count])
-
-	if err := json.Unmarshal(data, &gConfigSetting); err != nil {
+	if err := json.Unmarshal(content, &cws.ConfigSetting); err != nil {
 		panic(err)
 	}
-	fmt.Println(gConfigSetting["APP_NAME"])
-	fmt.Println(gConfigSetting["DB_HOST"])
+
+	for k := range cws.ConfigSetting {
+		fmt.Printf("%s=%s\n", k, cws.ConfigSetting[k])
+	}
+}
+
+func genSaltString() string {
+	buf := new(bytes.Buffer)
+	io.CopyN(buf, rand.Reader, 32)
+	return hex.EncodeToString(buf.Bytes())
+}
+
+func DoHash(pass, salt string) string {
+	h := sha256.New()
+	h.Write([]byte(pass))
+	h.Write([]byte(salt))
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func main() {
+	// initial cws object
+	cws := new(careWorkerServer)
+
 	// config parser
-	configParse()
+	configParse(cws)
+
+	// connect to DB server
+	DBconnect(cws)
 
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
 
 	// Set the router as the default one provided by Gin
-	router = gin.Default()
+	//router = gin.Default()
+	cws.router = gin.Default()
 
 	// Set favicon.ico
-	router.Use(favicon.New("public/static/photos/favicon.ico"))
+	cws.router.Use(favicon.New("public/static/photos/favicon.ico"))
 
 	// Set sessions for keeping user info
 	store := sessions.NewCookieStore([]byte("secret"))
-	router.Use(sessions.Sessions("mysession", store))
+	cws.router.Use(sessions.Sessions("mysession", store))
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
-	router.LoadHTMLGlob("public/templates/*")
+	cws.router.LoadHTMLGlob("public/templates/*")
 
 	// Initialize the routes
-	initializeRoutes()
+	initializeRoutes(cws)
 
 	// add deinit when Ctrl+C to term process
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	go deinit(sigs)
+	go deinit(sigs, cws)
 
 	// Start serving the application
-	router.Run(":3000")
+	cws.router.Run(fmt.Sprintf(":%s", cws.ConfigSetting["APP_SERVER_PORT"]))
 }
 
 // Render one of HTML, JSON or CSV based on the 'Accept' header of the request

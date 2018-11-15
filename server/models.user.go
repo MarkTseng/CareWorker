@@ -4,35 +4,28 @@ package main
 
 import (
 	"errors"
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"strings"
-)
-
-const (
-	MongoDBUrl = "mongodb://localhost:27017/articles_demo_dev"
+	"time"
 )
 
 type user struct {
 	Id       bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 	Username string        `json:"username" form:"username" binding:"required" bson:"username"`
 	Password string        `json:"password" form:"password" binding:"required" bson:"password"`
+	Salt     string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
+	login    time.Time
 }
 
 // Check if the username and password combination is valid
-func isUserValid(username, password string) bool {
-	session, err := mgo.Dial(MongoDBUrl)
-	if err != nil {
-		panic(err)
-	}
+func isUserValid(cws *careWorkerServer, username, password string) bool {
+	result := new(user)
+	cws.users.Find(bson.M{"username": username}).One(&result)
 
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("articles_demo_dev").C("users")
-	result := user{}
-	err = c.Find(bson.M{"username": username}).One(&result)
+	// use password from http parameter
+	salt_password := DoHash(password, result.Salt)
 
-	if result.Username == username && result.Password == password {
+	if result.Username == username && result.Password == salt_password {
 		return true
 	}
 	return false
@@ -40,41 +33,28 @@ func isUserValid(username, password string) bool {
 
 // Register a new user with the given username and password
 // NOTE: For this demo, we
-func registerNewUser(username, password string) (*user, error) {
+func registerNewUser(cws *careWorkerServer, username, password string) (*user, error) {
 	if strings.TrimSpace(password) == "" {
 		return nil, errors.New("The password can't be empty")
-	} else if !isUsernameAvailable(username) {
+	} else if !isUsernameAvailable(cws, username) {
 		return nil, errors.New("The username isn't available")
 	}
 
-	u := user{Username: username, Password: password}
+	// generate salt
+	salt := genSaltString()
+	// get salt password with sha256 hexcode
+	salt_pass := DoHash(password, salt)
+	u := user{Username: username, Password: salt_pass, Salt: salt}
 
-	session, err := mgo.Dial(MongoDBUrl)
-	if err != nil {
-		panic(err)
-	}
-
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("articles_demo_dev").C("users")
-	err = c.Insert(&u)
+	cws.users.Insert(&u)
 
 	return &u, nil
 }
 
 // Check if the supplied username is available
-func isUsernameAvailable(username string) bool {
-	session, err := mgo.Dial(MongoDBUrl)
-	if err != nil {
-		panic(err)
-	}
-
-	defer session.Close()
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("articles_demo_dev").C("users")
+func isUsernameAvailable(cws *careWorkerServer, username string) bool {
 	result := user{}
-	err = c.Find(bson.M{"username": username}).One(&result)
-
+	cws.users.Find(bson.M{"username": username}).One(&result)
 	if result.Username == username {
 		return false
 	}

@@ -10,8 +10,8 @@ import (
 	"strconv"
 )
 
-func showIndexPage(c *gin.Context) {
-	articles := getAllArticles()
+func (cws *careWorkerServer) showIndexPage(c *gin.Context) {
+	articles := getAllArticles(cws)
 
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
@@ -19,20 +19,18 @@ func showIndexPage(c *gin.Context) {
 		"payload": articles}, "index.html")
 }
 
-func showArticleCreationPage(c *gin.Context) {
+func (cws *careWorkerServer) showArticleCreationPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "Create New Article"}, "create-article.html")
 }
 
-func getArticle(c *gin.Context) {
+func (cws *careWorkerServer) getArticle(c *gin.Context) {
 	// Check if the article ID is valid
-	//log.Print(c.Param("article_id"))
 	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
 		// Check if the article exists
-		if article, err := getArticleByID(uint64(articleID)); err == nil {
-			// Call the render function with the title, article and the name of the
-			// template
+		if article, err := getArticleByID(cws, uint64(articleID)); err == nil {
+			// Call the render function with the title, article and the name of the template
 			render(c, gin.H{
 				"title":   article.Title,
 				"payload": article}, "article.html")
@@ -48,7 +46,7 @@ func getArticle(c *gin.Context) {
 	}
 }
 
-func createArticle(c *gin.Context) {
+func (cws *careWorkerServer) createArticle(c *gin.Context) {
 	// Obtain the POSTed title and content values
 	title := c.PostForm("title")
 	content := c.PostForm("content")
@@ -59,7 +57,7 @@ func createArticle(c *gin.Context) {
 	//log.Printf("createArticle username %s\n", username)
 
 	if username != nil {
-		if a, err := createNewArticle(title, content, username.(string)); err == nil {
+		if a, err := createNewArticle(cws, title, content, username.(string)); err == nil {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",
@@ -75,7 +73,7 @@ func createArticle(c *gin.Context) {
 
 }
 
-func deleteArticle(c *gin.Context) {
+func (cws *careWorkerServer) deleteArticle(c *gin.Context) {
 	id := c.Param("id")
 	//log.Printf("deleteArticle id: %s\n", id)
 
@@ -85,7 +83,7 @@ func deleteArticle(c *gin.Context) {
 	//log.Printf("deleteArticle username %s\n", username)
 
 	if username != nil {
-		if err := deleteOldArticle(id, username.(string)); err == nil {
+		if err := deleteOldArticle(cws, id, username.(string)); err == nil {
 			// If the article is delete successfully, show success message
 			render(c, gin.H{
 				"title": "Submission Successful",
@@ -101,7 +99,7 @@ func deleteArticle(c *gin.Context) {
 
 }
 
-func updateArticle(c *gin.Context) {
+func (cws *careWorkerServer) updateArticle(c *gin.Context) {
 	// Obtain the POSTed title and content values
 	title := c.PostForm("title")
 	content := c.PostForm("content")
@@ -116,7 +114,7 @@ func updateArticle(c *gin.Context) {
 	//log.Printf("createArticle username %s\n", username)
 
 	if username != nil {
-		if a, err := updateOldArticle(id, title, content, username.(string)); err == nil {
+		if a, err := updateOldArticle(cws, id, title, content, username.(string)); err == nil {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",
