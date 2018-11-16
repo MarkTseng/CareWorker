@@ -117,7 +117,6 @@ askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionS
 			for ( var i = 0; i < arguments.length; i++) {
 				s += arguments[i];
 			}
-
 			return SHA256.hex(s);
 
 		}
@@ -133,17 +132,14 @@ askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionS
 				credentials.Password = "";
 
 				// Get a salt for this session
-				$http.post("/u/register/salt", {"Username" : u})
+				$http.post("/u/register/salt", {"username" : u})
 					.success(function(user_salt) {
-						$http.post("/u/salt", {"Username" : u})
-							.success(function(session_salt) {
-
 								// Produce the "Password" to send
-								p = protect (u + p, user_salt.Salt);
-								p = hash( p , session_salt)
+								p = protect (u + p, user_salt.salt);
+								//p = hash( p , user_salt.salt)
 
 								// Try to login
-								var login = $http.post("/u/login", {"Username": u, "Password": p, "Salt": session_salt});
+								var login = $http.post("/u/login", {"username": u, "password": p, "salt": user_salt.salt});
 
 								login.success(cacheSession);
 								login.success(FlashService.clear);
@@ -151,13 +147,11 @@ askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionS
 
 								if ( typeof fn === "function" )
 									login.success(fn);
-							}
-						)
 					}
 				)
 			},
 			logout: function (fn) {
-				var logout =  $http.post("/logout");
+				var logout =  $http.get("/u/logout");
 				logout.success(uncacheSession);
 
 				if ( typeof fn === "function" )

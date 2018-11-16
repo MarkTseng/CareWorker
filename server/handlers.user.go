@@ -32,6 +32,19 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
+	log.Printf("performLogin POST username:%s, password:%s\n", username, password)
+	// Obtain the POSTed JSON username and password values
+	if username == "" && password == "" {
+		objA := new(user)
+		if err := c.ShouldBindJSON(&objA); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		log.Printf("performLogin JSON username:%s, password:%s\n", objA.Username, objA.Password)
+		username = objA.Username
+		password = objA.Password
+	}
+
 	// Check if the username/password combination is valid
 	if isUserValid(cws, username, password) {
 		// If the username/password is valid set the token in a cookie
@@ -59,6 +72,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 }
 
 func (cws *careWorkerServer) logout(c *gin.Context) {
+	log.Printf("logout\n")
 	// Clear the cookie
 	c.SetCookie("token", "", -1, "", "", false, true)
 	session := sessions.Default(c)
@@ -83,21 +97,23 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	// Obtain the POSTed username and password values
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	salt := c.PostForm("salt")
 
-	log.Printf("register POST username:%s, password:%s\n", username, password)
+	log.Printf("register POST username:%s, password:%s, salt:%s\n", username, password, salt)
 	// Obtain the POSTed JSON username and password values
 	if username == "" && password == "" {
-		objA := user{Username: username, Password: password, Salt: ""}
+		objA := new(user)
 		if err := c.ShouldBindJSON(&objA); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		log.Printf("register JSON username:%s, password:%s\n", objA.Username, objA.Password)
+		log.Printf("register JSON username:%s, password:%s, salt:%s\n", objA.Username, objA.Password, objA.Salt)
 		username = objA.Username
 		password = objA.Password
+		salt = objA.Salt
 	}
 
-	if _, err := registerNewUser(cws, username, password); err == nil {
+	if _, err := registerNewUser(cws, username, password, salt); err == nil {
 		// If the user is created, set the token in a cookie and log the user in
 		token := generateSessionToken()
 		c.SetCookie("token", token, 3600, "", "", false, true)
@@ -120,5 +136,27 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 			"ErrorTitle":   "Registration Failed",
 			"ErrorMessage": err.Error()})
 
+	}
+}
+
+func (cws *careWorkerServer) registerSalt(c *gin.Context) {
+	// Obtain the POSTed username and password values
+	username := c.PostForm("username")
+
+	log.Printf("register POST username:%s\n")
+	// Obtain the POSTed JSON username and password values
+	if username == "" {
+		objA := new(user)
+		if err := c.ShouldBindJSON(&objA); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		log.Printf("register JSON username:%s\n", objA.Username)
+		username = objA.Username
+		if queryUser, err := isUserSaleAvailable(cws, username); err == true {
+			log.Println(queryUser)
+			log.Println(err)
+			c.JSON(http.StatusOK, queryUser)
+		}
 	}
 }

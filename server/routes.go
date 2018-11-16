@@ -41,6 +41,10 @@ func initializeRoutes(cws *careWorkerServer) {
 		// Handle POST requests at /u/register
 		// Ensure that the user is not logged in by using the middleware
 		cws.userRoutes.POST("/register", cws.ensureNotLoggedIn(), cws.register)
+
+		// Handle POST requests at /u/register
+		// Ensure that the user is not logged in by using the middleware
+		cws.userRoutes.POST("/register/salt", cws.ensureNotLoggedIn(), cws.registerSalt)
 	}
 
 	// Group article related routes together

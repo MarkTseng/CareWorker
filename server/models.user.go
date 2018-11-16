@@ -30,10 +30,7 @@ func isUserValid(cws *careWorkerServer, username, password string) bool {
 	result := new(user)
 	cws.users.Find(bson.M{"username": username}).One(&result)
 
-	// use password from http parameter
-	salt_password := DoHash(password, result.Salt)
-
-	if result.Username == username && result.Password == salt_password {
+	if result.Username == username && result.Password == password {
 		return true
 	}
 	return false
@@ -41,7 +38,7 @@ func isUserValid(cws *careWorkerServer, username, password string) bool {
 
 // Register a new user with the given username and password
 // NOTE: For this demo, we
-func registerNewUser(cws *careWorkerServer, username, password string) (*user, error) {
+func registerNewUser(cws *careWorkerServer, username, password, salt string) (*user, error) {
 	if strings.TrimSpace(password) == "" {
 		log.Printf("registerNewUser password null\n")
 		return nil, errors.New("The password can't be empty")
@@ -50,12 +47,7 @@ func registerNewUser(cws *careWorkerServer, username, password string) (*user, e
 		return nil, errors.New("The username isn't available")
 	}
 
-	// generate salt
-	salt := genSaltString()
-	// get salt password with sha256 hexcode
-	salt_pass := DoHash(password, salt)
-	u := user{Username: username, Password: salt_pass, Salt: salt}
-
+	u := user{Username: username, Password: password, Salt: salt}
 	cws.users.Insert(&u)
 
 	log.Printf("registerNewUser success\n")
@@ -70,4 +62,14 @@ func isUsernameAvailable(cws *careWorkerServer, username string) bool {
 		return false
 	}
 	return true
+}
+
+// Check if the supplied username is available
+func isUserSaleAvailable(cws *careWorkerServer, username string) (*user, bool) {
+	result := new(user)
+	cws.users.Find(bson.M{"username": username}).One(&result)
+	if result.Username == username {
+		return result, true
+	}
+	return nil, false
 }
