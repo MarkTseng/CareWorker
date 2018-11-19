@@ -58,10 +58,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		session.Save()
 
 		//log.Printf("username %s\n", username)
-
-		render(c, gin.H{
-			"title": "Successful Login"}, "login-successful.html")
-
+		c.JSON(http.StatusOK, "Success")
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
@@ -127,8 +124,7 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 				session.Save()
 		*/
 		log.Printf("%s: register success\n", username)
-
-		c.Redirect(http.StatusTemporaryRedirect, "/#/login")
+		c.JSON(http.StatusOK, "Success")
 
 	} else {
 		// If the username/password combination is invalid,
@@ -155,9 +151,11 @@ func (cws *careWorkerServer) registerSalt(c *gin.Context) {
 		log.Printf("register JSON username:%s\n", objA.Username)
 		username = objA.Username
 		if queryUser, err := isUserSaleAvailable(cws, username); err == true {
+			Salt := make(map[string]string)
+			Salt["salt"] = queryUser.Salt
 			log.Println(queryUser)
 			log.Println(err)
-			c.JSON(http.StatusOK, queryUser)
+			c.JSON(http.StatusOK, Salt)
 		}
 	}
 }
