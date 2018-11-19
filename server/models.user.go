@@ -26,14 +26,14 @@ type user struct {
 }
 
 // Check if the username and password combination is valid
-func isUserValid(cws *careWorkerServer, username, password string) bool {
+func isUserValid(cws *careWorkerServer, username, password string) *user {
 	result := new(user)
 	cws.users.Find(bson.M{"username": username}).One(&result)
 
 	if result.Username == username && result.Password == password {
-		return true
+		return result
 	}
-	return false
+	return nil
 }
 
 // Register a new user with the given username and password

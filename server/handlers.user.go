@@ -46,7 +46,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	}
 
 	// Check if the username/password combination is valid
-	if isUserValid(cws, username, password) {
+	if user := isUserValid(cws, username, password); user != nil {
 		// If the username/password is valid set the token in a cookie
 		token := generateSessionToken()
 		c.SetCookie("token", token, 3600, "", "", false, true)
@@ -58,7 +58,10 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		session.Save()
 
 		//log.Printf("username %s\n", username)
-		c.JSON(http.StatusOK, "Success")
+		RespUser := make(map[string]string)
+		RespUser["Username"] = user.Username
+		RespUser["ID"] = user.Id.Hex()
+		c.JSON(http.StatusOK, RespUser)
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
