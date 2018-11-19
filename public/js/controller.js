@@ -30,7 +30,7 @@ askeecsControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', '
 
 			// Register the user and redirect them to the login page
 			AuthService.register($scope.credentials, function () {
-				$location.path("/u/login");
+				$location.path("/login");
 			});
 
 			// Make sure we wipe out the credentials

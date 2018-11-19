@@ -114,20 +114,21 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	}
 
 	if _, err := registerNewUser(cws, username, password, salt); err == nil {
-		// If the user is created, set the token in a cookie and log the user in
-		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", false, true)
-		c.Set("is_logged_in", true)
+		/*
+			// If the user is created, set the token in a cookie and log the user in
+				token := generateSessionToken()
+				c.SetCookie("token", token, 3600, "", "", false, true)
+				c.Set("is_logged_in", true)
 
-		// save username in session
-		session := sessions.Default(c)
-		session.Set("username", username)
-		session.Save()
+				// save username in session
 
+				session := sessions.Default(c)
+				session.Set("username", username)
+				session.Save()
+		*/
 		log.Printf("%s: register success\n", username)
 
-		render(c, gin.H{
-			"title": "Successful registration & Login"}, "login-successful.html")
+		c.Redirect(http.StatusTemporaryRedirect, "/#/login")
 
 	} else {
 		// If the username/password combination is invalid,
