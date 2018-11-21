@@ -1,5 +1,5 @@
 				<div class="askeecs-question clearfix">
-					<h3>{{question.Title}}</h3>
+					<h3>{{question.title}}</h3>
 					<div class="askeecs-media askeecs-widget askeecs-widget-box">
 						<div class="askeecs-vote-up">
 							<span class="glyphicon glyphicon-chevron-up" ng-click="voteUp()"></span>
@@ -15,12 +15,12 @@
 						</div>
 					</div>
 					<div class="askeecs-question-details clearfix" style="">
-						{{question.Body}}
+						{{question.body}}
 						<hr>
 						<div class="askeecs-question-author pull-right">
 							<span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span>
 
-							<a href="#">{{question.Author}}</a>
+							<a href="#">{{question.author}}</a>
 							<span class="badge">0</span>
 						</div>
 						<div>

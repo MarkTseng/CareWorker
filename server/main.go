@@ -148,6 +148,7 @@ func render(c *gin.Context, data gin.H, templateName string) {
 	loggedInInterface, _ := c.Get("is_logged_in")
 	data["is_logged_in"] = loggedInInterface.(bool)
 
+	log.Printf("render Request.Header: %s\n", c.Request.Header.Get("Accept"))
 	switch c.Request.Header.Get("Accept") {
 	case "application/json":
 		// Respond with JSON

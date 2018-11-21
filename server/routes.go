@@ -9,13 +9,13 @@ func initializeRoutes(cws *careWorkerServer) {
 	cws.router.Use(cws.setUserStatus())
 
 	// Handle the index route
-	//cws.router.GET("/", cws.showIndexPage)
+	cws.router.GET("/q", cws.showIndexPage)
 
 	// Handle css static file
-	cws.router.Static("/css", "public/static/css")
+	//cws.router.Static("/css", "public/static/css")
 
 	// Handle css static file
-	cws.router.Static("/photos", "public/static/photos")
+	//cws.router.Static("/photos", "public/static/photos")
 
 	// Group user related routes together
 	cws.userRoutes = cws.router.Group("/u")

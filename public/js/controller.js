@@ -120,7 +120,8 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 		$scope.comment = { "Body" : "" }
 		$scope.response = { "Body" : "" }
 
-		$http.get('/q/' + $routeParams.questionId).success(function(data) {
+		$http.defaults.headers.common['Accept'] = 'application/json';
+		$http.get('/article/view/' + $routeParams.questionId).success(function(data) {
 			$scope.question = data;
 			console.log(data)
 		});

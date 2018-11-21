@@ -213,6 +213,7 @@ askeecsApp.factory('Questions', ['$http',
 		var store	= []
 		var f		= {};
 
+		$http.defaults.headers.common['Accept'] = 'application/json';
 		var p = function (data) {
 			this.success = function (fn) {
 				fn(data)
