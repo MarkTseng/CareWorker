@@ -5,7 +5,7 @@ package main
 import (
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	//"log"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -51,6 +51,19 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
 
+	// Obtain the POSTed JSON username and password values
+	if title == "" && content == "" {
+		objA := new(article)
+		if err := c.ShouldBindJSON(&objA); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		title = objA.Title
+		content = objA.Body
+	}
+	log.Printf("Title: %s\n", title)
+	log.Printf("content: %s\n", content)
+
 	// get username in session
 	session := sessions.Default(c)
 	username := session.Get("username")
@@ -61,7 +74,7 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",
-				"payload": a}, "submission-successful.html")
+				"payload": a.Id}, "submission-successful.html")
 		} else {
 			// if there was an error while creating the article, abort with an error
 			c.AbortWithStatus(http.StatusBadRequest)

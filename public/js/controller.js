@@ -79,9 +79,9 @@ askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', 
 			// Default to a non error state
 			var err = false;
 
-			if ($scope.question.markdown.length < 50)
+			if ($scope.question.markdown.length < 10)
 			{
-				$scope.error.markdown = "Your question must be 50 characters or more."
+				$scope.error.markdown = "Your question must be 10 characters or more."
 				err = true;
 			}
 
@@ -101,10 +101,11 @@ askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', 
 				return;
 			}
 
+			$http.defaults.headers.common['Accept'] = 'application/json';
 			$http({
 				method: 'POST',
-				url: '/q',
-				data: {Title:$scope.question.title, Body: $scope.question.markdown, Tags: $scope.question.tags.split(' ')}
+				url: '/article/create',
+				data: {title: $scope.question.title, body: $scope.question.markdown, Tags: $scope.question.tags.split(' ')}
 			}).success(function(data) {
 				// TODO: this should be a JSON response
 				$location.path("/questions/"+data);	
@@ -129,7 +130,7 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 		$scope.voteUp = function () {
 			$http({
 				method: 'GET',
-				url: '/q/' + $scope.question.ID + '/vote/up',
+				url: '/q/' + $scope.question._id + '/vote/up',
 				data: {}
 			}).success(function(data) {
 				$scope.question.Upvotes = data.Upvotes
@@ -139,7 +140,7 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 		$scope.voteDown = function () {
 			$http({
 				method: 'GET',
-				url: '/q/' + $scope.question.ID + '/vote/down',
+				url: '/q/' + $scope.question._id + '/vote/down',
 				data: {}
 			}).success(function(data) {
 				$scope.question.Downvotes = data.Downvotes
@@ -169,7 +170,7 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 
 			$http({
 				method: 'post',
-				url: '/q/' + $scope.question.ID + '/comment/',
+				url: '/q/' + $scope.question._id + '/comment/',
 				data: $scope.comment
 			}).success(function(data) {
 				delete $scope.scomment;
@@ -196,7 +197,7 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 
 			$http({
 				method: 'post',
-				url: '/q/' + $scope.question.ID + '/response/',
+				url: '/q/' + $scope.question._id + '/response/',
 				data: $scope.response
 			}).success(function(data) {
 				$scope.question.Responses.push(data);
