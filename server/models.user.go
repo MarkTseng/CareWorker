@@ -28,7 +28,8 @@ type user struct {
 // Check if the username and password combination is valid
 func isUserValid(cws *careWorkerServer, username, password string) *user {
 	result := new(user)
-	cws.users.Find(bson.M{"username": username}).One(&result)
+	//cws.users.Find(bson.M{"username": username}).One(&result)
+	cws.collection["users"].Find(bson.M{"username": username}).One(&result)
 
 	if result.Username == username && result.Password == password {
 		return result
@@ -48,7 +49,8 @@ func registerNewUser(cws *careWorkerServer, username, password, salt string) (*u
 	}
 
 	u := user{Username: username, Password: password, Salt: salt}
-	cws.users.Insert(&u)
+	//cws.users.Insert(&u)
+	cws.collection["users"].Insert(&u)
 
 	log.Printf("registerNewUser success\n")
 	return &u, nil
@@ -57,7 +59,8 @@ func registerNewUser(cws *careWorkerServer, username, password, salt string) (*u
 // Check if the supplied username is available
 func isUsernameAvailable(cws *careWorkerServer, username string) bool {
 	result := user{}
-	cws.users.Find(bson.M{"username": username}).One(&result)
+	//cws.users.Find(bson.M{"username": username}).One(&result)
+	cws.collection["users"].Find(bson.M{"username": username}).One(&result)
 	if result.Username == username {
 		return false
 	}
@@ -67,7 +70,8 @@ func isUsernameAvailable(cws *careWorkerServer, username string) bool {
 // Check if the supplied username is available
 func isUserSaleAvailable(cws *careWorkerServer, username string) (*user, bool) {
 	result := new(user)
-	cws.users.Find(bson.M{"username": username}).One(&result)
+	//cws.users.Find(bson.M{"username": username}).One(&result)
+	cws.collection["users"].Find(bson.M{"username": username}).One(&result)
 	if result.Username == username {
 		return result, true
 	}

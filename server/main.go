@@ -20,6 +20,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 )
 
@@ -31,11 +32,9 @@ const (
 
 type careWorkerServer struct {
 	// mgo objs
-	db        *mgo.Database
-	dbSession *mgo.Session
-	articles  *mgo.Collection
-	users     *mgo.Collection
-	counters  *mgo.Collection
+	db         *mgo.Database
+	dbSession  *mgo.Session
+	collection map[string]*mgo.Collection
 	// gin objs
 	router        *gin.Engine
 	userRoutes    *gin.RouterGroup
@@ -64,9 +63,15 @@ func DBconnect(cws *careWorkerServer) {
 	dbName := fmt.Sprintf("%s", cws.ConfigSetting["DB_DATABASE"])
 	db := session.DB(dbName)
 	cws.db = db
-	cws.articles = cws.db.C("articles")
-	cws.users = cws.db.C("users")
-	cws.counters = cws.db.C("counters")
+
+	// parser BDs collections
+	cws.collection = make(map[string]*mgo.Collection)
+	collections := fmt.Sprintf("%s", cws.ConfigSetting["DB_COLLECTIONS"])
+	for _, collection := range strings.Split(collections[1:len(collections)-1], " ") {
+		fmt.Printf("create %s collection\n", collection)
+		cws.collection[collection] = cws.db.C(collection)
+	}
+
 }
 
 func configParse(cws *careWorkerServer) {
