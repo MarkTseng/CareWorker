@@ -50,9 +50,11 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 	// Obtain the POSTed title and content values
 	title := c.PostForm("title")
 	content := c.PostForm("content")
+	location := c.PostForm("location")
+	salary := c.PostForm("salary")
 
 	// Obtain the POSTed JSON username and password values
-	if title == "" && content == "" {
+	if title == "" {
 		objA := new(article)
 		if err := c.ShouldBindJSON(&objA); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -60,9 +62,13 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 		}
 		title = objA.Title
 		content = objA.Body
+		location = objA.Location
+		salary = objA.Salary
 	}
 	log.Printf("Title: %s\n", title)
 	log.Printf("content: %s\n", content)
+	log.Printf("location: %s\n", location)
+	log.Printf("salary: %s\n", salary)
 
 	// get username in session
 	session := sessions.Default(c)
@@ -70,7 +76,7 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 	//log.Printf("createArticle username %s\n", username)
 
 	if username != nil {
-		if a, err := createNewArticle(cws, title, content, username.(string)); err == nil {
+		if a, err := createNewArticle(cws, title, content, location, salary, username.(string)); err == nil {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",

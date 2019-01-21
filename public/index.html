@@ -59,12 +59,12 @@
           <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
             <li><a href="#/register">Sign Up</a></li>
             <li><a href="#/login">Login</a></li>
-		</ul>
-		
-			  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
-				  <li class="clearfix"><a href="#/profile">{{user.Username}}</a></li>
-				<li><a href="#" askeecs-logout>Logout</a></li>
-			</ul>
+		  </ul>
+		  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
+			  <li><a href="#/job" class="btn btn-primary btn-lg">Create Jobs</a></li>
+			  <li class="clearfix"><a href="#/profile">{{user.Username}}</a></li>
+			  <li><a href="#" askeecs-logout>Logout</a></li>
+		  </ul>
         </div><!--/.navbar-collapse -->
       </div>
     </div>
@@ -72,17 +72,9 @@
     <div class="container askeecs-main">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-lg-12">
-			<div class="askeecs-main-banner">
-				<img src="img/acm_banner.png" class="img-thumbnail"></img>
-			</div>
-		</div>
-	  </div>
-      <div class="row">
         <div class="col-lg-8">
 			<div class="askeecs-header">
-				<h1>WSU EECS Question & Answer</h1>
-				<p>Ask a question and get an aswer from students and staff.</p>
+				<h1>Care Worker Jobs</h1>
 				<form role="form">
 					<div class="input-group">
 						<input type="text" class="form-control" id="query" placeholder="search for questions.."></input>
@@ -95,24 +87,12 @@
 			<div class="alert alert-warning ng-hide" ng-show="flash">{{flash}}</div>
 			<div ng-view></div>
         </div>
-        <div class="col-lg-4 askeecs-sidebar">
-			<div class="askeecs-ask-btn-center">
-				<a href="#/ask" class="btn btn-primary btn-lg">Ask a Question</a>
-			</div>
-			<div>
-				<h2>Trending Tags</h2>
-				<a href="#" class="label label-info askeecs-tag">cs460</a>
-			</div>
-			<div class="askeecs-main-banner">
-				<img src="img/block_ad.png" class="img-thumbnail"></img>
-			</div>
-        </div>
       </div>
 
       <hr>
 
       <footer>
-        <p>&copy; CareWorker Company 2018</p>
+        <p>&copy; CareWorker Company 2019</p>
       </footer>
     </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>

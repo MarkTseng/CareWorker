@@ -1,0 +1,16 @@
+
+				<div class="askeecs-question clearfix">
+					<form novalidate role="form" id="f-question" ng-submit="processForm()">
+						<div class="form-group" ng-class="{'has-error': error.title}">
+							<label for="qTitle">Job</label>
+							<input type="text" name="title" ng-model="job.title" class="form-control" id="gTitle" placeholder="Title" required>
+							<label for="qTitle">Location</label>
+							<input type="text" name="location" ng-model="job.location" class="form-control" id="gTitle" placeholder="Location" required>
+							<label for="qTitle">Salary</label>
+							<input type="text" name="salary" ng-model="job.salary" class="form-control" id="gTitle" placeholder="Salary" required>
+						</div>
+						<div class="form-group">
+							<button id="submit-question" type="submit" class="btn btn-primary pull-right">Create Job</button>
+						</div>
+					</form>
+				</div>

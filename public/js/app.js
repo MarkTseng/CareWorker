@@ -11,9 +11,17 @@ askeecsApp.config(['$routeProvider',
 				templateUrl: 'partials/question-detail.html',
 				controller: 'QuestionDetailCtrl'
 			}).
+			when('/job/:jobId', {
+				templateUrl: 'partials/job-detail.html',
+				controller: 'JobDetailCtrl'
+			}).
 			when('/ask', {
 				templateUrl: 'partials/question-post.html',
 				controller: 'QuestionAskCtrl'
+			}).
+			when('/job', {
+				templateUrl: 'partials/job-post.html',
+				controller: 'JobCtrl'
 			}).
 			when('/register', {
 				templateUrl: 'partials/register.html',

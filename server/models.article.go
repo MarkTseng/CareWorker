@@ -17,6 +17,8 @@ type article struct {
 	Id        uint64 `json:"_id,omitempty" bson:"_id,omitempty"`
 	Title     string `json:"title" form:"title" binding:"required" bson:"title"`
 	Body      string `json:"body" form:"body" binding:"required" bson:"body"`
+	Location  string `json:"location" form:"location" binding:"required" bson:"location"`
+	Salary    string `json:"salary" form:"salary" binding:"required" bson:"salary"`
 	Author    string `json:"author" form:"author" binding:"required" bson:"author"`
 	CreatedOn int64  `json:"created_on" bson:"created_on"`
 	UpdatedOn int64  `json:"updated_on" bson:"updated_on"`
@@ -45,12 +47,12 @@ func getArticleByID(cws *careWorkerServer, id uint64) (*article, error) {
 }
 
 // Create a new article with the title and content provided
-func createNewArticle(cws *careWorkerServer, title, content, username string) (*article, error) {
+func createNewArticle(cws *careWorkerServer, title, content, location, salary, username string) (*article, error) {
 	ai.Connect(cws.collection["counters"])
 	aId := ai.Next("articles")
-	a := article{Title: title, Body: content, Id: aId, Author: username}
+	a := article{Title: title, Body: content, Id: aId, Author: username, Location: location, Salary: salary}
 	//err := cws.articles.Insert(bson.M{"_id": aId, "title": title, "body": content, "author": username})
-	err := cws.collection["articles"].Insert(bson.M{"_id": aId, "title": title, "body": content, "author": username})
+	err := cws.collection["articles"].Insert(bson.M{"_id": aId, "title": title, "body": content, "author": username, "location": location, "salary": salary})
 	if err != nil {
 		panic(err)
 	}

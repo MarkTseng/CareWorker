@@ -116,6 +116,59 @@ askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', 
 	}
 ]);
 
+askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
+	function ($scope, $http, $window, $sce, $location) {
+		var job = {"title" : "", "location" : "", "salary" : ""}
+
+		$scope.job = job;
+
+		$scope.processForm = function () {
+
+			// Remove any previous error statements
+			$scope.error = {}
+
+
+			// Default to a non error state
+			var err = false;
+
+			if ($scope.job.title.length == 0)
+			{
+				$scope.error.title = "You must enter a title."
+				err = true;
+			}
+
+			if ($scope.job.location.length == 0)
+			{
+				$scope.error.tags = "You must enter a location."
+				err = true;
+			}
+            
+            if ($scope.job.salary.length == 0)
+			{
+				$scope.error.tags = "You must enter a salary."
+				err = true;
+			}
+
+			if (err) {
+				return;
+			}
+
+			$http.defaults.headers.common['Accept'] = 'application/json';
+			$http({
+				method: 'POST',
+				url: '/article/create',
+				data: {title: $scope.job.title, location: $scope.job.location, salary: $scope.job.salary}
+			}).success(function(data) {
+				// TODO: this should be a JSON response
+				$location.path("/job/"+data);	
+			});
+			// TODO: Failure
+		}
+
+	}
+]);
+
+
 askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
 		$scope.comment = { "Body" : "" }
@@ -205,3 +258,17 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 		}
 	}
 ]);
+
+askeecsControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
+	function ($scope, $routeParams, $http, $window, $sce) {
+
+		$http.defaults.headers.common['Accept'] = 'application/json';
+		$http.get('/article/view/' + $routeParams.jobId).success(function(data) {
+			$scope.job = data;
+			console.log(data)
+		});
+
+	}
+]);
+
+
