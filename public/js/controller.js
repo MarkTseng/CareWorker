@@ -118,7 +118,7 @@ askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', 
 
 askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {
-		var job = {"title" : "", "location" : "", "salary" : ""}
+		var job = {"title" : "", "location" : "", "salary" : "", "body":""}
 
 		$scope.job = job;
 
@@ -149,6 +149,12 @@ askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', 
 				err = true;
 			}
 
+            if ($scope.job.body.length == 0)
+			{
+				$scope.error.tags = "You must enter a content."
+				err = true;
+            }
+
 			if (err) {
 				return;
 			}
@@ -157,7 +163,7 @@ askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', 
 			$http({
 				method: 'POST',
 				url: '/article/create',
-				data: {title: $scope.job.title, location: $scope.job.location, salary: $scope.job.salary}
+				data: {title: $scope.job.title, location: $scope.job.location, salary: $scope.job.salary, body: $scope.job.body}
 			}).success(function(data) {
 				// TODO: this should be a JSON response
 				$location.path("/job/"+data);	
