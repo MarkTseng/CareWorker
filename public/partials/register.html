@@ -3,7 +3,7 @@
 		<form role="form" ng-submit="processForm()">
 			<div class="form-group">
 				<label for="email">Email Adress</label>
-				<input type="text" class="form-control" id="email" name="email" ng-model="credentials.username" placeholder="Email">
+				<input type="text" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
 			</div>
 			<div class="form-group">
 				<label for="password">Password</label>
@@ -12,6 +12,66 @@
 			<div class="form-group">
 				<label for="cpassword">Confirm Password</label>
 				<input type="password" class="form-control" id="cpassword" name="cpassword" ng-model="credentials.cpassword" placeholder="Password">
+			</div>
+			<div class="form-group">
+				<label for="username">Name</label>
+				<div class="row">
+					<div class="col-xs-6 col-md-6">
+						<input class="form-control" name="firstname" placeholder="First Name" type="text" ng-model="credentials.firstname" required autofocus />
+					</div>
+					<div class="col-xs-6 col-md-6">
+						<input class="form-control" name="lastname" placeholder="Last Name" type="text" ng-model="credentials.lastname" required />
+					</div>
+				</div>	
+			</div>
+			<div class="form-group">
+				<label for="gender">Gender</label><br/>
+				<label class="radio-inline">
+					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender"/>
+					Male
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender" />
+					Female
+				</label>
+			</div>
+			<div class="form-group">
+				<label for="idnumber" class="col-4">ID number</label>
+				<input type="text" id="idnumber" class="form-control" placeholder="ID number" ng-model="credentials.idnumber">
+			</div>
+			<div class="form-group">
+				<label for="birthDate" class="col-4">Date of Birth</label>
+				<input type="date" id="birthDate" class="form-control" ng-model="credentials.birthday">
+			</div>
+			<div class="form-group">
+				<select ng-model="credentials.city" ng-options="city as city for (city, districts) in areas" ng-change="updateZipcode()">
+					<option value>縣市</option>
+				</select>
+
+				<select ng-model="credentials.district" ng-options="district as district for (district, zipcode) in areas[credentials.city]" ng-change="updateZipcode()">
+					<option value>區鎮鄉</option>
+				</select>
+
+				<p>縣市：{{ credentials.city }}</p>
+				<p>鄉鎮市區：{{ credentials.district }}</p>
+				<p>郵遞區號：{{ credentials.zipcode }}</p>
+				<label for="address">Adress</label>
+				<input type="text" class="form-control" id="address" name="address" ng-model="credentials.address" placeholder="Address">
+			</div>
+			<div class="form-group">
+				<label for="phone">phone</label>
+				<input type="text" class="form-control" id="phone" name="phone" ng-model="credentials.phone" placeholder="Phone">
+			</div>
+			<div class="form-group">
+				<label for="phone">care worker / need care worker </label></br>
+				<label class="radio-inline">
+					<input type="radio" name="idtype" id="idtype1" value="careworker" ng-model="credentials.idtype"/>
+					Care Worker
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="idtype" id="idtype2" value="bose" ng-model="credentials.idtype" />
+					Need Care Worker
+				</label>
 			</div>
 			<div class="form-group">
 				<button id="submit" type="submit" class="btn btn-primary pull-right">Register</button>
