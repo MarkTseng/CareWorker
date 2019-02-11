@@ -340,7 +340,16 @@ askeecsApp.filter('commentremark', function () {
 });
 
 askeecsApp.config(function ($translateProvider) {
-	$translateProvider.translations('en', en_US_translations);
-	$translateProvider.translations('zh', zh_translations);
+	// configures staticFilesLoader
+	$translateProvider.useStaticFilesLoader({
+		prefix: 'data/locale-',
+		suffix: '.json'
+	});
 	$translateProvider.preferredLanguage('zh');
 });
+
+askeecsApp.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+	$scope.changeLanguage = function (langKey) {
+		$translate.use(langKey);
+	};
+}]);

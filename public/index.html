@@ -37,16 +37,15 @@
 
 		<script src="js/app.js"></script>
 		<script src="js/controller.js"></script>
-        <script src="js/translations_en_US.js"></script>
-        <script src="js/translations_zh_TW.js"></script>
         <script src="js/translate.js"></script>
+		<script src="js/angular-translate-loader-static-files.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
     <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
+      <div class="container" ng-controller="Ctrl">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
@@ -58,6 +57,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#/question">Home</a></li>
+			<button ng-click="changeLanguage('en')">test LANG</button>
           </ul>
           <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
             <li><a href="#/register">Sign Up</a></li>
