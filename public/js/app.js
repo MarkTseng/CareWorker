@@ -1,4 +1,4 @@
-var askeecsApp = angular.module('askeecs', ['angularMoment', 'ngRoute', 'askeecsControllers', 'ngCookies'])
+var askeecsApp = angular.module('askeecs', ['angularMoment', 'ngRoute', 'askeecsControllers', 'ngCookies', 'pascalprecht.translate'])
 
 askeecsApp.config(['$routeProvider',
 	function($routeProvider) {
@@ -337,4 +337,10 @@ askeecsApp.filter('commentremark', function () {
 			return 600 - input + " characters left"
 		
 	}
+});
+
+askeecsApp.config(function ($translateProvider) {
+	$translateProvider.translations('en', en_US_translations);
+	$translateProvider.translations('zh', zh_translations);
+	$translateProvider.preferredLanguage('zh');
 });
