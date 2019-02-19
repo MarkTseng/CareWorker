@@ -57,14 +57,23 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#/question">Home</a></li>
-			<button ng-click="changeLanguage('en')">test LANG</button>
-          </ul>
-          <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
-            <li><a href="#/register">Sign Up</a></li>
-            <li><a href="#/login">Login</a></li>
+		  </ul>
+		  <ul class="nav navbar-nav navbar-right">
+			  <li class="dropdown">
+				  <a class="dropdown-toggle" data-toggle="dropdown" href="#">語言
+					  <span class="caret"></span></a>
+				  <ul class="dropdown-menu">
+					  <li><a href="#" ng-click="changeLanguage('en')">English</a></li>
+					  <li><a href="#" ng-click="changeLanguage('zh')">中文</a></li>
+				  </ul>
+			  </li>
+		  </ul>
+		  <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
+			  <li><a href="#/register"><span class="glyphicon glyphicon-user">Sign Up</a></li>
+			  <li><a href="#/login"><span class="glyphicon glyphicon-log-in">Login</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
-			  <li><a href="#/job" class="btn btn-primary btn-lg">Create Jobs</a></li>
+			  <li><a href="#/job" >Create Jobs</a></li>
 			  <li class="clearfix"><a href="#/profile">{{user.Username}}</a></li>
 			  <li><a href="#" askeecs-logout>Logout</a></li>
 		  </ul>
