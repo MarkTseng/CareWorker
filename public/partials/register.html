@@ -64,15 +64,27 @@
 				<input type="text" class="form-control" id="phone" name="phone" ng-model="credentials.phone" placeholder="Phone">
 			</div>
 			<div class="form-group">
-				<label for="phone">care worker / need care worker </label></br>
-				<label class="radio-inline">
-					<input type="radio" name="idtype" id="idtype1" value="careworker" ng-model="credentials.idtype"/>
-					Care Worker
+				<label for="idtype">ID type </label></br>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype1" value="boss" ng-model="credentials.idtype"/>
+					家長/父母/孕婦產婦/家事/照護雇主/一般會員
 				</label>
-				<label class="radio-inline">
-					<input type="radio" name="idtype" id="idtype2" value="bose" ng-model="credentials.idtype" />
-					Need Care Worker
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype2" value="babySitter" ng-model="credentials.idtype" />
+					保母服務提供人員
 				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype3" value="houseKeeper" ng-model="credentials.idtype" />
+					坐月子服務提供人員
+				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype4" value="careworker" ng-model="credentials.idtype" />
+					家事/照護服務提供人員
+				</label>
+			</div>
+			<div class="form-group" ng-show="credentials.idtype == 'careworker'">
+				<label for="comment">comment </label></br>
+				<textarea type="text" class="form-control" id="comment" name="comment" ng-model="credentials.comment" placeholder="Comment"></textarea>
 			</div>
 			<div class="form-group">
 				<button id="submit" type="submit" class="btn btn-primary pull-right">Register</button>

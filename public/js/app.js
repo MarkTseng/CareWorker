@@ -41,7 +41,7 @@ askeecsApp.run(function($rootScope, $location, AuthService, FlashService, Sessio
 	var routesThatRequireAuth = ['/ask'];
 
 	$rootScope.authenticated = SessionService.get('authenticated');
-	$rootScope.user = SessionService.get('user');
+	$rootScope.username = SessionService.get('username');
 
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		FlashService.clear()
@@ -96,15 +96,14 @@ askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionS
 
 		var cacheSession = function (user) {
 			SessionService.set('authenticated', true);
-			SessionService.set('user', user);
-			$rootScope.authenticated = true;
+			SessionService.set('username', user.Username);
+            $rootScope.authenticated = true;
 			$rootScope.user = user;
-
 		}
 
 		var uncacheSession = function () {
 			SessionService.unset('authenticated');
-			SessionService.unset('user');
+			SessionService.unset('username');
 			$rootScope.authenticated = false;
 			$rootScope.user = {};
 		}
