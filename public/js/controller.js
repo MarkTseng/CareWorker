@@ -1,6 +1,6 @@
-var askeecsControllers = angular.module('askeecsControllers', ['ngCookies']);
+var careworkerControllers = angular.module('careworkerControllers', ['ngCookies']);
 
-askeecsControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
+careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 	function ($scope, Questions) {
 		Questions.List()
 			.success(function (questions) {
@@ -12,7 +12,7 @@ askeecsControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 	}
 ]);
 
-askeecsControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', 'AuthService',
+careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', 'AuthService',
 	function ($scope, $http, $location, AuthService) {
 		var credentials = { "username": "", "password": "", "cpassword": "" }
 
@@ -455,7 +455,7 @@ askeecsControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', '
 	}
 ]);
 
-askeecsControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'AuthService',
+careworkerControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'AuthService',
 	function ($scope, $http, $location, AuthService) {
 		var credentials = { "Username": "", "Password": "", "Salt": "" }
 
@@ -473,7 +473,7 @@ askeecsControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'Aut
 	}
 ]);
 
-askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', '$sce', '$location',
+careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {
 		var question = {"markdown" : "", "title" : "", "tags" : ""}
 
@@ -531,7 +531,7 @@ askeecsControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', 
 	}
 ]);
 
-askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
+careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {
 		var job = {"title" : "", "location" : "", "salary" : "", "body":""}
 
@@ -590,7 +590,7 @@ askeecsControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', 
 ]);
 
 
-askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
+careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
 		$scope.comment = { "Body" : "" }
 		$scope.response = { "Body" : "" }
@@ -680,7 +680,7 @@ askeecsControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '
 	}
 ]);
 
-askeecsControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
+careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
 
 		$http.defaults.headers.common['Accept'] = 'application/json';

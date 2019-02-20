@@ -1,6 +1,6 @@
-var askeecsApp = angular.module('askeecs', ['angularMoment', 'ngRoute', 'askeecsControllers', 'ngCookies', 'pascalprecht.translate'])
+var careworkerApp = angular.module('careworker', ['angularMoment', 'ngRoute', 'careworkerControllers', 'ngCookies', 'pascalprecht.translate'])
 
-askeecsApp.config(['$routeProvider',
+careworkerApp.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
 			when('/questions', {
@@ -37,7 +37,7 @@ askeecsApp.config(['$routeProvider',
 	}
 ]);
 
-askeecsApp.run(function($rootScope, $location, AuthService, FlashService, SessionService) {
+careworkerApp.run(function($rootScope, $location, AuthService, FlashService, SessionService) {
 	var routesThatRequireAuth = ['/ask'];
 
 	$rootScope.authenticated = SessionService.get('authenticated');
@@ -53,7 +53,7 @@ askeecsApp.run(function($rootScope, $location, AuthService, FlashService, Sessio
 	});
 });
 
-askeecsApp.config(function($httpProvider) {
+careworkerApp.config(function($httpProvider) {
 	var logsOutUserOn401 = function ($location, $q, SessionService, FlashService) {
 		var success = function (res) {
 			return res;
@@ -77,7 +77,7 @@ askeecsApp.config(function($httpProvider) {
 	$httpProvider.responseInterceptors.push(logsOutUserOn401);
 })
 
-askeecsApp.factory("SessionService", function () {
+careworkerApp.factory("SessionService", function () {
 	return {
 		get: function (key) {
 			return sessionStorage.getItem(key);
@@ -91,7 +91,7 @@ askeecsApp.factory("SessionService", function () {
 	}
 });
 
-askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionService', 'FlashService',
+careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionService', 'FlashService',
 	function($rootScope, $http, $location, SessionService, FlashService) {
 
 		var cacheSession = function (user) {
@@ -200,7 +200,7 @@ askeecsApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionS
 	}
 ]);
 
-askeecsApp.factory("FlashService", function ($rootScope) {
+careworkerApp.factory("FlashService", function ($rootScope) {
 	return {
 		show: function (msg) {
 			$rootScope.flashn = 1;
@@ -213,7 +213,7 @@ askeecsApp.factory("FlashService", function ($rootScope) {
 	}
 });
 
-askeecsApp.factory('Questions', ['$http',
+careworkerApp.factory('Questions', ['$http',
 	function ($http) {
 
 		var urlBase = '/q'
@@ -279,7 +279,7 @@ askeecsApp.factory('Questions', ['$http',
 	}
 ]);
 
-askeecsApp.directive('askeecsLogout', function (AuthService) {
+careworkerApp.directive('careworkerLogout', function (AuthService) {
 	return {
 		restrict: 'A',
 		 link: function(scope, element, attrs) {
@@ -294,7 +294,7 @@ askeecsApp.directive('askeecsLogout', function (AuthService) {
 	}
 });
 
-askeecsApp.directive('question', ['Questions',
+careworkerApp.directive('question', ['Questions',
 	function (Questions) {
 		function link ( scope, element, attributes ) {
 			console.log("Generating question...", attributes.question);
@@ -310,7 +310,7 @@ askeecsApp.directive('question', ['Questions',
 	}
 ]);
 
-askeecsApp.directive('comment', ['Questions',
+careworkerApp.directive('comment', ['Questions',
 	function (Questions) {
 		function link ( scope, element, attributes ) {
 			console.log("Generating comment...", attributes.question);
@@ -326,7 +326,7 @@ askeecsApp.directive('comment', ['Questions',
 	}
 ]);
 
-askeecsApp.filter('commentremark', function () {
+careworkerApp.filter('commentremark', function () {
 	return function(input) {
 		if(input === 0)
 			return "at least enter 15 characters";
@@ -338,7 +338,7 @@ askeecsApp.filter('commentremark', function () {
 	}
 });
 
-askeecsApp.config(function ($translateProvider) {
+careworkerApp.config(function ($translateProvider) {
 	// configures staticFilesLoader
 	$translateProvider.useStaticFilesLoader({
 		prefix: 'data/locale-',
@@ -347,7 +347,7 @@ askeecsApp.config(function ($translateProvider) {
 	$translateProvider.preferredLanguage('zh');
 });
 
-askeecsApp.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
+careworkerApp.controller('Ctrl', ['$translate', '$scope', function ($translate, $scope) {
 	$scope.changeLanguage = function (langKey) {
 		$translate.use(langKey);
 	};

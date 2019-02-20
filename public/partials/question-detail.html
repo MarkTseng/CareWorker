@@ -1,33 +1,33 @@
-				<div class="askeecs-question clearfix">
+				<div class="careworker-question clearfix">
 					<h3>{{question.title}}</h3>
-					<div class="askeecs-media askeecs-widget askeecs-widget-box">
-						<div class="askeecs-vote-up">
+					<div class="careworker-media careworker-widget careworker-widget-box">
+						<div class="careworker-vote-up">
 							<span class="glyphicon glyphicon-chevron-up" ng-click="voteUp()"></span>
 						</div>
-						<div class="askeecs-votes">
+						<div class="careworker-votes">
 							{{question.Upvotes.length - question.Downvotes.length}}
 						</div>
-						<div class="askeecs-vote-down">
+						<div class="careworker-vote-down">
 							<span class="glyphicon glyphicon-chevron-down" ng-click="voteDown()"></span>
 						</div>
-						<div class="askeecs-star-question">
+						<div class="careworker-star-question">
 							<span class="glyphicon glyphicon-star-empty"></span>
 						</div>
 					</div>
-					<div class="askeecs-question-details clearfix" style="">
+					<div class="careworker-question-details clearfix" style="">
 						{{question.body}}
 						<hr>
-						<div class="askeecs-question-author pull-right">
+						<div class="careworker-question-author pull-right">
 							<span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span>
 
 							<a href="#">{{question.author}}</a>
 							<span class="badge">0</span>
 						</div>
 						<div>
-							<a href="#" ng-repeat="tag in question.Tags" class="label label-info askeecs-tag">{{tag}}</a>
+							<a href="#" ng-repeat="tag in question.Tags" class="label label-info careworker-tag">{{tag}}</a>
 						</div>
-						<ul class="askeecs-comment-list list-unstyled">
-							<li class="askeecs-comment" ng-repeat="comment in question.Comments">
+						<ul class="careworker-comment-list list-unstyled">
+							<li class="careworker-comment" ng-repeat="comment in question.Comments">
 							<p><a href="#" ><span class="glyphicon glyphicon-arrow-up"></span></a> {{comment.Body}} – <a href="#" class="">{{comment.Author}}</a> <small><span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span></small></p>
 							</li>
 						</ul>
@@ -49,38 +49,38 @@
 						</div>
 					</div>
 				</div>
-				<ul class="row nav nav-tabs askeecs-topic-nav">
+				<ul class="row nav nav-tabs careworker-topic-nav">
 					<li class="active"><a href="#">Most Votes</a></li>
 					<li><a href="#">Recent</a></li>
 				</ul>
-				<ul class="askeecs-responses">
-					<li class="askeecs-question clearfix" ng-repeat="response in question.Responses">
-						<div class="askeecs-media askeecs-widget askeecs-widget-box">
-							<div class="askeecs-vote-up">
+				<ul class="careworker-responses">
+					<li class="careworker-question clearfix" ng-repeat="response in question.Responses">
+						<div class="careworker-media careworker-widget careworker-widget-box">
+							<div class="careworker-vote-up">
 								<span class="glyphicon glyphicon-chevron-up"></span>
 							</div>
-							<div class="askeecs-votes">
+							<div class="careworker-votes">
 								{{response.Score.Up - response.Score.Down}}
 							</div>
-							<div class="askeecs-vote-down">
+							<div class="careworker-vote-down">
 								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
-							<div class="askeecs-star-question">
+							<div class="careworker-star-question">
 								<span class="glyphicon glyphicon-star-empty"></span>
 							</div>
 						</div>
-						<div class="askeecs-question-details clearfix" style="">
+						<div class="careworker-question-details clearfix" style="">
 							{{response.Body}}
 							<hr>
-							<div class="askeecs-question-author pull-right">
+							<div class="careworker-question-author pull-right">
 								<span title="{{response.Timestamp | date:'medium'}}" am-time-ago="response.Timestamp"></span>
 
 								<a href="#">{{response.Author}}</a>
 								<span class="badge">0</span>
 							</div>
 							<!--
-							<ul class="askeecs-comment-list list-unstyled">
-								<li class="askeecs-comment" ng-repeat="comment in response.comments">
+							<ul class="careworker-comment-list list-unstyled">
+								<li class="careworker-comment" ng-repeat="comment in response.comments">
 								<p><a href="#" ><span class="glyphicon glyphicon-arrow-up"></span></a> {{comment.Body}} – <a href="#" class="">{{comment.Author}}</a> <small><span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span></small></p>
 								</li>
 							</ul>
@@ -133,7 +133,7 @@
 						<hr>
 						<div class="form-group">
 							<label for="">Preview</label>
-							<div class="askeecs-question-preview" ng-bind-html='htmlSafe' id="mk-preview">
+							<div class="careworker-question-preview" ng-bind-html='htmlSafe' id="mk-preview">
 							</div>
 						</div>
 						<div class="form-group">
