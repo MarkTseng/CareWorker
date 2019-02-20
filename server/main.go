@@ -143,7 +143,8 @@ func main() {
 	go deinit(sigs, cws)
 
 	// Start serving the application
-	cws.router.Run(fmt.Sprintf(":%s", cws.ConfigSetting["APP_SERVER_PORT"]))
+	//cws.router.Run(fmt.Sprintf(":%s", cws.ConfigSetting["APP_SERVER_PORT"]))
+	cws.router.RunTLS(fmt.Sprintf(":%s", cws.ConfigSetting["APP_SERVER_PORT"]), "server/ssldata/certificate.crt", "server/ssldata/private.key")
 }
 
 // Render one of HTML, JSON or CSV based on the 'Accept' header of the request
