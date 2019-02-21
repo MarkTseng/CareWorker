@@ -25,7 +25,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
                            idtype: "",
                            lastname: "",
                            password: "",
-                           serviceRequest: "".
+                           serviceRequest: "",
                            street: "",
                            zipcode: ""};
         $scope.updateZipcode = function() {
