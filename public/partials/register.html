@@ -1,18 +1,43 @@
 <div class="row">
 	<div class="careworker-question col-lg-6 col-lg-offset-3">
-		<form role="form" ng-submit="processForm()">
+		<form role="form" name="myform" ng-submit="processForm()">
+			<div class="form-group">
+				<label for="idtype">註冊身份類型</label></br>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype1" value="boss" ng-checked='true' ng-model="credentials.idtype"/>
+					雇主
+				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype2" value="babySitter" ng-model="credentials.idtype" />
+					保母服務提供人員
+				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype3" value="confinement" ng-model="credentials.idtype" />
+					坐月子服務提供人員
+				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype4" value="houseKeeper" ng-model="credentials.idtype" />
+					家事服務提供人員
+				</label>
+				<label class="radio">
+					<input type="radio" name="idtype" id="idtype5" value="careWorker" ng-model="credentials.idtype" />
+				    照護服務提供人員
+				</label>
+			</div>
 			<div class="form-group">
 				<label for="email">Email Adress</label>
 				<input type="text" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
 			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" name="password" ng-model="credentials.password" placeholder="Password">
+            <div class="form-group" ng-class"{'has-error': error.password}">
+				<label for="password" >Password</label>
+				<input type="password" class="form-control" id="password" name="password" ng-minlength="6" ng-model="credentials.password" placeholder="Password" required autofocus />
+                <span ng-if="!myform.password.$valid">password at least 6 words</span>
 			</div>
 			<div class="form-group">
 				<label for="cpassword">Confirm Password</label>
-				<input type="password" class="form-control" id="cpassword" name="cpassword" ng-model="credentials.cpassword" placeholder="Password">
+				<input type="password" class="form-control" id="cpassword" name="cpassword" ng-model="credentials.cpassword" placeholder="Password" required autofocus />
 			</div>
+            <div class="alert alert-danger" ng-show="error.password" autofocus > {{error.password}}</div>
 			<div class="form-group">
 				<label for="username">Name</label>
 				<div class="row">
@@ -36,10 +61,6 @@
 				</label>
 			</div>
 			<div class="form-group">
-				<label for="idnumber" class="col-4">ID number</label>
-				<input type="text" id="idnumber" class="form-control" placeholder="ID number" ng-model="credentials.idnumber">
-			</div>
-			<div class="form-group">
 				<label for="birthDate" class="col-4">Date of Birth</label>
 				<input type="date" id="birthDate" class="form-control" ng-model="credentials.birthday">
 			</div>
@@ -59,35 +80,24 @@
 				<label for="address">Adress</label>
 				<input type="text" class="form-control" id="address" name="address" ng-model="credentials.address" placeholder="Address">
 			</div>
-			<div class="form-group">
+            <div class="form-group" ng-class"{'has-error': errorPhone}">
 				<label for="phone">phone</label>
 				<input type="text" class="form-control" id="phone" name="phone" ng-model="credentials.phone" placeholder="Phone">
 			</div>
-			<div class="form-group">
-				<label for="idtype">ID type </label></br>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype1" value="boss" ng-model="credentials.idtype"/>
-					家長/父母/孕婦產婦/家事/照護雇主/一般會員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype2" value="babySitter" ng-model="credentials.idtype" />
-					保母服務提供人員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype3" value="houseKeeper" ng-model="credentials.idtype" />
-					坐月子服務提供人員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype4" value="careworker" ng-model="credentials.idtype" />
-					家事/照護服務提供人員
-				</label>
+			<div class="form-group" ng-show="credentials.idtype == 'boss'">
+				<label for="serviceRequest">Service request</label></br>
+				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceRequest" name="serviceRequest" ng-model="credentials.serviceRequest" placeholder="Service request"></textarea>
 			</div>
-			<div class="form-group" ng-show="credentials.idtype == 'careworker'">
-				<label for="comment">comment </label></br>
-				<textarea type="text" class="form-control" id="comment" name="comment" ng-model="credentials.comment" placeholder="Comment"></textarea>
+			<div class="form-group" ng-hide="credentials.idtype == 'boss'">
+				<label for="lineId" class="col-4">Linen Id</label>
+				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
+				<label for="serviceItem">Service Item</label></br>
+				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceItem" name="serviceItem" ng-model="credentials.serviceItem" placeholder="Service item list"></textarea>
+				<label for="descriptor">Descriptor</label></br>
+				<textarea type="text" class="form-control" clos="50" raws="10" id="descriptor" name="descriptor" ng-model="credentials.descriptor" placeholder="Descriptor list"></textarea>
 			</div>
 			<div class="form-group">
-				<button id="submit" type="submit" class="btn btn-primary pull-right">Register</button>
+				<button id="submit" type="submit" class="btn btn-primary pull-right" ng-disabled="myform.$invalid" >Register</button>
 			</div>
 		</form>
 	</div>

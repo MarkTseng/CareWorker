@@ -352,3 +352,17 @@ careworkerApp.controller('Ctrl', ['$translate', '$scope', function ($translate, 
 		$translate.use(langKey);
 	};
 }]);
+
+// Custom validator based on expressions.
+// see: https://docs.angularjs.org/guide/forms
+careworkerApp.directive('wjValidationError', function () {
+  return {
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctl) {
+      scope.$watch(attrs['wjValidationError'], function (errorMsg) {
+        elm[0].setCustomValidity(errorMsg);
+        ctl.$setValidity('wjValidationError', errorMsg ? false : true);
+      });
+    }
+  };
+});
