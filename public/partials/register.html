@@ -25,75 +25,94 @@
 				</label>
 			</div>
 			<div class="form-group">
-				<label for="email">Email Adress</label>
-				<input type="text" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
-			</div>
-            <div class="form-group" ng-class"{'has-error': error.password}">
-				<label for="password" >Password</label>
-				<input type="password" class="form-control" id="password" name="password" ng-minlength="6" ng-model="credentials.password" placeholder="Password" required autofocus />
-                <span ng-if="!myform.password.$valid">password at least 6 words</span>
-			</div>
-			<div class="form-group">
-				<label for="cpassword">Confirm Password</label>
-				<input type="password" class="form-control" id="cpassword" name="cpassword" ng-model="credentials.cpassword" placeholder="Password" required autofocus />
-			</div>
-            <div class="alert alert-danger" ng-show="error.password" autofocus > {{error.password}}</div>
-			<div class="form-group">
-				<label for="username">Name</label>
+				<label for="username">姓名</label>
 				<div class="row">
 					<div class="col-xs-6 col-md-6">
-						<input class="form-control" name="firstname" placeholder="First Name" type="text" ng-model="credentials.firstname" required autofocus />
+						<input class="form-control" name="lastname" placeholder="姓" type="text" ng-model="credentials.lastname" required autofocus />
 					</div>
 					<div class="col-xs-6 col-md-6">
-						<input class="form-control" name="lastname" placeholder="Last Name" type="text" ng-model="credentials.lastname" required />
+						<input class="form-control" name="firstname" placeholder="名子" type="text" ng-model="credentials.firstname" required autofocus />
 					</div>
 				</div>	
 			</div>
 			<div class="form-group">
-				<label for="gender">Gender</label><br/>
+				<label for="email">電子郵件</label>
+				<input type="email" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
+				<div class="alert alert-danger"  ng-show="myform.email.$dirty && myform.email.$invalid">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Invalid email address
+				</div>
+			</div>
+			<div class="form-group">
+				<label>密碼</label>
+				<input type="password" name="password" class="form-control" ng-model="credentials.password" ng-minlength="6" required/>
+				<br>
+				<div class="alert alert-danger"  ng-show="(myform.password.$error.minlength || myform.password.$error.required) && (myform.password.$dirty || submitted)">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Password must be at least 6 characters.
+				</div>
+			</div>
+			<div class="form-group">
+				<label>確認密碼</label>
+				<input type="password" name="confirmPassword" class="form-control" ng-model="credentials.confirmPassword" required pw-check match="credentials.password"/>
+				<br>
+				<div class="alert alert-danger"  ng-show="myform.password.$valid && (myform.confirmPassword.$error.matchError || myform.confirmPassword.$error.required) && (myform.confirmPassword.$dirty || submitted)">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Passwords should match.
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="gender">性別</label><br/>
 				<label class="radio-inline">
-					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender"/>
-					Male
+					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender" required/>
+					男
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender" />
-					Female
+					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender" required />
+					女
 				</label>
 			</div>
 			<div class="form-group">
-				<label for="birthDate" class="col-4">Date of Birth</label>
-				<input type="date" id="birthDate" class="form-control" ng-model="credentials.birthday">
+				<label for="birthDate" class="col-4">生日</label>
+				<input type="date" id="birthDate" class="form-control" ng-model="credentials.birthday" required />
 			</div>
 			<div class="form-group">
-				<label for="city">縣市</label>
+				<label for="address">居住地址</label>
 				<select class="form-control" ng-model="credentials.city" ng-options="city as city for (city, districts) in areas" ng-change="updateZipcode()">
 					<option value>縣市</option>
 				</select>
-
-				<label for="district">鄉鎮市區</label>
 				<select class="form-control" ng-model="credentials.district" ng-options="district as district for (district, zipcode) in areas[credentials.city]" ng-change="updateZipcode()">
 					<option value>鄉鎮市區</option>
 				</select>
-				<label for="zipcode">zipcode</label>
-				<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="credentials.zipcode" value=credentials.zipcode placeholder="Zipcode">
+				<label for="zipcode">郵遞區號</label>
+				<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="credentials.zipcode" value=credentials.zipcode placeholder="Zipcode" required \>
 
-				<label for="address">Adress</label>
-				<input type="text" class="form-control" id="address" name="address" ng-model="credentials.address" placeholder="Address">
+				<label for="street">街道號碼</label>
+				<input type="text" class="form-control" id="street" name="street" ng-model="credentials.street" placeholder="Street" required \>
 			</div>
-            <div class="form-group" ng-class"{'has-error': errorPhone}">
-				<label for="phone">phone</label>
-				<input type="text" class="form-control" id="phone" name="phone" ng-model="credentials.phone" placeholder="Phone">
+            <div class="form-group">
+				<label for="cellPhone">手機號碼</label>
+				<input type="text" class="form-control" id="cellPhone" name="cellPhone" ng-model="credentials.cellPhone" placeholder="Cell Phone" ng-minlength="10" required \>
+				<div class="alert alert-danger"  ng-show="(myform.cellPhone.$error.minlength || myform.cellPhone.$error.required) && (myform.cellPhone.$dirty || submitted)">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Phone number must 10 characters.
+				</div>
 			</div>
 			<div class="form-group" ng-show="credentials.idtype == 'boss'">
-				<label for="serviceRequest">Service request</label></br>
+				<label for="serviceRequest">服務需求</label></br>
 				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceRequest" name="serviceRequest" ng-model="credentials.serviceRequest" placeholder="Service request"></textarea>
 			</div>
 			<div class="form-group" ng-hide="credentials.idtype == 'boss'">
-				<label for="lineId" class="col-4">Linen Id</label>
+				<label for="lineId" class="col-4">Line帳號</label>
 				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
-				<label for="serviceItem">Service Item</label></br>
+				<label for="serviceItem">服務項目說明</label></br>
 				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceItem" name="serviceItem" ng-model="credentials.serviceItem" placeholder="Service item list"></textarea>
-				<label for="descriptor">Descriptor</label></br>
+				<label for="descriptor">證照字號與經歷說明</label></br>
 				<textarea type="text" class="form-control" clos="50" raws="10" id="descriptor" name="descriptor" ng-model="credentials.descriptor" placeholder="Descriptor list"></textarea>
 			</div>
 			<div class="form-group">

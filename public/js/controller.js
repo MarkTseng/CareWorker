@@ -14,7 +14,20 @@ careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 
 careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', 'AuthService',
 	function ($scope, $http, $location, AuthService) {
-		var credentials = { "password": "", "cpassword": "" ,"idtype":"boss"}
+		var credentials = {birthday: "",
+                           cellPhone: "",
+                           city: "",
+                           confirmPassword: "",
+                           district: "",
+                           email: "",
+                           firstname: "",
+                           gender: "",
+                           idtype: "",
+                           lastname: "",
+                           password: "",
+                           serviceRequest: "".
+                           street: "",
+                           zipcode: ""};
         $scope.updateZipcode = function() {
             if ($scope.credentials.city && $scope.credentials.district) {
                 $scope.credentials.zipcode = $scope.areas[$scope.credentials.city][$scope.credentials.district];
@@ -115,15 +128,11 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
         };
         $scope.credentials = credentials; 
         $scope.processForm = function () {
-            // Remove any previous error statements
-            $scope.error = {}
             // Default to a non error state
             var err = false;
 
             // Make sure they have entered a password that matches
-            if($scope.credentials.password != $scope.credentials.cpassword) {
-                console.log("Missed matched password");
-				$scope.error.password = "Missed matched password"
+            if($scope.credentials.password != $scope.credentials.confirmPassword) {
                 err = true;
                 return;
             }
@@ -135,7 +144,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
             return;
 
             // We don't need this to be passed along
-            delete $scope.credentials.CPassword;
+            delete $scope.credentials.confirmPassword;
 
             // Register the user and redirect them to the login page
             AuthService.register($scope.credentials, function () {
