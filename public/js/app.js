@@ -132,21 +132,21 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 			login: function (credentials, fn) {
 
 				// Friendly vars
-				var u = credentials.Username;
+				var e = credentials.Email;
 				var p = credentials.Password;
 
-				credentials.Username = "";
+				credentials.Email = "";
 				credentials.Password = "";
 
 				// Get a salt for this session
-				$http.post("/u/register/salt", {"username" : u})
+				$http.post("/u/register/salt", {"email" : e})
 					.success(function(user_salt) {
 								// Produce the "Password" to send
-								p = protect (u + p, user_salt.salt);
+								p = protect (e + p, user_salt.salt);
 								//p = hash( p , user_salt.salt)
 
 								// Try to login
-								var login = $http.post("/u/login", {"username": u, "password": p, "salt": user_salt.salt});
+								var login = $http.post("/u/login", {"email": e, "password": p, "salt": user_salt.salt});
 
 								login.success(cacheSession);
 								login.success(FlashService.clear);
@@ -168,19 +168,34 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 			register: function (credentials, fn) {
 
 				// Friendly vars
-				var u = credentials.username;
+				var e = credentials.email;
 				var p = credentials.password;
 
-				credentials.username = "";
+				credentials.email = "";
 				credentials.password = "";
 
 				var s = protect(Date.now(), Math.random());
 
 				// Produce the "Password" to send
-				p = protect(u + p, s);
+				p = protect(e + p, s);
 
-				var register = $http.post("/u/register", {"username" : u, "password" : p, "salt" : s });
-
+				//var register = $http.post("/u/register", {"email" : e, "password" : p, "salt" : s });
+				var register = $http.post("/u/register", {
+                                                        "birthday": credentials.birthday,
+                                                        "cellPhone": credentials.cellPhone,
+                                                        "city": credentials.city,
+                                                        "district": credentials.district,
+                                                        "email": e,
+                                                        "gender": credentials.gender,
+                                                        "idtype": credentials.idtype,
+                                                        "nickname": credentials.nickname,
+                                                        "password": p,
+                                                        "salt": s,
+                                                        "serviceRequest": credentials.serviceRequest,
+                                                        "street": credentials.street,
+                                                        "username": credentials.username,
+                                                        "zipcode": credentials.zipcode
+                                                        });
 				if ( typeof fn === "function")
 					register.success(fn);
 
@@ -352,4 +367,23 @@ careworkerApp.controller('Ctrl', ['$translate', '$scope', function ($translate, 
 		$translate.use(langKey);
 	};
 }]);
+
+careworkerApp.directive('pwCheck', function(){
+    return {
+        require : 'ngModel',
+        scope : { 
+            password: '=match'
+        },  
+        link:function(scope, element, attrs, ngModel){
+            scope.$watch('password', function(){
+                    ngModel.$setValidity('matchError', element.val() === scope.password);
+            })  
+            element.on('keyup', function(){
+                    scope.$apply(function(){
+                            ngModel.$setValidity('matchError', element.val() === scope.password);                            
+                    })  
+            })  
+        }   
+    }   
+});
 

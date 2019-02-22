@@ -20,10 +20,10 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
                            confirmPassword: "",
                            district: "",
                            email: "",
-                           firstname: "",
+                           username: "",
                            gender: "",
-                           idtype: "",
-                           lastname: "",
+                           idtype: "boss",
+                           nickname: "",
                            password: "",
                            serviceRequest: "",
                            street: "",
@@ -139,9 +139,9 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
             if (err)
                 return;
 
+            // debug
             console.log($scope.credentials)
-            // debuging
-            return;
+            //return;
 
             // We don't need this to be passed along
             delete $scope.credentials.confirmPassword;

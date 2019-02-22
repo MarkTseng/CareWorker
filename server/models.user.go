@@ -10,19 +10,23 @@ import (
 	"time"
 )
 
-/*
-// Binding from JSON
-type Login struct {
-	User     string `form:"user" json:"user" xml:"user"  binding:"required"`
-	Password string `form:"password" json:"password" xml:"password" binding:"required"`
-}
-*/
 type user struct {
-	Id       bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
-	Username string        `json:"username" form:"username" binding:"required" bson:"username"`
-	Password string        `json:"password" form:"password" binding:"required" bson:"password"`
-	Salt     string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
-	login    time.Time
+	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	Username       string        `json:"username" form:"username" binding:"required" bson:"username"`
+	Nickname       string        `json:"nickname" form:"nickname" binding:"required" bson:"nickname"`
+	Password       string        `json:"password" form:"password" binding:"required" bson:"password"`
+	Email          string        `json:"email" form:"email" binding:"required" bson:"email"`
+	Birthday       string        `json:"birthday" form:"birthday" binding:"required" bson:"birthday"`
+	CellPhone      string        `json:"cellPhone" form:"cellPhone" binding:"required" bson:"cellPhone"`
+	City           string        `json:"city" form:"city" binding:"required" bson:"city"`
+	District       string        `json:"district" form:"district" binding:"required" bson:"district"`
+	Gender         string        `json:"gender" form:"gender" binding:"required" bson:"gender"`
+	Idtype         string        `json:"idtype" form:"idtype" binding:"required" bson:"idtype"`
+	ServiceRequest string        `json:"serviceRequest" form:"serviceRequest" binding:"required" bson:"serviceRequest"`
+	Street         string        `json:"street" form:"street" binding:"required" bson:"street"`
+	Zipcode        string        `json:"zipcode" form:"zipcode" binding:"required" bson:"zipcode"`
+	Salt           string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
+	login          time.Time
 }
 
 // Check if the username and password combination is valid
@@ -39,7 +43,7 @@ func isUserValid(cws *careWorkerServer, username, password string) *user {
 
 // Register a new user with the given username and password
 // NOTE: For this demo, we
-func registerNewUser(cws *careWorkerServer, username, password, salt string) (*user, error) {
+func registerNewUser(cws *careWorkerServer, username, password, salt, email string) (*user, error) {
 	if strings.TrimSpace(password) == "" {
 		log.Printf("registerNewUser password null\n")
 		return nil, errors.New("The password can't be empty")
@@ -48,7 +52,7 @@ func registerNewUser(cws *careWorkerServer, username, password, salt string) (*u
 		return nil, errors.New("The username isn't available")
 	}
 
-	u := user{Username: username, Password: password, Salt: salt}
+	u := user{Username: username, Password: password, Salt: salt, Email: email}
 	//cws.users.Insert(&u)
 	cws.collection["users"].Insert(&u)
 

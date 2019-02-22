@@ -98,22 +98,24 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	salt := c.PostForm("salt")
+	email := c.PostForm("email")
 
 	log.Printf("register POST username:%s, password:%s, salt:%s\n", username, password, salt)
 	// Obtain the POSTed JSON username and password values
 	if username == "" && password == "" {
-		objA := new(user)
-		if err := c.ShouldBindJSON(&objA); err != nil {
+		objUser := new(user)
+		if err := c.ShouldBindJSON(&objUser); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		log.Printf("register JSON username:%s, password:%s, salt:%s\n", objA.Username, objA.Password, objA.Salt)
-		username = objA.Username
-		password = objA.Password
-		salt = objA.Salt
+		log.Println(objUser)
+		username = objUser.Username
+		password = objUser.Password
+		salt = objUser.Salt
+		email = objUser.Email
 	}
 
-	if _, err := registerNewUser(cws, username, password, salt); err == nil {
+	if _, err := registerNewUser(cws, username, password, salt, email); err == nil {
 		/*
 			// If the user is created, set the token in a cookie and log the user in
 				token := generateSessionToken()
