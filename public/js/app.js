@@ -99,6 +99,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 			SessionService.set('username', user.Username);
             $rootScope.authenticated = true;
 			$rootScope.user = user;
+			$rootScope.username  = user.Username;
 		}
 
 		var uncacheSession = function () {
