@@ -160,7 +160,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 
 careworkerControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'AuthService',
 	function ($scope, $http, $location, AuthService) {
-		var credentials = { "Username": "", "Password": "", "Salt": "" }
+		var credentials = { "Username": "", "Password": "", "Salt": "" , "Email":"" }
 
 		$scope.credentials = credentials
 		$scope.processForm = function () {

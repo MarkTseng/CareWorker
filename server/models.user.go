@@ -30,34 +30,35 @@ type user struct {
 }
 
 // Check if the username and password combination is valid
-func isUserValid(cws *careWorkerServer, username, password string) *user {
-	result := new(user)
+func isUserValid(cws *careWorkerServer, email, password string) *user {
+	queryUser := new(user)
 	//cws.users.Find(bson.M{"username": username}).One(&result)
-	cws.collection["users"].Find(bson.M{"username": username}).One(&result)
+	cws.collection["users"].Find(bson.M{"email": email}).One(&queryUser)
 
-	if result.Username == username && result.Password == password {
-		return result
+	if queryUser.Email == email && queryUser.Password == password {
+		return queryUser
 	}
 	return nil
 }
 
 // Register a new user with the given username and password
 // NOTE: For this demo, we
-func registerNewUser(cws *careWorkerServer, username, password, salt, email string) (*user, error) {
+func registerNewUser(cws *careWorkerServer, username, password, salt, email string, newUser *user) (*user, error) {
 	if strings.TrimSpace(password) == "" {
 		log.Printf("registerNewUser password null\n")
 		return nil, errors.New("The password can't be empty")
-	} else if !isUsernameAvailable(cws, username) {
+	} else if !isUsernameAvailable(cws, newUser.Email) {
 		log.Printf("registerNewUser username exlist\n")
 		return nil, errors.New("The username isn't available")
 	}
 
-	u := user{Username: username, Password: password, Salt: salt, Email: email}
+	//u := user{Username: username, Password: password, Salt: salt, Email: email}
 	//cws.users.Insert(&u)
-	cws.collection["users"].Insert(&u)
+	//cws.collection["users"].Insert(&u)
+	cws.collection["users"].Insert(newUser)
 
 	log.Printf("registerNewUser success\n")
-	return &u, nil
+	return newUser, nil
 }
 
 // Check if the supplied username is available
@@ -72,12 +73,12 @@ func isUsernameAvailable(cws *careWorkerServer, username string) bool {
 }
 
 // Check if the supplied username is available
-func isUserSaleAvailable(cws *careWorkerServer, username string) (*user, bool) {
-	result := new(user)
+func isUserSaleAvailable(cws *careWorkerServer, email string) (*user, bool) {
+	saltUser := new(user)
 	//cws.users.Find(bson.M{"username": username}).One(&result)
-	cws.collection["users"].Find(bson.M{"username": username}).One(&result)
-	if result.Username == username {
-		return result, true
+	cws.collection["users"].Find(bson.M{"email": email}).One(&saltUser)
+	if saltUser.Email == email {
+		return saltUser, true
 	}
 	return nil, false
 }
