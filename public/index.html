@@ -56,26 +56,27 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#/question">Home</a></li>
+            <li class="active"><a href="#/question" data-toggle="collapse" data-target=".navbar-collapse">Home</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right">
 			  <li class="dropdown">
 				  <a class="dropdown-toggle" data-toggle="dropdown" href="#">語言
 					  <span class="caret"></span></a>
 				  <ul class="dropdown-menu">
-					  <li><a href="#" ng-click="changeLanguage('en')">English</a></li>
-					  <li><a href="#" ng-click="changeLanguage('zh')">中文</a></li>
+					  <li><a href="#" ng-click="changeLanguage('en')" data-toggle="collapse" data-target=".navbar-collapse">English</a></li>
+					  <li><a href="#" ng-click="changeLanguage('zh')" data-toggle="collapse" data-target=".navbar-collapse">中文</a></li>
 				  </ul>
 			  </li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
-			  <li><a href="#/register"><span class="glyphicon glyphicon-user">Sign Up</a></li>
-			  <li><a href="#/login"><span class="glyphicon glyphicon-log-in">Login</a></li>
+			  <li><a href="#/register" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-user">Sign Up</a></li>
+			  <li><a href="#/login" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-log-in">Login</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
-			  <li><a href="#/job" >Create Jobs</a></li>
-			  <li class="clearfix"><a href="#/profile">{{username}}</a></li>
-			  <li><a href="#" careworker-logout>Logout</a></li>
+			  <li><a href="#/worker" data-toggle="collapse" data-target=".navbar-collapse">Find Worker</a></li>
+			  <li><a href="#/job" data-toggle="collapse" data-target=".navbar-collapse">Find Jobs</a></li>
+			  <li class="clearfix"><a href="#/profile" data-toggle="collapse" data-target=".navbar-collapse">{{username}}</a></li>
+			  <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse" careworker-logout>Logout</a></li>
 		  </ul>
         </div><!--/.navbar-collapse -->
       </div>
