@@ -5,23 +5,23 @@
 				<label for="idtype">註冊身份類型</label></br>
 				<label class="radio">
 					<input type="radio" name="idtype" id="idtype1" value="boss" ng-checked='true' ng-model="credentials.idtype"/>
-					雇主
+				雇主
 				</label>
 				<label class="radio">
 					<input type="radio" name="idtype" id="idtype2" value="babySitter" ng-model="credentials.idtype" />
-					保母服務提供人員
+				保母服務提供人員
 				</label>
 				<label class="radio">
 					<input type="radio" name="idtype" id="idtype3" value="confinement" ng-model="credentials.idtype" />
-					坐月子服務提供人員
+				坐月子服務提供人員
 				</label>
 				<label class="radio">
 					<input type="radio" name="idtype" id="idtype4" value="houseKeeper" ng-model="credentials.idtype" />
-					家事服務提供人員
+				家事服務提供人員
 				</label>
 				<label class="radio">
 					<input type="radio" name="idtype" id="idtype5" value="careWorker" ng-model="credentials.idtype" />
-				    照護服務提供人員
+				照護服務提供人員
 				</label>
 			</div>
 			<div class="form-group">
@@ -103,9 +103,38 @@
 					Phone number must 10 characters.
 				</div>
 			</div>
+			<div class="form-group">
+				<label for="contact">聯絡方式</label></br>
+				<label class="radio">
+				    <input type="checkbox" name="contact1" id="contact1" ng-model="credentials.contactByTelphone" value="telphone" /> 
+                聯絡電話
+                </label>
+				<label class="radio">
+				    <input type="checkbox" name="contact2" id="contact2" ng-model="credentials.contactByCellphone" value="cellphone" /> 
+                行動電話　
+                </label>
+				<label class="radio">
+				    <input type="checkbox" name="contact3" id="contact3" ng-model="credentials.contactByEmail" value="email" />
+                E-mail　
+                </label>
+			</div>
+            <div class="form-group">
+              <label ng-repeat="fruitName in fruits" class="checkbox-inline">
+                <input type="checkbox" name="selectedFruits[]" value="{{fruitName}}" ng-checked="selection.indexOf(fruitName) > -1" ng-click="toggleSelection(fruitName)"><span translate="{{fruitName}}"></span>
+			  </label>
+            </div>
 			<div class="form-group" ng-show="credentials.idtype == 'boss'">
-				<label for="serviceRequest">服務需求</label></br>
-				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceRequest" name="serviceRequest" ng-model="credentials.serviceRequest" placeholder="Service request"></textarea>
+			  <label for="serviceRequest">服務需求</label></br>
+              <label ng-repeat="fruitName in fruits" class="checkbox-inline">
+                <input type="checkbox" name="selectedFruits[]" value="{{fruitName}}" ng-checked="selection.indexOf(fruitName) > -1" ng-click="toggleSelection(fruitName)"><span translate="{{fruitName}}"></span>
+			  </label>
+				<input type="checkbox" ng-click="toggleSelection('1')" name="specialty_type" value="1"> 醫院看護　 
+				<input type="checkbox" ng-click="toggleSelection('2')" name="specialty_type" value="2"> 居家照顧　 
+				<input type="checkbox" ng-click="toggleSelection('3')" name="specialty_type" value="3"> 家事服務　 
+				<input type="checkbox" ng-click="toggleSelection('4')" name="specialty_type" value="4"> 坐月子服務　 
+				<input type="checkbox" ng-click="toggleSelection('5')" name="specialty_type" value="5"> 保母服務　 
+				<input type="checkbox" ng-click="toggleSelection('6')" name="specialty_type" value="6">
+					<span translate="TELPHONE"></span> 
 			</div>
 			<div class="form-group" ng-hide="credentials.idtype == 'boss'">
 				<label for="lineId" class="col-4">Line帳號</label>
@@ -114,6 +143,10 @@
 				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceItem" name="serviceItem" ng-model="credentials.serviceItem" placeholder="Service item list"></textarea>
 				<label for="descriptor">證照字號與經歷說明</label></br>
 				<textarea type="text" class="form-control" clos="50" raws="10" id="descriptor" name="descriptor" ng-model="credentials.descriptor" placeholder="Descriptor list"></textarea>
+			</div>
+			<div class="col-md-6">
+				<h4>selection</h4>
+				<pre>{{credentials|json}}</pre>
 			</div>
 			<div class="form-group">
 				<button id="submit" type="submit" class="btn btn-primary pull-right" ng-disabled="myform.$invalid" >Register</button>

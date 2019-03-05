@@ -126,7 +126,28 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
             澎湖縣: { 馬公市: "880", 西嶼鄉: "881", 望安鄉: "882", 七美鄉: "883", 白沙鄉: "884", 湖西鄉: "885"
             }
         };
-        $scope.credentials = credentials; 
+
+		$scope.fruits = ['1', '2', '3', '4', '5'];
+		// selected fruits
+		$scope.selection = [];
+		// toggle selection for a given fruit by name
+		$scope.toggleSelection = function toggleSelection(fruitName) {
+			var idx = $scope.selection.indexOf(fruitName);
+
+			// is currently selected
+			if (idx > -1) {
+				$scope.selection.splice(idx, 1);
+			}
+
+			// is newly selected
+			else {
+				$scope.selection.push(fruitName);
+			}
+		};
+
+        $scope.credentials = credentials;
+		$scope.credentials['request'] = $scope.selection
+
         $scope.processForm = function () {
             // Default to a non error state
             var err = false;
@@ -141,7 +162,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 
             // debug
             console.log($scope.credentials)
-            //return;
+            return;
 
             // We don't need this to be passed along
             delete $scope.credentials.confirmPassword;
