@@ -127,26 +127,43 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
             }
         };
 
-		$scope.fruits = ['1', '2', '3', '4', '5'];
-		// selected fruits
-		$scope.selection = [];
-		// toggle selection for a given fruit by name
-		$scope.toggleSelection = function toggleSelection(fruitName) {
-			var idx = $scope.selection.indexOf(fruitName);
+		// contacts 
+		$scope.contacts = ['CELLPHONE', 'EMAIL'];
+		$scope.contactSelection = [];
+		$scope.contactToggleSelection = function contactToggleSelection(contactName) {
+			var idx = $scope.contactSelection.indexOf(contactName);
 
 			// is currently selected
 			if (idx > -1) {
-				$scope.selection.splice(idx, 1);
+				$scope.contactSelection.splice(idx, 1);
 			}
 
 			// is newly selected
 			else {
-				$scope.selection.push(fruitName);
+				$scope.contactSelection.push(contactName);
+			}
+		};
+
+		// request Serivce 
+		$scope.requestServices = ['CW_HOSTPITAL', 'CW_HOME', 'HOUSE_KEEPER', 'CONFINEMENT', 'BABYSITTER'];
+		$scope.requestServiceSelection = [];
+		$scope.requestServiceToggleSelection = function requestServiceToggleSelection(serviceName) {
+			var idx = $scope.contactSelection.indexOf(serviceName);
+
+			// is currently selected
+			if (idx > -1) {
+				$scope.requestServiceSelection.splice(idx, 1);
+			}
+
+			// is newly selected
+			else {
+				$scope.requestServiceSelection.push(serviceName);
 			}
 		};
 
         $scope.credentials = credentials;
-		$scope.credentials['request'] = $scope.selection
+		$scope.credentials['contact'] = $scope.contactSelection
+		$scope.credentials['requestService'] = $scope.requestServiceSelection
 
         $scope.processForm = function () {
             // Default to a non error state

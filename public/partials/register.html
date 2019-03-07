@@ -3,25 +3,13 @@
 		<form role="form" name="myform" ng-submit="processForm()">
 			<div class="form-group">
 				<label for="idtype">註冊身份類型</label></br>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype1" value="boss" ng-checked='true' ng-model="credentials.idtype"/>
-				雇主
+				<label class="checkbox-inline">
+					<input type="radio" name="idtype" id="idtype1" value="findCW" ng-checked='true' ng-model="credentials.idtype"/>
+					<span>找居家照護人員（求才）</span>
 				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype2" value="babySitter" ng-model="credentials.idtype" />
-				保母服務提供人員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype3" value="confinement" ng-model="credentials.idtype" />
-				坐月子服務提供人員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype4" value="houseKeeper" ng-model="credentials.idtype" />
-				家事服務提供人員
-				</label>
-				<label class="radio">
-					<input type="radio" name="idtype" id="idtype5" value="careWorker" ng-model="credentials.idtype" />
-				照護服務提供人員
+				<label class="radio-inline">
+					<input type="radio" name="idtype" id="idtype2" value="findJob" ng-model="credentials.idtype" />
+					<span>找居家照護工作（求職）</span>
 				</label>
 			</div>
 			<div class="form-group">
@@ -36,7 +24,7 @@
 				</div>	
 			</div>
 			<div class="form-group">
-				<label for="email">電子郵件</label>
+				<label for="email">電子郵件(登入帳號)</label>
 				<input type="email" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
 				<div class="alert alert-danger"  ng-show="myform.email.$dirty && myform.email.$invalid">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -69,11 +57,11 @@
 				<label for="gender">性別</label><br/>
 				<label class="radio-inline">
 					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender" required/>
-					男
+					<span>男</span>
 				</label>
 				<label class="radio-inline">
 					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender" required />
-					女
+					<span>女</span>
 				</label>
 			</div>
 			<div class="form-group">
@@ -105,38 +93,17 @@
 			</div>
 			<div class="form-group">
 				<label for="contact">聯絡方式</label></br>
-				<label class="radio">
-				    <input type="checkbox" name="contact1" id="contact1" ng-model="credentials.contactByTelphone" value="telphone" /> 
-                聯絡電話
-                </label>
-				<label class="radio">
-				    <input type="checkbox" name="contact2" id="contact2" ng-model="credentials.contactByCellphone" value="cellphone" /> 
-                行動電話　
-                </label>
-				<label class="radio">
-				    <input type="checkbox" name="contact3" id="contact3" ng-model="credentials.contactByEmail" value="email" />
-                E-mail　
-                </label>
+				<label class="radio" ng-repeat="contact in contacts">
+					<input type="checkbox" name="selectedContact[]" value="{{contact}}" ng-checked="selection.indexOf(contact) > -1" ng-click="contactToggleSelection(contact)"><span translate="{{contact}}"></span>
+				</label>
 			</div>
-            <div class="form-group">
-              <label ng-repeat="fruitName in fruits" class="checkbox-inline">
-                <input type="checkbox" name="selectedFruits[]" value="{{fruitName}}" ng-checked="selection.indexOf(fruitName) > -1" ng-click="toggleSelection(fruitName)"><span translate="{{fruitName}}"></span>
+			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
+			  <label for="serviceRequest">服務項目</label></br>
+              <label class="radio" ng-repeat="service in requestServices">
+                <input type="checkbox" name="selectedServices[]" value="{{service}}" ng-checked="selection.indexOf(service) > -1" ng-click="requestServiceToggleSelection(service)"><span translate="{{service}}"></span>
 			  </label>
-            </div>
-			<div class="form-group" ng-show="credentials.idtype == 'boss'">
-			  <label for="serviceRequest">服務需求</label></br>
-              <label ng-repeat="fruitName in fruits" class="checkbox-inline">
-                <input type="checkbox" name="selectedFruits[]" value="{{fruitName}}" ng-checked="selection.indexOf(fruitName) > -1" ng-click="toggleSelection(fruitName)"><span translate="{{fruitName}}"></span>
-			  </label>
-				<input type="checkbox" ng-click="toggleSelection('1')" name="specialty_type" value="1"> 醫院看護　 
-				<input type="checkbox" ng-click="toggleSelection('2')" name="specialty_type" value="2"> 居家照顧　 
-				<input type="checkbox" ng-click="toggleSelection('3')" name="specialty_type" value="3"> 家事服務　 
-				<input type="checkbox" ng-click="toggleSelection('4')" name="specialty_type" value="4"> 坐月子服務　 
-				<input type="checkbox" ng-click="toggleSelection('5')" name="specialty_type" value="5"> 保母服務　 
-				<input type="checkbox" ng-click="toggleSelection('6')" name="specialty_type" value="6">
-					<span translate="TELPHONE"></span> 
 			</div>
-			<div class="form-group" ng-hide="credentials.idtype == 'boss'">
+			<div class="form-group" ng-hide="credentials.idtype == 'findCW'">
 				<label for="lineId" class="col-4">Line帳號</label>
 				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
 				<label for="serviceItem">服務項目說明</label></br>
