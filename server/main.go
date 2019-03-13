@@ -119,6 +119,8 @@ func main() {
 	// Set the router as the default one provided by Gin
 	//router = gin.Default()
 	cws.router = gin.Default()
+	// secure json prefix for angularjs
+	cws.router.SecureJsonPrefix(")]}',\n")
 
 	// Set favicon.ico
 	cws.router.Use(favicon.New("public/static/photos/favicon.ico"))
@@ -158,6 +160,7 @@ func render(c *gin.Context, data gin.H, templateName string) {
 	switch c.Request.Header.Get("Accept") {
 	case "application/json":
 		// Respond with JSON
+		//c.SecureJSON(http.StatusOK, data["payload"])
 		c.JSON(http.StatusOK, data["payload"])
 	case "application/xml":
 		// Respond with XML

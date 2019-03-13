@@ -103,7 +103,7 @@
                 <input type="checkbox" name="selectedServices[]" value="{{service}}" ng-checked="selection.indexOf(service) > -1" ng-click="requestServiceToggleSelection(service)"><span translate="{{service}}"></span>
 			  </label>
 			</div>
-			<div class="form-group" ng-hide="credentials.idtype == 'findCW'">
+			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
 				<label for="lineId" class="col-4">Line帳號</label>
 				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
 				<label for="serviceItem">服務項目說明</label></br>
