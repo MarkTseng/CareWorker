@@ -178,8 +178,8 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
                 return;
 
             // debug
-            console.log($scope.credentials)
-            return;
+            //console.log($scope.credentials)
+            //return;
 
             // We don't need this to be passed along
             delete $scope.credentials.confirmPassword;
