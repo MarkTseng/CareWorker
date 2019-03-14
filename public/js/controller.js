@@ -25,7 +25,6 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
                            idtype: "boss",
                            nickname: "",
                            password: "",
-                           serviceRequest: "",
                            street: "",
                            zipcode: ""};
         $scope.updateZipcode = function() {
@@ -186,6 +185,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 
             // Register the user and redirect them to the login page
             AuthService.register($scope.credentials, function () {
+            		console.log($scope.credentials)
                     $location.path("/login");
             });
 

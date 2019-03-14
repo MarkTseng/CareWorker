@@ -192,7 +192,8 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
                                                         "nickname": credentials.nickname,
                                                         "password": p,
                                                         "salt": s,
-                                                        "serviceRequest": credentials.serviceRequest,
+                                                        "contact": credentials.contact,
+                                                        "requestService": credentials.requestService,
                                                         "street": credentials.street,
                                                         "username": credentials.username,
                                                         "zipcode": credentials.zipcode

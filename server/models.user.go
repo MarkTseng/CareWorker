@@ -22,7 +22,8 @@ type user struct {
 	District       string        `json:"district" form:"district" binding:"required" bson:"district"`
 	Gender         string        `json:"gender" form:"gender" binding:"required" bson:"gender"`
 	Idtype         string        `json:"idtype" form:"idtype" binding:"required" bson:"idtype"`
-	ServiceRequest string        `json:"serviceRequest" form:"serviceRequest" binding:"required" bson:"serviceRequest"`
+	RequestService []string      `json:"requestService" form:"requestService" binding:"required" bson:"requestService"`
+	Contact        []string      `json:"contact" form:"contact" binding:"required" bson:"contact"`
 	Street         string        `json:"street" form:"street" binding:"required" bson:"street"`
 	Zipcode        string        `json:"zipcode" form:"zipcode" binding:"required" bson:"zipcode"`
 	Salt           string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
