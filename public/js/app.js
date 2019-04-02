@@ -1,4 +1,4 @@
-var careworkerApp = angular.module('careworker', ['angularMoment', 'ngRoute', 'careworkerControllers', 'ngCookies', 'pascalprecht.translate'])
+var careworkerApp = angular.module('careworker', ['careworkerControllers', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 careworkerApp.config(['$routeProvider',
 	function($routeProvider) {
@@ -53,7 +53,7 @@ careworkerApp.run(function($rootScope, $location, AuthService, FlashService, Ses
 	});
 });
 
-careworkerApp.config(function($httpProvider) {
+careworkerApp.config(['$httpProvider', function($httpProvider) {
 	var logsOutUserOn401 = function ($location, $q, SessionService, FlashService) {
 		var success = function (res) {
 			return res;
@@ -74,8 +74,8 @@ careworkerApp.config(function($httpProvider) {
 		}
 	}
 
-	$httpProvider.responseInterceptors.push(logsOutUserOn401);
-})
+	$httpProvider.interceptors.push(logsOutUserOn401);
+}])
 
 careworkerApp.factory("SessionService", function () {
 	return {
@@ -141,7 +141,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 
 				// Get a salt for this session
 				$http.post("/u/register/salt", {"email" : e})
-					.success(function(user_salt) {
+					.then(function(user_salt) {
 								// Produce the "Password" to send
 								p = protect (e + p, user_salt.salt);
 								//p = hash( p , user_salt.salt)
@@ -149,21 +149,21 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 								// Try to login
 								var login = $http.post("/u/login", {"email": e, "password": p, "salt": user_salt.salt});
 
-								login.success(cacheSession);
-								login.success(FlashService.clear);
-								login.error(loginError);
+								login.then(cacheSession);
+								login.then(FlashService.clear);
+								login.then(null, loginError);
 
 								if ( typeof fn === "function" )
-									login.success(fn);
+									login.then(fn);
 					}
 				)
 			},
 			logout: function (fn) {
 				var logout =  $http.get("/u/logout");
-				logout.success(uncacheSession);
+				logout.then(uncacheSession);
 
 				if ( typeof fn === "function" )
-					logout.success(fn);
+					logout.then(fn);
 
 			},
 			register: function (credentials, fn) {
@@ -246,8 +246,10 @@ careworkerApp.factory('Questions', ['$http',
 
 		f.List = function () {
 			return $http.get(urlBase)
-				.success(function (data) {
-					store = data;
+				.then(function (response) {
+					store = response.data;
+					// return value for then, next chain.
+					return response.data;
 				});
 		}
 
@@ -265,25 +267,25 @@ careworkerApp.factory('Questions', ['$http',
 
 		f.Insert = function (item) {
 			return $http.post(urlBase, item)
-				.success(function(data) {
-					store.push(data);
+				.then(function(response) {
+					store.push(response.data);
 				});
 		}
 
 		f.Update = function (item) {
 			return $http.put(urlBase + '/' + item.ID, item)
-				.success(function (data) {
+				.then(function (response) {
 					for ( var i = 0; i < store.length; i++ )
 					{
 						if ( store[i].ID == id )
-							return store[i] = data;
+							return store[i] = response.data;
 					}
 				});
 		}
 
 		f.Delete = function (id) {
 			return $http.delete(urlBase + '/' + id)
-				.success(function (data) {
+				.then(function (response) {
 					for ( var i = 0; i < store.length; i++ )
 					{
 						if ( store[i].ID == id )
@@ -315,7 +317,7 @@ careworkerApp.directive('question', ['Questions',
 	function (Questions) {
 		function link ( scope, element, attributes ) {
 			console.log("Generating question...", attributes.question);
-			Questions.Get(attributes.question).success(function(data) {
+			Questions.Get(attributes.question).then(function(data) {
 				console.log(data)
 			})
 		}
@@ -331,7 +333,7 @@ careworkerApp.directive('comment', ['Questions',
 	function (Questions) {
 		function link ( scope, element, attributes ) {
 			console.log("Generating comment...", attributes.question);
-			Questions.Get(attributes.question).success(function(data) {
+			Questions.Get(attributes.question).then(function(data) {
 				console.log(data)
 			})
 		}

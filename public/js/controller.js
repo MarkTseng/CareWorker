@@ -3,10 +3,9 @@ var careworkerControllers = angular.module('careworkerControllers', ['ngCookies'
 careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 	function ($scope, Questions) {
 		Questions.List()
-			.success(function (questions) {
-				$scope.questions = questions;
-			})
-			.error(function (error) {
+			.then(function successCallback(data) {
+				$scope.questions = data;
+			}, function errorCallback(error) {
 				$scope.error = 'Unable to load questions';
 			});
 	}
@@ -262,7 +261,7 @@ careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window
 				method: 'POST',
 				url: '/article/create',
 				data: {title: $scope.question.title, body: $scope.question.markdown, Tags: $scope.question.tags.split(' ')}
-			}).success(function(data) {
+			}).then(function(data) {
 				// TODO: this should be a JSON response
 				$location.path("/questions/"+data);	
 			});
@@ -320,7 +319,7 @@ careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce
 				method: 'POST',
 				url: '/article/create',
 				data: {title: $scope.job.title, location: $scope.job.location, salary: $scope.job.salary, body: $scope.job.body}
-			}).success(function(data) {
+			}).then(function(data) {
 				// TODO: this should be a JSON response
 				$location.path("/job/"+data);	
 			});
@@ -335,11 +334,11 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 	function ($scope, $routeParams, $http, $window, $sce) {
 		$scope.comment = { "Body" : "" }
 		$scope.response = { "Body" : "" }
-
+		console.log("QuestionDetailCtrl")
 		$http.defaults.headers.common['Accept'] = 'application/json';
-		$http.get('/article/view/' + $routeParams.questionId).success(function(data) {
-			$scope.question = data;
-			console.log(data)
+		$http.get('/article/view/' + $routeParams.questionId).then(function(resopnse) {
+			$scope.question = resopnse.data;
+			console.log(resopnse.data)
 		});
 
 		$scope.voteUp = function () {
@@ -347,7 +346,7 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'GET',
 				url: '/q/' + $scope.question._id + '/vote/up',
 				data: {}
-			}).success(function(data) {
+			}).then(function(data) {
 				$scope.question.Upvotes = data.Upvotes
 			});
 		}
@@ -357,7 +356,7 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'GET',
 				url: '/q/' + $scope.question._id + '/vote/down',
 				data: {}
-			}).success(function(data) {
+			}).then(function(data) {
 				$scope.question.Downvotes = data.Downvotes
 			});
 		}
@@ -387,7 +386,7 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'post',
 				url: '/q/' + $scope.question._id + '/comment/',
 				data: $scope.comment
-			}).success(function(data) {
+			}).then(function(data) {
 				delete $scope.scomment;
 				$scope.question.Comments.push(data);
 			});
@@ -414,7 +413,7 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'post',
 				url: '/q/' + $scope.question._id + '/response/',
 				data: $scope.response
-			}).success(function(data) {
+			}).then(function(data) {
 				$scope.question.Responses.push(data);
 			});
 		}
@@ -423,14 +422,10 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 
 careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
-
 		$http.defaults.headers.common['Accept'] = 'application/json';
-		$http.get('/article/view/' + $routeParams.jobId).success(function(data) {
+		$http.get('/article/view/' + $routeParams.jobId).then(function(data) {
 			$scope.job = data;
 			console.log(data)
 		});
-
 	}
 ]);
-
-

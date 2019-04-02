@@ -3,24 +3,24 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" ng-app="careworker"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title translate="TITLE">Care Worker</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title translate="TITLE">Care Worker</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 		<script src="js/vendor/moment.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 
@@ -29,18 +29,29 @@
 		<script src="js/vendor/marked.js"></script>
 		<script src="js/vendor/hashes.min.js"></script>
 		<script src="js/vendor/bignumber.min.js"></script>
-
+    <!--
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.js"></script>
 		<script src="js/vendor/angular/angular-moment.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-cookies.js"></script>
 		<script src="js/vendor/angular/angular-route.js"></script>
+    -->
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-cookies.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
 
 		<script src="js/app.js"></script>
 		<script src="js/controller.js"></script>
-        <script src="js/translate.js"></script>
+    <script src="js/translate.js"></script>
 		<script src="js/angular-translate-loader-static-files.min.js"></script>
-    </head>
-    <body>
+  </head>
+  <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -56,7 +67,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#/question" data-toggle="collapse" data-target=".navbar-collapse">Home</a></li>
+            <li class="active"><a href="#!/question" data-toggle="collapse" data-target=".navbar-collapse">Home</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right">
 			  <li class="dropdown">
@@ -69,12 +80,12 @@
 			  </li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
-			  <li><a href="#/register" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-user">Sign Up</a></li>
-			  <li><a href="#/login" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-log-in">Login</a></li>
+			  <li><a href="#!/register" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-user">Sign Up</a></li>
+			  <li><a href="#!/login" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-log-in">Login</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
-			  <li><a href="#/worker" data-toggle="collapse" data-target=".navbar-collapse">Find Worker</a></li>
-			  <li><a href="#/job" data-toggle="collapse" data-target=".navbar-collapse">Find Jobs</a></li>
+			  <li><a href="#!/worker" data-toggle="collapse" data-target=".navbar-collapse">Find Worker</a></li>
+			  <li><a href="#!/job" data-toggle="collapse" data-target=".navbar-collapse">Find Jobs</a></li>
 			  <li class="clearfix"><a href="#/profile" data-toggle="collapse" data-target=".navbar-collapse">{{username}}</a></li>
 			  <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse" careworker-logout>Logout</a></li>
 		  </ul>
