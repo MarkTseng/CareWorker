@@ -1,27 +1,26 @@
-
-			<div class="">
-				<ul class="careworker-topic-list">
-					<li class="careworker-question clearfix" ng-repeat="question in questions">
-						<div class="careworker-media careworker-widget careworker-widget-box">
-							<div class="careworker-upper" ng-class="{'careworker-question-answered': question.accepted}">
-								{{question.Responses.length}}
-							</div>
-							<div class="careworker-lower">
-								<span class="glyphicon glyphicon-ok"></span>
-							</div>
-						</div>
-						<div class="careworker-question-details clearfix">
-							<h3><a href="#!/questions/{{question._id}}">{{question.title}}</a></h3>
-							<div class="careworker-question-author pull-right">
-								<span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span>
-								<a href="#">{{question.author}}</a>
-								<span class="badge badge-">0</span>
-							</div>
-							<div>
-								<a href="#" ng-repeat="tag in question.Tags" class="label label-info careworker-tag">{{tag}}</a>
-							</div>
-							
-						</div>
-					</li>
-				<ul>
+<div class="">
+	<ul class="careworker-topic-list">
+		<li class="careworker-question clearfix" ng-repeat="question in questions">
+			<div class="careworker-media careworker-widget careworker-widget-box">
+				<div class="careworker-upper" ng-class="{'careworker-question-answered': question.accepted}">
+					{{question.Responses.length}}
+				</div>
+				<div class="careworker-lower">
+					<span class="glyphicon glyphicon-ok"></span>
+				</div>
 			</div>
+			<div class="careworker-question-details clearfix">
+				<h3><a href="#!/questions/{{question._id}}">{{question.title}}</a></h3>
+				<div class="careworker-question-author pull-right">
+					<span title="{{question.Timestamp | date:'medium'}}" am-time-ago="question.Timestamp"></span>
+					<a href="#">{{question.author}}</a>
+					<span class="badge badge-">0</span>
+				</div>
+				<div>
+					<a href="#" ng-repeat="tag in question.Tags" class="label label-info careworker-tag">{{tag}}</a>
+				</div>
+
+			</div>
+		</li>
+		<ul>
+</div>

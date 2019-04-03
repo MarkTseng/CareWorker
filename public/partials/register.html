@@ -4,7 +4,8 @@
 			<div class="form-group">
 				<label for="idtype">註冊身份類型</label></br>
 				<label class="checkbox-inline">
-					<input type="radio" name="idtype" id="idtype1" value="findCW" ng-checked='true' ng-model="credentials.idtype"/>
+					<input type="radio" name="idtype" id="idtype1" value="findCW" ng-checked='true'
+						ng-model="credentials.idtype" />
 					<span>找居家照護人員（求才）</span>
 				</label>
 				<label class="radio-inline">
@@ -16,17 +17,20 @@
 				<label for="username">姓名</label>
 				<div class="row">
 					<div class="col-xs-6 col-md-6">
-						<input class="form-control" name="username" placeholder="真實姓名" type="text" ng-model="credentials.username" required autofocus />
+						<input class="form-control" name="username" placeholder="真實姓名" type="text" ng-model="credentials.username"
+							required autofocus />
 					</div>
 					<div class="col-xs-6 col-md-6">
-						<input class="form-control" name="nickname" placeholder="暱稱" type="text" ng-model="credentials.nickname" required autofocus />
+						<input class="form-control" name="nickname" placeholder="暱稱" type="text" ng-model="credentials.nickname"
+							required autofocus />
 					</div>
-				</div>	
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="email">電子郵件(登入帳號)</label>
-				<input type="email" class="form-control" id="email" name="email" ng-model="credentials.email" placeholder="Email">
-				<div class="alert alert-danger"  ng-show="myform.email.$dirty && myform.email.$invalid">
+				<input type="email" class="form-control" id="email" name="email" ng-model="credentials.email"
+					placeholder="Email">
+				<div class="alert alert-danger" ng-show="myform.email.$dirty && myform.email.$invalid">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only">Error:</span>
 					Invalid email address
@@ -34,9 +38,11 @@
 			</div>
 			<div class="form-group">
 				<label>密碼</label>
-				<input type="password" name="password" class="form-control" ng-model="credentials.password" ng-minlength="6" required/>
+				<input type="password" name="password" class="form-control" ng-model="credentials.password" ng-minlength="6"
+					required />
 				<br>
-				<div class="alert alert-danger"  ng-show="(myform.password.$error.minlength || myform.password.$error.required) && (myform.password.$dirty || submitted)">
+				<div class="alert alert-danger"
+					ng-show="(myform.password.$error.minlength || myform.password.$error.required) && (myform.password.$dirty || submitted)">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only">Error:</span>
 					Password must be at least 6 characters.
@@ -44,9 +50,11 @@
 			</div>
 			<div class="form-group">
 				<label>確認密碼</label>
-				<input type="password" name="confirmPassword" class="form-control" ng-model="credentials.confirmPassword" required pw-check match="credentials.password"/>
+				<input type="password" name="confirmPassword" class="form-control" ng-model="credentials.confirmPassword"
+					required pw-check match="credentials.password" />
 				<br>
-				<div class="alert alert-danger"  ng-show="myform.password.$valid && (myform.confirmPassword.$error.matchError || myform.confirmPassword.$error.required) && (myform.confirmPassword.$dirty || submitted)">
+				<div class="alert alert-danger"
+					ng-show="myform.password.$valid && (myform.confirmPassword.$error.matchError || myform.confirmPassword.$error.required) && (myform.confirmPassword.$dirty || submitted)">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only">Error:</span>
 					Passwords should match.
@@ -54,13 +62,14 @@
 			</div>
 
 			<div class="form-group">
-				<label for="gender">性別</label><br/>
+				<label for="gender">性別</label><br />
 				<label class="radio-inline">
-					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender" required/>
+					<input type="radio" name="gender" id="inlineCheckbox1" value="male" ng-model="credentials.gender" required />
 					<span>男</span>
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender" required />
+					<input type="radio" name="gender" id="inlineCheckbox2" value="female" ng-model="credentials.gender"
+						required />
 					<span>女</span>
 				</label>
 			</div>
@@ -70,22 +79,29 @@
 			</div>
 			<div class="form-group">
 				<label for="address">居住地址</label>
-				<select class="form-control" ng-model="credentials.city" ng-options="city as city for (city, districts) in areas" ng-change="updateZipcode()">
+				<select class="form-control" ng-model="credentials.city"
+					ng-options="city as city for (city, districts) in areas" ng-change="updateZipcode()">
 					<option value>縣市</option>
 				</select>
-				<select class="form-control" ng-model="credentials.district" ng-options="district as district for (district, zipcode) in areas[credentials.city]" ng-change="updateZipcode()">
+				<select class="form-control" ng-model="credentials.district"
+					ng-options="district as district for (district, zipcode) in areas[credentials.city]"
+					ng-change="updateZipcode()">
 					<option value>鄉鎮市區</option>
 				</select>
 				<label for="zipcode">郵遞區號</label>
-				<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="credentials.zipcode" value=credentials.zipcode placeholder="Zipcode" required \>
+				<input type="text" class="form-control" id="zipcode" name="zipcode" ng-model="credentials.zipcode"
+					value=credentials.zipcode placeholder="Zipcode" required \>
 
 				<label for="street">街道號碼</label>
-				<input type="text" class="form-control" id="street" name="street" ng-model="credentials.street" placeholder="Street" required \>
+				<input type="text" class="form-control" id="street" name="street" ng-model="credentials.street"
+					placeholder="Street" required \>
 			</div>
-            <div class="form-group">
+			<div class="form-group">
 				<label for="cellPhone">手機號碼</label>
-				<input type="text" class="form-control" id="cellPhone" name="cellPhone" ng-model="credentials.cellPhone" placeholder="Cell Phone" ng-minlength="10" required \>
-				<div class="alert alert-danger"  ng-show="(myform.cellPhone.$error.minlength || myform.cellPhone.$error.required) && (myform.cellPhone.$dirty || submitted)">
+				<input type="text" class="form-control" id="cellPhone" name="cellPhone" ng-model="credentials.cellPhone"
+					placeholder="Cell Phone" ng-minlength="10" required \>
+				<div class="alert alert-danger"
+					ng-show="(myform.cellPhone.$error.minlength || myform.cellPhone.$error.required) && (myform.cellPhone.$dirty || submitted)">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only">Error:</span>
 					Phone number must 10 characters.
@@ -94,31 +110,37 @@
 			<div class="form-group">
 				<label for="contact">聯絡方式</label></br>
 				<label class="radio" ng-repeat="contact in contacts">
-					<input type="checkbox" name="selectedContact[]" value="{{contact}}" ng-checked="selection.indexOf(contact) > -1" ng-click="contactToggleSelection(contact)"><span translate="{{contact}}"></span>
+					<input type="checkbox" name="selectedContact[]" value="{{contact}}"
+						ng-checked="selection.indexOf(contact) > -1" ng-click="contactToggleSelection(contact)"><span
+						translate="{{contact}}"></span>
 				</label>
 			</div>
 			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
-			  <label for="serviceRequest">服務項目</label></br>
-              <label class="radio" ng-repeat="service in requestServices">
-                <input type="checkbox" name="selectedServices[]" value="{{service}}" ng-checked="selection.indexOf(service) > -1" ng-click="requestServiceToggleSelection(service)"><span translate="{{service}}"></span>
-			  </label>
+				<label for="serviceRequest">服務項目</label></br>
+				<label class="radio" ng-repeat="service in requestServices">
+					<input type="checkbox" name="selectedServices[]" value="{{service}}"
+						ng-checked="selection.indexOf(service) > -1" ng-click="requestServiceToggleSelection(service)"><span
+						translate="{{service}}"></span>
+				</label>
 			</div>
 			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
 				<label for="lineId" class="col-4">Line帳號</label>
 				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
 				<label for="serviceItem">服務項目說明</label></br>
-				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceItem" name="serviceItem" ng-model="credentials.serviceItem" placeholder="Service item list"></textarea>
+				<textarea type="text" class="form-control" clos="50" raws="10" id="serviceItem" name="serviceItem"
+					ng-model="credentials.serviceItem" placeholder="Service item list"></textarea>
 				<label for="descriptor">證照字號與經歷說明</label></br>
-				<textarea type="text" class="form-control" clos="50" raws="10" id="descriptor" name="descriptor" ng-model="credentials.descriptor" placeholder="Descriptor list"></textarea>
+				<textarea type="text" class="form-control" clos="50" raws="10" id="descriptor" name="descriptor"
+					ng-model="credentials.descriptor" placeholder="Descriptor list"></textarea>
 			</div>
 			<div class="col-md-6">
 				<h4>selection</h4>
 				<pre>{{credentials|json}}</pre>
 			</div>
 			<div class="form-group">
-				<button id="submit" type="submit" class="btn btn-primary pull-right" ng-disabled="myform.$invalid" >Register</button>
+				<button id="submit" type="submit" class="btn btn-primary pull-right"
+					ng-disabled="myform.$invalid">Register</button>
 			</div>
 		</form>
 	</div>
 </div>
-

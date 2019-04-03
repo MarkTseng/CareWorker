@@ -9,11 +9,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"github.com/thinkerou/favicon"
-	"gopkg.in/mgo.v2"
 	"io"
 	"io/ioutil"
 	"log"
@@ -22,6 +17,12 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"github.com/thinkerou/favicon"
+	"gopkg.in/mgo.v2"
 )
 
 // global const variable
