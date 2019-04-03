@@ -1,4 +1,4 @@
-var careworkerApp = angular.module('careworker', ['careworkerControllers', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
+var careworkerApp = angular.module('careworker', ['careworkerControllers', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 careworkerApp.config(['$routeProvider',
 	function($routeProvider) {
@@ -30,6 +30,10 @@ careworkerApp.config(['$routeProvider',
 			when('/login', {
 				templateUrl: 'partials/login.html',
 				controller: 'LoginCtrl'
+			}).
+			when('/profile', {
+				templateUrl: 'partials/profile.html',
+				controller: 'ProfileCtrl'
 			}).
 			otherwise({
 				redirectTo: '/questions'

@@ -16,9 +16,13 @@
             padding-top: 50px;
             padding-bottom: 20px;
         }
+
     </style>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/main.css">
+
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
 
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 		<script src="js/vendor/moment.min.js"></script>
@@ -86,7 +90,7 @@
 		  <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
 			  <li><a href="#!/worker" data-toggle="collapse" data-target=".navbar-collapse">Find Worker</a></li>
 			  <li><a href="#!/job" data-toggle="collapse" data-target=".navbar-collapse">Find Jobs</a></li>
-			  <li class="clearfix"><a href="#/profile" data-toggle="collapse" data-target=".navbar-collapse">{{username}}</a></li>
+			  <li class="clearfix"><a href="#!/profile" data-toggle="collapse" data-target=".navbar-collapse">{{username}}</a></li>
 			  <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse" careworker-logout>Logout</a></li>
 		  </ul>
         </div><!--/.navbar-collapse -->

@@ -1,4 +1,4 @@
-var careworkerControllers = angular.module('careworkerControllers', ['ngCookies']);
+var careworkerControllers = angular.module('careworkerControllers', ['ngMaterial', 'ngMessages', 'ngCookies']);
 
 careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 	function ($scope, Questions) {
@@ -427,5 +427,43 @@ careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$h
 			$scope.job = data;
 			console.log(data)
 		});
+	}
+]);
+
+careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
+	function ($scope, $routeParams, $http, $window, $sce) {
+			console.log("Profile");
+			$scope.items = [1,2,3,4,5];
+			$scope.selected = [1];
+			$scope.toggle = function (item, list) {
+				var idx = list.indexOf(item);
+				if (idx > -1) {
+					list.splice(idx, 1);
+				}
+				else {
+					list.push(item);
+				}
+			};
+		
+			$scope.exists = function (item, list) {
+				return list.indexOf(item) > -1;
+			};
+		
+			$scope.isIndeterminate = function() {
+				return ($scope.selected.length !== 0 &&
+						$scope.selected.length !== $scope.items.length);
+			};
+		
+			$scope.isChecked = function() {
+				return $scope.selected.length === $scope.items.length;
+			};
+		
+			$scope.toggleAll = function() {
+				if ($scope.selected.length === $scope.items.length) {
+					$scope.selected = [];
+				} else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
+					$scope.selected = $scope.items.slice(0);
+				}
+			};
 	}
 ]);
