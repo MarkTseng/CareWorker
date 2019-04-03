@@ -433,37 +433,23 @@ careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$h
 careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
 			console.log("Profile");
-			$scope.items = [1,2,3,4,5];
-			$scope.selected = [1];
-			$scope.toggle = function (item, list) {
-				var idx = list.indexOf(item);
-				if (idx > -1) {
-					list.splice(idx, 1);
-				}
-				else {
-					list.push(item);
-				}
+			$scope.user = {
+				title: 'Developer',
+				email: 'ipsum@lorem.com',
+				firstName: '',
+				lastName: '',
+				company: 'Google',
+				address: '1600 Amphitheatre Pkwy',
+				city: 'Mountain View',
+				state: 'CA',
+				biography: 'Loves kittens, snowboarding, and can type at 130 WPM.\n\nAnd rumor has it she bouldered up Castle Craig!',
+				postalCode: '94043'
 			};
-		
-			$scope.exists = function (item, list) {
-				return list.indexOf(item) > -1;
-			};
-		
-			$scope.isIndeterminate = function() {
-				return ($scope.selected.length !== 0 &&
-						$scope.selected.length !== $scope.items.length);
-			};
-		
-			$scope.isChecked = function() {
-				return $scope.selected.length === $scope.items.length;
-			};
-		
-			$scope.toggleAll = function() {
-				if ($scope.selected.length === $scope.items.length) {
-					$scope.selected = [];
-				} else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
-					$scope.selected = $scope.items.slice(0);
-				}
-			};
+	
+			$scope.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS ' +
+			'MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI ' +
+			'WY').split(' ').map(function(state) {
+					return {abbrev: state};
+				});
 	}
 ]);
