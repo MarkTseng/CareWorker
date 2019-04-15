@@ -279,9 +279,9 @@ careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window
 				method: 'POST',
 				url: '/article/create',
 				data: { title: $scope.question.title, body: $scope.question.markdown, Tags: $scope.question.tags.split(' ') }
-			}).then(function (data) {
+			}).then(function (response) {
 				// TODO: this should be a JSON response
-				$location.path("/questions/" + data);
+				$location.path("/questions/" + response.data);
 			});
 			// TODO: Failure
 		}
@@ -333,9 +333,9 @@ careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce
 				method: 'POST',
 				url: '/article/create',
 				data: { title: $scope.job.title, location: $scope.job.location, salary: $scope.job.salary, body: $scope.job.body }
-			}).then(function (data) {
+			}).then(function (response) {
 				// TODO: this should be a JSON response
-				$location.path("/job/" + data);
+				$location.path("/questions/" + response.data);
 			});
 			// TODO: Failure
 		}
@@ -359,8 +359,8 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'GET',
 				url: '/q/' + $scope.question._id + '/vote/up',
 				data: {}
-			}).then(function (data) {
-				$scope.question.Upvotes = data.Upvotes
+			}).then(function (response) {
+				$scope.question.Upvotes = response.data.Upvotes
 			});
 		}
 
@@ -369,8 +369,8 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 				method: 'GET',
 				url: '/q/' + $scope.question._id + '/vote/down',
 				data: {}
-			}).then(function (data) {
-				$scope.question.Downvotes = data.Downvotes
+			}).then(function (response) {
+				$scope.question.Downvotes = response.data.Downvotes
 			});
 		}
 
