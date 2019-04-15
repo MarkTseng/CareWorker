@@ -348,11 +348,10 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 	function ($scope, $routeParams, $http, $window, $sce) {
 		$scope.comment = { "Body": "" }
 		$scope.response = { "Body": "" }
-		console.log("QuestionDetailCtrl")
 		$http.defaults.headers.common['Accept'] = 'application/json';
 		$http.get('/article/view/' + $routeParams.questionId).then(function (resopnse) {
 			$scope.question = resopnse.data;
-			console.log(resopnse.data)
+			//console.log(resopnse.data)
 		});
 
 		$scope.voteUp = function () {
