@@ -97,12 +97,12 @@ careworkerApp.factory("SessionService", function () {
 careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'SessionService', 'FlashService',
 	function ($rootScope, $http, $location, SessionService, FlashService) {
 
-		var cacheSession = function (user) {
+		var cacheSession = function (response) {
 			SessionService.set('authenticated', true);
-			SessionService.set('username', user.Username);
+			SessionService.set('username', response.data.Username);
 			$rootScope.authenticated = true;
-			$rootScope.user = user;
-			$rootScope.username = user.Username;
+			$rootScope.user = response.data;
+			$rootScope.username = response.data.Username;
 		}
 
 		var uncacheSession = function () {
@@ -110,6 +110,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 			SessionService.unset('username');
 			$rootScope.authenticated = false;
 			$rootScope.user = {};
+			$rootScope.username = "";
 		}
 
 		var loginError = function (res) {
