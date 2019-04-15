@@ -144,13 +144,13 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 
 				// Get a salt for this session
 				$http.post("/u/register/salt", { "email": e })
-					.then(function (user_salt) {
+					.then(function (response) {
 						// Produce the "Password" to send
-						p = protect(e + p, user_salt.salt);
-						//p = hash( p , user_salt.salt)
+						p = protect(e + p, response.data.salt);
+						//p = hash( p , response.data.salt)
 
 						// Try to login
-						var login = $http.post("/u/login", { "email": e, "password": p, "salt": user_salt.salt });
+						var login = $http.post("/u/login", { "email": e, "password": p, "salt": response.data.salt });
 
 						login.then(cacheSession);
 						login.then(FlashService.clear);
@@ -202,7 +202,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 					"zipcode": credentials.zipcode
 				});
 				if (typeof fn === "function")
-					register.success(fn);
+					register.then(fn);
 
 			},
 			isLoggedIn: function () {

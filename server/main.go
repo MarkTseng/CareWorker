@@ -12,7 +12,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-	"net/http"
+	//"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -153,21 +153,26 @@ func main() {
 // Render one of HTML, JSON or CSV based on the 'Accept' header of the request
 // If the header doesn't specify this, HTML is rendered, provided that
 // the template name is present
-func render(c *gin.Context, data gin.H, templateName string) {
+func render(c *gin.Context, data gin.H, templateName string, httpStatus int) {
 	loggedInInterface, _ := c.Get("is_logged_in")
 	data["is_logged_in"] = loggedInInterface.(bool)
 
-	//log.Printf("render Request.Header: %s\n", c.Request.Header.Get("Accept"))
+	log.Printf("render Request.Header: %s, templateName:%s\n", c.Request.Header.Get("Accept"), templateName)
 	switch c.Request.Header.Get("Accept") {
+	case "application/json, text/plain, */*":
+		// Respond with JSON
+		c.SecureJSON(httpStatus, data["payload"])
+		//c.JSON(http.StatusOK, data["payload"])
 	case "application/json":
 		// Respond with JSON
-		c.SecureJSON(http.StatusOK, data["payload"])
+		c.SecureJSON(httpStatus, data["payload"])
 		//c.JSON(http.StatusOK, data["payload"])
 	case "application/xml":
 		// Respond with XML
-		c.XML(http.StatusOK, data["payload"])
+		c.XML(httpStatus, data["payload"])
 	default:
 		// Respond with HTML
-		c.HTML(http.StatusOK, templateName, data)
+
+		c.HTML(httpStatus, templateName, data)
 	}
 }

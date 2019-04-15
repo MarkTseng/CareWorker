@@ -16,13 +16,17 @@ func (cws *careWorkerServer) showIndexPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title":   "Care Worker",
-		"payload": articles}, "index.html")
+		"payload": articles},
+		"index.html",
+		http.StatusOK)
 }
 
 func (cws *careWorkerServer) showArticleCreationPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
-		"title": "Create New Article"}, "create-article.html")
+		"title": "Create New Article"},
+		"create-article.html",
+		http.StatusOK)
 }
 
 func (cws *careWorkerServer) getArticle(c *gin.Context) {
@@ -33,7 +37,8 @@ func (cws *careWorkerServer) getArticle(c *gin.Context) {
 			// Call the render function with the title, article and the name of the template
 			render(c, gin.H{
 				"title":   article.Title,
-				"payload": article}, "article.html")
+				"payload": article}, "article.html",
+				http.StatusOK)
 
 		} else {
 			// If the article is not found, abort with an error
@@ -80,7 +85,8 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",
-				"payload": a.Id}, "submission-successful.html")
+				"payload": a.Id}, "submission-successful.html",
+				http.StatusOK)
 		} else {
 			// if there was an error while creating the article, abort with an error
 			c.AbortWithStatus(http.StatusBadRequest)
@@ -105,8 +111,9 @@ func (cws *careWorkerServer) deleteArticle(c *gin.Context) {
 		if err := deleteOldArticle(cws, id, username.(string)); err == nil {
 			// If the article is delete successfully, show success message
 			render(c, gin.H{
-				"title": "Submission Successful",
-			}, "submission-delete-successful.html")
+				"title": "Submission Successful"},
+				"submission-delete-successful.html",
+				http.StatusOK)
 		} else {
 			// if there was an error while creating the article, abort with an error
 			c.AbortWithStatus(http.StatusBadRequest)
@@ -137,7 +144,8 @@ func (cws *careWorkerServer) updateArticle(c *gin.Context) {
 			// If the article is created successfully, show success message
 			render(c, gin.H{
 				"title":   "Submission Successful",
-				"payload": a}, "submission-successful.html")
+				"payload": a}, "submission-successful.html",
+				http.StatusOK)
 		} else {
 			// if there was an error while creating the article, abort with an error
 			c.AbortWithStatus(http.StatusBadRequest)

@@ -35,6 +35,7 @@ func isUserValid(cws *careWorkerServer, email, password string) *user {
 	queryUser := new(user)
 	//cws.users.Find(bson.M{"username": username}).One(&result)
 	cws.collection["users"].Find(bson.M{"email": email}).One(&queryUser)
+	log.Printf("queryUser.Email:%s, Password:%s\n", queryUser.Email, queryUser.Password)
 
 	if queryUser.Email == email && queryUser.Password == password {
 		return queryUser

@@ -23,8 +23,9 @@ func generateSessionToken() string {
 func (cws *careWorkerServer) showLoginPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	render(c, gin.H{
-		"title": "Login",
-	}, "login.html")
+		"title": "Login"},
+		"login.html",
+		http.StatusOK)
 }
 
 func (cws *careWorkerServer) performLogin(c *gin.Context) {
@@ -65,9 +66,14 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
-		c.HTML(http.StatusBadRequest, "login.html", gin.H{
+		//c.HTML(http.StatusBadRequest, "login.html", gin.H{
+		//	"ErrorTitle":   "Login Failed",
+		//	"ErrorMessage": "Invalid credentials provided"})
+		render(c, gin.H{
 			"ErrorTitle":   "Login Failed",
-			"ErrorMessage": "Invalid credentials provided"})
+			"ErrorMessage": "Invalid credentials provided"},
+			"login.html",
+			http.StatusBadRequest)
 	}
 }
 
@@ -90,7 +96,9 @@ func (cws *careWorkerServer) showRegistrationPage(c *gin.Context) {
 	// Call the render function with the name of the template to render
 	log.Println("showRegistrationPage")
 	render(c, gin.H{
-		"title": "Register"}, "register.html")
+		"title": "Register"},
+		"register.html",
+		http.StatusOK)
 }
 
 func (cws *careWorkerServer) register(c *gin.Context) {
@@ -138,6 +146,11 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 			"ErrorTitle":   "Registration Failed",
 			"ErrorMessage": err.Error()})
 
+		render(c, gin.H{
+			"ErrorTitle":   "Registration Failed",
+			"ErrorMessage": err.Error()},
+			"register.html",
+			http.StatusBadRequest)
 	}
 }
 
