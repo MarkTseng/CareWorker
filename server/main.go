@@ -135,7 +135,7 @@ func main() {
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
-	cws.router.LoadHTMLGlob("public/templates/*")
+	//cws.router.LoadHTMLGlob("public/templates/*")
 
 	// Initialize the routes
 	initializeRoutes(cws)
