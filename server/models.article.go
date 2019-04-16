@@ -7,7 +7,7 @@ import (
 	"github.com/night-codes/mgo-ai"
 	//"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"log"
+	//"log"
 	"strconv"
 )
 
@@ -66,7 +66,7 @@ func deleteOldArticle(cws *careWorkerServer, id, username string) error {
 	//err = cws.articles.Remove(bson.M{"_id": article_Id})
 	err = cws.collection["articles"].Remove(bson.M{"_id": article_Id})
 	if err != nil {
-		log.Printf("remove fail %v\n", err)
+		dbgMessage("remove fail %v\n", err)
 	}
 	return err
 }
@@ -80,7 +80,7 @@ func updateOldArticle(cws *careWorkerServer, id, title, content, username string
 	err = cws.collection["articles"].Update(ietmSelector, change)
 
 	if err != nil {
-		log.Printf("update fail %v\n", err)
+		dbgMessage("update fail %v\n", err)
 	}
 
 	a := article{Title: title, Body: content, Id: uint64(article_Id), Author: username}

@@ -170,7 +170,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 					logout.then(fn);
 
 			},
-			register: function (credentials, fn) {
+			register: function (credentials, successfn, errorfn) {
 
 				// Friendly vars
 				var e = credentials.email;
@@ -202,8 +202,8 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 					"username": credentials.username,
 					"zipcode": credentials.zipcode
 				});
-				if (typeof fn === "function")
-					register.then(fn);
+				if ((typeof successfn === "function") && (typeof errorfn === "function"))
+					register.then(successfn, errorfn);
 
 			},
 			isLoggedIn: function () {

@@ -5,7 +5,7 @@ package main
 import (
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"log"
+	//"log"
 	"net/http"
 	"strconv"
 )
@@ -13,7 +13,6 @@ import (
 func (cws *careWorkerServer) showIndexPage(c *gin.Context) {
 	articles := getAllArticles(cws)
 
-	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title":   "Care Worker",
 		"payload": articles},
@@ -22,7 +21,6 @@ func (cws *careWorkerServer) showIndexPage(c *gin.Context) {
 }
 
 func (cws *careWorkerServer) showArticleCreationPage(c *gin.Context) {
-	// Call the render function with the name of the template to render
 	render(c, gin.H{
 		"title": "Create New Article"},
 		"create-article.html",
@@ -70,15 +68,10 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 		location = objA.Location
 		salary = objA.Salary
 	}
-	log.Printf("Title: %s\n", title)
-	log.Printf("content: %s\n", content)
-	log.Printf("location: %s\n", location)
-	log.Printf("salary: %s\n", salary)
 
 	// get username in session
 	session := sessions.Default(c)
 	username := session.Get("username")
-	//log.Printf("createArticle username %s\n", username)
 
 	if username != nil {
 		if a, err := createNewArticle(cws, title, content, location, salary, username.(string)); err == nil {
@@ -100,12 +93,11 @@ func (cws *careWorkerServer) createArticle(c *gin.Context) {
 
 func (cws *careWorkerServer) deleteArticle(c *gin.Context) {
 	id := c.Param("id")
-	//log.Printf("deleteArticle id: %s\n", id)
+	dbgMessage("deleteArticle id: %s\n", id)
 
 	// get username in session
 	session := sessions.Default(c)
 	username := session.Get("username")
-	//log.Printf("deleteArticle username %s\n", username)
 
 	if username != nil {
 		if err := deleteOldArticle(cws, id, username.(string)); err == nil {
@@ -131,13 +123,9 @@ func (cws *careWorkerServer) updateArticle(c *gin.Context) {
 	content := c.PostForm("content")
 	id := c.PostForm("id")
 
-	//log.Printf("updateArticle id %s\n", id)
-	//log.Printf("updateArticle title %s\n", title)
-
 	// get username in session
 	session := sessions.Default(c)
 	username := session.Get("username")
-	//log.Printf("createArticle username %s\n", username)
 
 	if username != nil {
 		if a, err := updateOldArticle(cws, id, title, content, username.(string)); err == nil {

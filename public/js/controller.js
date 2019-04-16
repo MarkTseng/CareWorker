@@ -185,6 +185,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 		$scope.credentials['requestService'] = $scope.requestServiceSelection
 
 		$scope.processForm = function () {
+			$scope.errorComment = ""
 			// Default to a non error state
 			var err = false;
 
@@ -204,9 +205,11 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 			delete $scope.credentials.confirmPassword;
 
 			// Register the user and redirect them to the login page
-			AuthService.register($scope.credentials, function () {
-				console.log($scope.credentials)
+			AuthService.register($scope.credentials, function successCallback(resopnse) {
 				$location.path("/login");
+			}, function errorCallback(response) {
+				console.log(response.data)
+				$scope.errorComment = response.data
 			});
 
 			// Make sure we wipe out the credentials

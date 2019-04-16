@@ -31,6 +31,8 @@ const (
 	MongoDBUrl = "mongodb://localhost:27017/articles_demo_dev"
 )
 
+var debug int
+
 type careWorkerServer struct {
 	// mgo objs
 	db         *mgo.Database
@@ -73,6 +75,11 @@ func DBconnect(cws *careWorkerServer) {
 		cws.collection[collection] = cws.db.C(collection)
 	}
 
+	// setting debug flage
+	if cws.ConfigSetting["APP_DEBUG"] == "1" {
+		debug = 1
+	}
+
 }
 
 func configParse(cws *careWorkerServer) {
@@ -102,6 +109,12 @@ func DoHash(pass, salt string) string {
 	h.Write([]byte(pass))
 	h.Write([]byte(salt))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func dbgMessage(format string, v ...interface{}) {
+	if debug == 1 {
+		log.Printf(fmt.Sprintf(format, v...))
+	}
 }
 
 func main() {
@@ -157,22 +170,14 @@ func render(c *gin.Context, data gin.H, templateName string, httpStatus int) {
 	loggedInInterface, _ := c.Get("is_logged_in")
 	data["is_logged_in"] = loggedInInterface.(bool)
 
-	log.Printf("render Request.Header: %s, templateName:%s\n", c.Request.Header.Get("Accept"), templateName)
+	dbgMessage("render Request.Header: %s, templateName:%s\n", c.Request.Header.Get("Accept"), templateName)
 	switch c.Request.Header.Get("Accept") {
-	case "application/json, text/plain, */*":
+	case "application/json, text/plain, */*", "application/json":
 		// Respond with JSON
 		c.SecureJSON(httpStatus, data["payload"])
-		//c.JSON(http.StatusOK, data["payload"])
-	case "application/json":
-		// Respond with JSON
-		c.SecureJSON(httpStatus, data["payload"])
-		//c.JSON(http.StatusOK, data["payload"])
 	case "application/xml":
-		// Respond with XML
 		c.XML(httpStatus, data["payload"])
 	default:
-		// Respond with HTML
-
 		c.HTML(httpStatus, templateName, data)
 	}
 }
