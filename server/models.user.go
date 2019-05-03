@@ -28,9 +28,10 @@ type user struct {
 	Zipcode        string        `json:"zipcode" form:"zipcode" binding:"required" bson:"zipcode"`
 	Salt           string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
 	login          time.Time
+	CreatedOn      int64 `json:"created_on" bson:"created_on"`
+	Level          int64 `json:"level" bson:"level"`
 }
 
-// Check if the username and password combination is valid
 func isUserValid(cws *careWorkerServer, email, password string) *user {
 	queryUser := new(user)
 	cws.collection["users"].Find(bson.M{"email": email}).One(&queryUser)
@@ -42,8 +43,6 @@ func isUserValid(cws *careWorkerServer, email, password string) *user {
 	return nil
 }
 
-// Register a new user with the given username and password
-// NOTE: For this demo, we
 func registerNewUser(cws *careWorkerServer, newUser *user) (*user, error) {
 	if strings.TrimSpace(newUser.Password) == "" {
 		dbgMessage("registerNewUser password null\n")
@@ -58,7 +57,6 @@ func registerNewUser(cws *careWorkerServer, newUser *user) (*user, error) {
 	return newUser, nil
 }
 
-// Check if the supplied username is available
 func isUserEmailAvailable(cws *careWorkerServer, email string) bool {
 	result := user{}
 	cws.collection["users"].Find(bson.M{"email": email}).One(&result)
@@ -68,7 +66,6 @@ func isUserEmailAvailable(cws *careWorkerServer, email string) bool {
 	return true
 }
 
-// Check if the supplied username is available
 func isUserSaleAvailable(cws *careWorkerServer, email string) (*user, bool) {
 	saltUser := new(user)
 	cws.collection["users"].Find(bson.M{"email": email}).One(&saltUser)

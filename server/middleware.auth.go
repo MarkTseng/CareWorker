@@ -7,7 +7,6 @@ import (
 	"net/http"
 )
 
-// This middleware ensures that a request will be aborted with an error
 // if the user is not logged in
 func (cws *careWorkerServer) ensureLoggedIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -20,7 +19,6 @@ func (cws *careWorkerServer) ensureLoggedIn() gin.HandlerFunc {
 	}
 }
 
-// This middleware ensures that a request will be aborted with an error
 // if the user is already logged in
 func (cws *careWorkerServer) ensureNotLoggedIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -28,7 +26,6 @@ func (cws *careWorkerServer) ensureNotLoggedIn() gin.HandlerFunc {
 		loggedInInterface, _ := c.Get("is_logged_in")
 		loggedIn := loggedInInterface.(bool)
 		if loggedIn {
-			// if token, err := c.Cookie("token"); err == nil || token != "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 	}

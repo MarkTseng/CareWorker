@@ -173,7 +173,6 @@ func render(c *gin.Context, data gin.H, templateName string, httpStatus int) {
 	dbgMessage("render Request.Header: %s, templateName:%s\n", c.Request.Header.Get("Accept"), templateName)
 	switch c.Request.Header.Get("Accept") {
 	case "application/json, text/plain, */*", "application/json":
-		// Respond with JSON
 		c.SecureJSON(httpStatus, data["payload"])
 	case "application/xml":
 		c.XML(httpStatus, data["payload"])
