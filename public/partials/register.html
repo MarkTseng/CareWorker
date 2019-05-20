@@ -4,12 +4,12 @@
 			<div class="form-group">
 				<label for="idtype">註冊身份類型</label></br>
 				<label class="checkbox-inline">
-					<input type="radio" name="idtype" id="idtype1" value="findCW" ng-checked='true'
+					<input type="radio" name="idtype" id="idtype1" value="employer" ng-checked='true'
 						ng-model="credentials.idtype" />
 					<span>找居家照護人員（求才）</span>
 				</label>
 				<label class="radio-inline">
-					<input type="radio" name="idtype" id="idtype2" value="findJob" ng-model="credentials.idtype" />
+					<input type="radio" name="idtype" id="idtype2" value="employee" ng-model="credentials.idtype" />
 					<span>找居家照護工作（求職）</span>
 				</label>
 			</div>
@@ -120,7 +120,7 @@
 						translate="{{contact}}"></span>
 				</label>
 			</div>
-			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
+			<div class="form-group" ng-show="credentials.idtype == 'employee'">
 				<label for="serviceRequest">服務項目</label></br>
 				<label class="radio" ng-repeat="service in requestServices">
 					<input type="checkbox" name="selectedServices[]" value="{{service}}"
@@ -128,7 +128,7 @@
 						translate="{{service}}"></span>
 				</label>
 			</div>
-			<div class="form-group" ng-show="credentials.idtype == 'findJob'">
+			<div class="form-group" ng-show="credentials.idtype == 'employee'">
 				<label for="lineId" class="col-4">Line帳號</label>
 				<input type="text" id="lineId" class="form-control" placeholder="Line Id" ng-model="credentials.lineId">
 				<label for="serviceItem">服務項目說明</label></br>

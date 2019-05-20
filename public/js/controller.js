@@ -22,7 +22,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 			email: "",
 			username: "",
 			gender: "",
-			idtype: "boss",
+			idtype: "employer",
 			nickname: "",
 			password: "",
 			street: "",
