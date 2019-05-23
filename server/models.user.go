@@ -27,9 +27,10 @@ type user struct {
 	Street         string        `json:"street" form:"street" binding:"required" bson:"street"`
 	Zipcode        string        `json:"zipcode" form:"zipcode" binding:"required" bson:"zipcode"`
 	Salt           string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
-	login          time.Time
-	CreatedOn      int64 `json:"created_on" bson:"created_on"`
-	Level          int64 `json:"level" bson:"level"`
+	Login          time.Time
+	CreatedOn      int64         `json:"created_on" bson:"created_on"`
+	Level          int64         `json:"level" bson:"level"`
+	Resume         bson.ObjectId `json:"resume,omitempty" bson:"resume,omitempty"`
 }
 
 func isUserValid(cws *careWorkerServer, email, password string) *user {

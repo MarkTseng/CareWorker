@@ -24,7 +24,6 @@ func initializeRoutes(cws *careWorkerServer) {
 	cws.articleRoutes = cws.router.Group("/article")
 	{
 		cws.articleRoutes.GET("/view/:article_id", cws.getArticle)
-		cws.articleRoutes.GET("/create", cws.ensureLoggedIn(), cws.showArticleCreationPage)
 		cws.articleRoutes.GET("/delete/:id", cws.ensureLoggedIn(), cws.deleteArticle)
 		cws.articleRoutes.POST("/create", cws.ensureLoggedIn(), cws.createArticle)
 		cws.articleRoutes.POST("/update", cws.ensureLoggedIn(), cws.updateArticle)

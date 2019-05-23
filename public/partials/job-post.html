@@ -1,4 +1,5 @@
 <div class="careworker-question clearfix">
+<!--
 	<form novalidate role="form" id="f-question" ng-submit="processForm()">
 		<div class="form-group" ng-class="{'has-error': error.title}">
 			<label for="qTitle">Job</label>
@@ -18,4 +19,105 @@
 			<button id="submit-question" type="submit" class="btn btn-primary pull-right">Create Job</button>
 		</div>
 	</form>
+-->
+
+	<div class="md-padding" ng-cloak style="min-height:270px">
+		<div layout="row" layout-wrap>
+			<div flex="100" flex-gt-sm="50" layout="column">
+				<div>
+					<fieldset class="standard" >
+						<legend>服務類型</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-select ng-model="hrJob.serviceType">
+								<md-option ng-repeat="serviceType in serviceTypes" value="{{serviceType}}">{{serviceType}}</md-option>
+							</md-select>
+						</md-input-container>
+					</fieldset>
+				</div>
+			
+				<div>
+					<fieldset class="standard" >
+						<legend>托育類型</legend>
+						<div layout="row" layout-wrap flex>
+							<div flex="30" ng-repeat="requestService in requestServices">
+								<md-checkbox ng-checked="exists(requestService, requestServicesSelected)" ng-click="requestServicesToggle(requestService, requestServicesSelected)">
+									{{ requestService }}
+								</md-checkbox>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+
+				<div>
+					<fieldset class="standard" >
+						<legend>托育位置</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-input-container class="md-block" flex-gt-sm>
+								<input ng-model="hrJob.location">
+							</md-input-container>
+						</md-input-container>
+					</fieldset>
+				</div>
+			
+			<!-- for HR -->
+				<div>
+					<fieldset class="standard" >
+						<legend>寶寶出生日期</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-datepicker ng-model="hrJob.birthday" md-placeholder="Enter date"></md-datepicker>
+						</md-input-container>
+					</fieldset>
+				</div>
+
+				<div>
+					<fieldset class="standard" >
+						<legend>寶寶性別</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-select ng-model="service">
+								<md-option ng-repeat="service in serviceTypes" value="{{service}}">{{service}}</md-option>
+							</md-select>
+						</md-input-container>
+					</fieldset>
+				</div>
+
+				<div>
+					<fieldset class="standard" >
+						<legend>托育時間</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-select ng-model="service">
+								<md-option ng-repeat="service in serviceTypes" value="{{service}}">{{service}}</md-option>
+							</md-select>
+						</md-input-container>
+					</fieldset>
+				</div>
+
+				<div>
+					<fieldset class="standard" >
+						<legend>預計開始托育日</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-select ng-model="service">
+								<md-option ng-repeat="service in serviceTypes" value="{{service}}">{{service}}</md-option>
+							</md-select>
+						</md-input-container>
+					</fieldset>
+				</div>
+
+				<div>
+					<fieldset class="standard" >
+						<legend>待遇</legend>
+						<md-input-container style="margin-right: 10px;">
+							<md-select ng-model="service">
+								<md-option ng-repeat="service in serviceTypes" value="{{service}}">{{service}}</md-option>
+							</md-select>
+						</md-input-container>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+		<div>
+			<h4>HR Jobs form select</h4>
+			<pre>{{hrJob | json}}</pre>
+		</div>
+	</div>
+
 </div>

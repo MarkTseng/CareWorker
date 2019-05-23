@@ -294,10 +294,37 @@ careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window
 
 careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {
-		var job = { "title": "", "location": "", "salary": "", "body": "" }
+		var hrJob = { "serviceType": "保母服務", "location": "", "salary": "", "body": "" }
 
-		$scope.job = job;
+		// service types
+		$scope.serviceTypes = [
+			"保母服務",
+			"坐月子服務",
+		];
+		$scope.serviceType = $scope.serviceTypes[0];
 
+		// request types
+		$scope.requestServices = ["到府托育","全日托","日托","半日托","臨托","其他"];
+		$scope.requestServicesSelected = [];
+
+		$scope.requestServicesToggle = function (item, list) {
+			var idx = list.indexOf(item);
+			if (idx > -1) {
+				list.splice(idx, 1);
+			}
+			else {
+				list.push(item);
+			}
+		};
+
+		$scope.exists = function (item, list) {
+			return list.indexOf(item) > -1;
+		};
+
+		$scope.hrJob = hrJob;
+		$scope.hrJob['requestService'] = $scope.requestServicesSelected
+
+		// process HR form table
 		$scope.processForm = function () {
 
 			// Remove any previous error statements
