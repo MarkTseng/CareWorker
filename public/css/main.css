@@ -129,6 +129,12 @@ body {
 	border-bottom: 1px solid #ccc;
 }
 
+.careworker-question-head {
+	padding: 10px 0px;
+	overflow: hidden;
+	border-bottom: 3px solid #ccc;
+}
+
 .careworker-ask-btn-center {
 	margin: 20px -20px 40px;
 	text-align:center;
@@ -206,7 +212,7 @@ border-color: rgb(76, 174, 76);
 }
 
 .careworker-question {
-	min-height: 250px;
+	min-height: 100px;
 }
 
 
