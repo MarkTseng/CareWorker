@@ -143,7 +143,7 @@ func main() {
 	store := sessions.NewCookieStore([]byte("secretSession"))
 	cws.router.Use(sessions.Sessions("careWorkerSession", store))
 
-	// for secure options
+	// set secure options and static html and angularjs
 	cws.router.Use(
 		secure.Secure(secure.Options{
 			SSLRedirect:          true,
@@ -153,10 +153,8 @@ func main() {
 			FrameDeny:            true,
 			ContentTypeNosniff:   true,
 			BrowserXssFilter:     true,
-		}))
-
-	// static html and angularjs
-	cws.router.Use(static.Serve("/", static.LocalFile("public", true)))
+		}),
+		static.Serve("/", static.LocalFile("public", true)))
 
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
