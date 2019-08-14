@@ -13,16 +13,16 @@ import (
 	"io/ioutil"
 	"log"
 	//"net/http"
-	"os"
-	"os/signal"
-	"strings"
-	"syscall"
-
 	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/contrib/secure"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/thinkerou/favicon"
 	"gopkg.in/mgo.v2"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
 )
 
 // global const variable
@@ -142,6 +142,18 @@ func main() {
 	// Set sessions for keeping user info
 	store := sessions.NewCookieStore([]byte("secretSession"))
 	cws.router.Use(sessions.Sessions("careWorkerSession", store))
+
+	// for secure options
+	cws.router.Use(
+		secure.Secure(secure.Options{
+			SSLRedirect:          true,
+			SSLProxyHeaders:      map[string]string{"X-Forwarded-Proto": "https"},
+			STSSeconds:           315360000,
+			STSIncludeSubdomains: true,
+			FrameDeny:            true,
+			ContentTypeNosniff:   true,
+			BrowserXssFilter:     true,
+		}))
 
 	// static html and angularjs
 	cws.router.Use(static.Serve("/", static.LocalFile("public", true)))
