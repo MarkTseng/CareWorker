@@ -114,7 +114,7 @@
 			</div>
 			<div class="form-group">
 				<label for="contact">聯絡方式</label></br>
-				<label class="radio" ng-repeat="contact in contacts">
+				<label class="checkbox" ng-repeat="contact in contacts">
 					<input type="checkbox" name="selectedContact[]" value="{{contact}}"
 						ng-checked="selection.indexOf(contact) > -1" ng-click="contactToggleSelection(contact)"><span
 						translate="{{contact}}"></span>
