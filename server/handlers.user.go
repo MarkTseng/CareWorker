@@ -35,8 +35,10 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		// save username in session
 		session := sessions.Default(c)
 		session.Set("username", user.Username)
-		session.Save()
-
+		err := session.Save()
+		if err == nil {
+			dbgMessage("user session svae failed")
+		}
 		RespUser := make(map[string]string)
 		RespUser["Username"] = user.Username
 		RespUser["ID"] = user.Id.Hex()
