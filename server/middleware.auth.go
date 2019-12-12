@@ -3,6 +3,7 @@
 package main
 
 import (
+	//	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,8 +37,21 @@ func (cws *careWorkerServer) setUserStatus() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if token, err := c.Cookie("token"); err == nil || token != "" {
 			c.Set("is_logged_in", true)
+			/*
+				dbgMessage("setUserStatus is_logged_in true: %s", token)
+				session := sessions.Default(c)
+				username := session.Get("username")
+				dbgMessage("session username: %s", username)
+				if user := UserSessionQuery(cws, username.(string)); user != nil {
+					RespUser := make(map[string]string)
+					RespUser["Username"] = user.Username
+					RespUser["ID"] = user.Id.Hex()
+					c.JSON(http.StatusOK, RespUser)
+				}
+			*/
 		} else {
 			c.Set("is_logged_in", false)
+			dbgMessage("setUserStatus is_logged_in false")
 		}
 	}
 }

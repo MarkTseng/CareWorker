@@ -1,34 +1,90 @@
 <div layout="column" layout-padding ng-cloak>
-
-	<br />
+	<form role="form" name="myform" ng-submit="processForm()">
 	<md-content class="md-no-momentum">
-		<md-input-container class="md-icon-float md-block">
-			<!-- Use floating label instead of placeholder -->
-			<label>Name</label>
-			<md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
-			<input ng-model="user.name" type="text">
+		<md-input-container class="md-block">
+			<label>姓名</label>
+			<input ng-model="profile.name" type="text" ng-required="true">
 		</md-input-container>
 
-		<md-input-container md-no-float class="md-icon-float md-block">
-			<!-- Use floating label instead of placeholder -->
-			<label>Phone Number</label>
-			<md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
-			<input ng-model="user.phone" type="text">
+		<md-input-container class="md-block">
+			<label>電話</label>
+			<input ng-model="profile.phone" type="text" ng-required="true">
 		</md-input-container>
 
-		<md-input-container class="md-icon-float md-block">
-			<!-- Use floating placeholder instead of label -->
-			<label>Email (required)</label>
-			<md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
-			<input ng-model="user.email" type="email" ng-required="true">
+		<md-input-container class="md-block" flex-gt-sm="">
+		<label>性別</label>
+			<md-select ng-model="profile.gender" ng-required="true">
+				<md-option value="Male">Male</md-option>
+				<md-option value="Female">Female</md-option>
+			</md-select>
 		</md-input-container>
 
-		<md-input-container md-no-float class="md-icon-float md-block">
-			<!-- Use floating placeholder instead of label -->
-			<label>Address</label>
-			<md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
-			<input ng-model="user.address" type="text">
+		<md-input-container class="md-block">
+            <label>生日</label>
+            <input type="date" id="birthDate" ng-model="profile.birthdayUTC" placeholder="yyyy-MM-dd" ng-required="true" ng-change="updateBirthday()">
 		</md-input-container>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>縣市</label>
+            <md-select ng-model="profile.city" ng-required="true" ng-change="updateDistrict()">
+              <md-option ng-repeat="city in citys" value="{{city}}">
+                {{city}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>鄉鎮市區</label>
+            <md-select ng-model="profile.district" ng-required="true" ng-change="updateZipcode()">
+              <md-option ng-repeat="district in districts" value="{{district}}">
+                {{district}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>郵遞區號</label>
+            <input name="zipcode" ng-model="profile.zipcode" placeholder="100" ng-required="true" ng-pattern="/^[0-9]{3}$/" md-maxlength="3">
+            <div ng-messages="myform.postalCode.$error" role="alert" multiple="">
+              <div ng-message="required" class="my-message">You must supply a postal code.</div>
+              <div ng-message="pattern" class="my-message">That doesn't look like a valid postal
+                code.
+              </div>
+              <div ng-message="md-maxlength" class="my-message">
+                Don't use the long version silly...we don't need to be that specific...
+              </div>
+            </div>
+          </md-input-container>
+        </div>
+
+        <md-input-container class="md-block">
+          <label>街道號碼</label>
+          <input ng-model="profile.street" ng-required="true"> 
+        </md-input-container>
+
+
+        <md-input-container class="md-block">
+			<label>證照</label>
+          	<textarea ng-model="profile.license" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+		</md-input-container>
+
+        <md-input-container class="md-block">
+			<label>工作經歷</label>
+          	<textarea ng-model="profile.jobbrew" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+		</md-input-container>
+
+		<!--
+		<div class="col-md-6">
+			<h4>selection</h4>
+			<pre>{{profile|json}}</pre>
+		</div>
+		-->
+		<div class="form-group">
+			<button id="submit" type="submit" class="btn btn-primary pull-right"
+				ng-disabled="myform.$invalid">Save</button>
+		</div>
+
 
 	</md-content>
 

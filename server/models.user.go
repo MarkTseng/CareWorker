@@ -10,6 +10,38 @@ import (
 	"time"
 )
 
+type user_account struct {
+	Id           bson.ObjectId `json:"_id,omitempty" bson:"id,omitempty"`
+	Password     string
+	Email        string
+	Created      time.Time
+	LastActivity time.Time
+	Status       string
+	Level        int
+	Salt         string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
+	UserGroupId  bson.ObjectId `json:"_id,omitempty" bson:"id,omitempty"`
+	ResumeId     bson.ObjectId `json:"_id,omitempty" bson:"id,omitempty"`
+}
+
+type user_group struct {
+	Id   bson.ObjectId `json:"_id,omitempty" bson:"id,omitempty"`
+	Name string
+}
+
+type user_profile struct {
+	Id       bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name     string        `json:"name" form:"name" binding:"required" bson:"name"`
+	Birthday string        `json:"birthday" form:"birthday" binding:"required" bson:"birthday"`
+	Phone    string        `json:"phone" form:"phone" binding:"required" bson:"phone"`
+	City     string        `json:"city" form:"city" binding:"required" bson:"city"`
+	District string        `json:"district" form:"district" binding:"required" bson:"district"`
+	Gender   string        `json:"gender" form:"gender" binding:"required" bson:"gender"`
+	Street   string        `json:"street" form:"street" binding:"required" bson:"street"`
+	Zipcode  string        `json:"zipcode" form:"zipcode" binding:"required" bson:"zipcode"`
+	JobsBrew string        `json:"jobbrew" form:"jobbrew" binding:"required" bson:"jobbrew"`
+	License  string        `json:"license" form:"license" binding:"required" bson:"license"`
+}
+
 type user struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 	Username       string        `json:"username" form:"username" binding:"required" bson:"username"`
@@ -31,6 +63,14 @@ type user struct {
 	CreatedOn      int64         `json:"created_on" bson:"created_on"`
 	Level          int64         `json:"level" bson:"level"`
 	Resume         bson.ObjectId `json:"resume,omitempty" bson:"resume,omitempty"`
+}
+
+func UserSessionQuery(cws *careWorkerServer, username string) *user {
+	queryUser := new(user)
+	cws.collection["users"].Find(bson.M{"username": username}).One(&queryUser)
+	dbgMessage("queryUser.Email:%s, Password:%s\n", queryUser.Email, queryUser.Password)
+
+	return queryUser
 }
 
 func isUserValid(cws *careWorkerServer, email, password string) *user {
@@ -67,7 +107,7 @@ func isUserEmailAvailable(cws *careWorkerServer, email string) bool {
 	return true
 }
 
-func isUserSaleAvailable(cws *careWorkerServer, email string) (*user, bool) {
+func isUserSaltAvailable(cws *careWorkerServer, email string) (*user, bool) {
 	saltUser := new(user)
 	cws.collection["users"].Find(bson.M{"email": email}).One(&saltUser)
 	if saltUser.Email == email {

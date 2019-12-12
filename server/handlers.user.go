@@ -9,10 +9,26 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pborman/uuid"
 	//"log"
+	"fmt"
 )
 
 func generateSessionToken() string {
 	return uuid.New()
+}
+
+func (cws *careWorkerServer) profile(c *gin.Context) {
+	profile := new(user_profile)
+	// Obtain the POSTed JSON username and password values
+	if err := c.ShouldBindJSON(&profile); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+		return
+	}
+	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Name, profile.Phone)
+	fmt.Println(profile)
+}
+
+func (cws *careWorkerServer) islogin(c *gin.Context) {
+
 }
 
 func (cws *careWorkerServer) performLogin(c *gin.Context) {
@@ -35,6 +51,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		// save username in session
 		session := sessions.Default(c)
 		session.Set("username", user.Username)
+		dbgMessage("set %s to session", user.Username)
 		err := session.Save()
 		if err == nil {
 			dbgMessage("user session svae failed")
@@ -100,7 +117,7 @@ func (cws *careWorkerServer) registerSalt(c *gin.Context) {
 	}
 	dbgMessage("register JSON email:%s\n", saltUser.Email)
 
-	if queryUser, err := isUserSaleAvailable(cws, saltUser.Email); err == true {
+	if queryUser, err := isUserSaltAvailable(cws, saltUser.Email); err == true {
 		Salt := make(map[string]string)
 		Salt["salt"] = queryUser.Salt
 		Salt["username"] = queryUser.Username

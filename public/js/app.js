@@ -206,7 +206,14 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 					register.then(successfn, errorfn);
 
 			},
+			profile: function (profile, successfn, errorfn) {
+				var profile = $http.post("/u/profile", profile);
+				if ((typeof successfn === "function") && (typeof errorfn === "function"))
+					profile.then(successfn, errorfn);
+
+			},
 			isLoggedIn: function () {
+                // to do check session login
 				return SessionService.get('authenticated');
 			},
 			currentUser: function () {
