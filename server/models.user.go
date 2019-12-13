@@ -115,3 +115,19 @@ func isUserSaltAvailable(cws *careWorkerServer, email string) (*user, bool) {
 	}
 	return nil, false
 }
+
+func updateUserProfile(cws *careWorkerServer, email string, profile *user_profile) error {
+	var err error
+	userProfile := new(user_profile)
+
+	err = cws.collection["user_profile"].Find(bson.M{"name": email}).One(&userProfile)
+	dbgMessage("userProfile:%s", userProfile.Name)
+	if err != nil {
+		dbgMessage("insert:%s", userProfile.Name)
+		err = cws.collection["user_profile"].Insert(profile)
+	} else {
+		dbgMessage("update:%s", userProfile.Name)
+		err = cws.collection["user_profile"].Update(bson.M{"_id": userProfile.Id}, profile)
+	}
+	return nil
+}

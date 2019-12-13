@@ -25,6 +25,19 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 	}
 	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Name, profile.Phone)
 	fmt.Println(profile)
+
+	if err := updateUserProfile(cws, profile.Name, profile); err == nil {
+		dbgMessage("%s: register success\n", profile.Name)
+		c.JSON(http.StatusOK, "Success")
+
+	} else {
+		// If the username/password combination is invalid,
+		// show the error message on the login page
+		render(c, gin.H{
+			"payload": err.Error()},
+			"register.html",
+			http.StatusBadRequest)
+	}
 }
 
 func (cws *careWorkerServer) islogin(c *gin.Context) {
