@@ -46,6 +46,7 @@ careworkerApp.run(function ($rootScope, $location, AuthService, FlashService, Se
 
 	$rootScope.authenticated = SessionService.get('authenticated');
 	$rootScope.username = SessionService.get('username');
+	$rootScope.userId = SessionService.get('userId');
 
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		FlashService.clear()
@@ -100,17 +101,21 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 		var cacheSession = function (response) {
 			SessionService.set('authenticated', true);
 			SessionService.set('username', response.data.Username);
+			SessionService.set('userId', response.data.UserId);
 			$rootScope.authenticated = true;
 			$rootScope.user = response.data;
 			$rootScope.username = response.data.Username;
+			$rootScope.userId = response.data.UserId;
 		}
 
 		var uncacheSession = function () {
 			SessionService.unset('authenticated');
 			SessionService.unset('username');
+			SessionService.unset('userId');
 			$rootScope.authenticated = false;
 			$rootScope.user = {};
 			$rootScope.username = "";
+			$rootScope.userId = "";
 		}
 
 		var loginError = function (res) {
@@ -207,6 +212,9 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 
 			},
 			profile: function (profile, successfn, errorfn) {
+                
+		        profile['userId'] = SessionService.get('userId');
+                console.log(profile)
 				var profile = $http.post("/u/profile", profile);
 				if ((typeof successfn === "function") && (typeof errorfn === "function"))
 					profile.then(successfn, errorfn);

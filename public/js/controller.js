@@ -475,6 +475,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
 	function ($scope, $routeParams, $http, $window, $sce, $location,AuthService) {
 		var profile = {
 			birthday: "",
+			userId: "",
 			birthdayUTC: new Date(2010,0,1),
 			phone: "0921041513",
 			city: "臺北市",
@@ -619,6 +620,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
         $scope.citys = Object.keys($scope.areas)
         $scope.districts = Object.keys($scope.areas[$scope.citys[0]])
 		$scope.profile = profile;
+
 		if($scope.profile.birthday != "")
 		{
 			var strBirthday = new String($scope.profile.birthday);

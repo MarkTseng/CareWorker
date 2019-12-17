@@ -23,11 +23,11 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
 		return
 	}
-	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Name, profile.Phone)
+	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
 	fmt.Println(profile)
 
-	if err := updateUserProfile(cws, profile.Name, profile); err == nil {
-		dbgMessage("%s: register success\n", profile.Name)
+	if err := updateUserProfile(cws, profile.Id.Hex(), profile); err == nil {
+		dbgMessage("%s: register success\n", profile.Id.Hex())
 		c.JSON(http.StatusOK, "Success")
 
 	} else {
@@ -40,22 +40,18 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 	}
 }
 
-func (cws *careWorkerServer) islogin(c *gin.Context) {
-
-}
-
 func (cws *careWorkerServer) performLogin(c *gin.Context) {
-	loginUser := new(user)
+	loginUserAccount := new(user_account)
 
 	// Obtain the POSTed JSON username and password values
-	if err := c.ShouldBindJSON(&loginUser); err != nil {
+	if err := c.ShouldBindJSON(&loginUserAccount); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
 		return
 	}
-	dbgMessage("performLogin JSON email:%s, password:%s\n", loginUser.Email, loginUser.Password)
+	dbgMessage("performLogin JSON email:%s, password:%s\n", loginUserAccount.Email, loginUserAccount.Password)
 
 	// Check if the username/password combination is valid
-	if user := isUserValid(cws, loginUser.Email, loginUser.Password); user != nil {
+	if user := isUserValid(cws, loginUserAccount.Email, loginUserAccount.Password); user != nil {
 		// If the username/password is valid set the token in a cookie
 		token := generateSessionToken()
 		c.SetCookie("token", token, 3600, "", "", false, true)
@@ -66,12 +62,14 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		session.Set("username", user.Username)
 		dbgMessage("set %s to session", user.Username)
 		err := session.Save()
-		if err == nil {
+		if err != nil {
 			dbgMessage("user session svae failed")
 		}
 		RespUser := make(map[string]string)
 		RespUser["Username"] = user.Username
-		RespUser["ID"] = user.Id.Hex()
+		RespUser["UserId"] = user.Id.Hex()
+		dbgMessage("RespUser[Username]:%s", RespUser["Username"])
+		dbgMessage("RespUser[UserId]:%s", RespUser["UserId"])
 		c.JSON(http.StatusOK, RespUser)
 	} else {
 		// If the username/password combination is invalid,
@@ -99,16 +97,17 @@ func (cws *careWorkerServer) logout(c *gin.Context) {
 }
 
 func (cws *careWorkerServer) register(c *gin.Context) {
-	newUser := new(user)
+	newUserAccount := new(user_account)
 
 	// Obtain the POSTed JSON username and password values
-	if err := c.ShouldBindJSON(&newUser); err != nil {
+	if err := c.ShouldBindJSON(&newUserAccount); err != nil {
+		dbgMessage("%s: register fail\n", newUserAccount.Email)
 		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
 		return
 	}
 
-	if _, err := registerNewUser(cws, newUser); err == nil {
-		dbgMessage("%s: register success\n", newUser.Email)
+	if _, err := registerNewUser(cws, newUserAccount); err == nil {
+		dbgMessage("%s: register success\n", newUserAccount.Email)
 		c.JSON(http.StatusOK, "Success")
 
 	} else {
@@ -123,7 +122,7 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 
 func (cws *careWorkerServer) registerSalt(c *gin.Context) {
 	// Obtain the POSTed JSON username and password values
-	saltUser := new(user)
+	saltUser := new(user_account)
 	if err := c.ShouldBindJSON(&saltUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
 		return
