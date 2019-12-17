@@ -6,7 +6,7 @@ import (
 	"errors"
 	"gopkg.in/mgo.v2/bson"
 	//"log"
-	//"fmt"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -140,16 +140,27 @@ func isUserSaltAvailable(cws *careWorkerServer, email string) (*user_account, bo
 	return nil, false
 }
 
-func updateUserProfile(cws *careWorkerServer, userId string, profile *user_profile) error {
+func updateUserProfile(cws *careWorkerServer, userId bson.ObjectId, profile *user_profile) error {
 	userProfile := new(user_profile)
 
 	err := cws.collection["user_profile"].Find(bson.M{"userId": userId}).One(&userProfile)
 	if err != nil {
-		dbgMessage("insert profile:%s", userProfile.Id.Hex())
-		err = cws.collection["user_profile"].Insert(profile)
-	} else {
-		dbgMessage("update profile:%s", userProfile.Id.Hex())
-		err = cws.collection["user_profile"].Update(bson.M{"_id": userProfile.Id}, profile)
+		panic(err)
 	}
+	dbgMessage("update profile:%s", userProfile.Id.Hex())
+	err = cws.collection["user_profile"].Update(bson.M{"_id": userProfile.Id}, profile)
+
 	return nil
+}
+
+func getUserProfile(cws *careWorkerServer, userId string) (*user_profile, error) {
+	userProfile := new(user_profile)
+	fmt.Printf("getUserProfile: %s", userId)
+
+	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).One(&userProfile)
+	if err != nil {
+		panic(err)
+	}
+
+	return userProfile, nil
 }

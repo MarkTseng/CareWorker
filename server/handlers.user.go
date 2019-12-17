@@ -16,6 +16,31 @@ func generateSessionToken() string {
 	return uuid.New()
 }
 
+func (cws *careWorkerServer) getProfile(c *gin.Context) {
+	profile := new(user_profile)
+	userId := c.Param("userId")
+	// Obtain the POSTed JSON username and password values
+	//if err := c.ShouldBindJSON(&profile); err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+	//	return
+	//}
+	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
+	fmt.Println(userId)
+
+	if userProfile, err := getUserProfile(cws, userId); err == nil {
+		dbgMessage("%s: register success\n", profile.Id.Hex())
+		c.JSON(http.StatusOK, userProfile)
+
+	} else {
+		// If the username/password combination is invalid,
+		// show the error message on the login page
+		render(c, gin.H{
+			"payload": err.Error()},
+			"register.html",
+			http.StatusBadRequest)
+	}
+}
+
 func (cws *careWorkerServer) profile(c *gin.Context) {
 	profile := new(user_profile)
 	// Obtain the POSTed JSON username and password values
@@ -26,7 +51,7 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
 	fmt.Println(profile)
 
-	if err := updateUserProfile(cws, profile.Id.Hex(), profile); err == nil {
+	if err := updateUserProfile(cws, profile.UserId, profile); err == nil {
 		dbgMessage("%s: register success\n", profile.Id.Hex())
 		c.JSON(http.StatusOK, "Success")
 

@@ -471,23 +471,29 @@ careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$h
 	}
 ]);
 
-careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce', '$location', 'AuthService',
-	function ($scope, $routeParams, $http, $window, $sce, $location,AuthService) {
+careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce', '$location', 'AuthService', 'SessionService',
+	function ($scope, $routeParams, $http, $window, $sce, $location, AuthService, SessionService) {
 		var profile = {
 			birthday: "",
 			userId: "",
 			birthdayUTC: new Date(2010,0,1),
-			phone: "0921041513",
-			city: "臺北市",
-			district: "中山區",
-			name: "Mark",
-			gender: "Male",
-			street: "dfefesefesfesfesfesfe",
-			zipcode: "104",
+			phone: "",
+			city: "",
+			district: "",
+			name: "",
+			gender: "",
+			street: "",
+			zipcode: "",
 			license: "",
 			jobbrew: ""
-		};
-
+        };
+        
+        $http.defaults.headers.common['Accept'] = 'application/json';
+		$http.get('/u/profile/' + SessionService.get('userId')).then(function (response) {
+			profile = response.data;
+            console.log(profile)
+    
+        profile['name'] = SessionService.get('username')
 		$scope.updateBirthday = function () {
 			var DateBirthday = new Date($scope.profile.birthdayUTC);
 			// UTC to GMT(taiwan) + 8 
@@ -639,5 +645,6 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
 				$scope.errorComment = response.data
 			});
 		}
+		});
     }
 ]);
