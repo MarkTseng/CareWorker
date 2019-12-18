@@ -191,21 +191,10 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 
 				//var register = $http.post("/u/register", {"email" : e, "password" : p, "salt" : s });
 				var register = $http.post("/u/register", {
-					"birthday": credentials.birthday,
-					"cellPhone": credentials.cellPhone,
-					"city": credentials.city,
-					"district": credentials.district,
 					"email": e,
-					"gender": credentials.gender,
-					"idtype": credentials.idtype,
-					"nickname": credentials.nickname,
 					"password": p,
 					"salt": s,
-					"contact": credentials.contact,
-					"requestService": credentials.requestService,
-					"street": credentials.street,
 					"username": credentials.username,
-					"zipcode": credentials.zipcode
 				});
 				if ((typeof successfn === "function") && (typeof errorfn === "function"))
 					register.then(successfn, errorfn);

@@ -21,7 +21,8 @@
 
 		<md-input-container class="md-block">
             <label>生日</label>
-            <input type="date" id="birthDate" ng-model="profile.birthdayUTC" placeholder="yyyy-MM-dd" ng-required="true" ng-change="updateBirthday()">
+            <input type="date" id="birthDate" ng-model="profile.birthdayUTC" placeholder="yyyy-MM-dd" 
+                               ng-required="true" ng-change="updateBirthday()">
 		</md-input-container>
 
         <div layout-gt-sm="row">
@@ -45,7 +46,8 @@
 
           <md-input-container class="md-block" flex-gt-sm="">
             <label>郵遞區號</label>
-            <input name="zipcode" ng-model="profile.zipcode" placeholder="100" ng-required="true" ng-pattern="/^[0-9]{3}$/" md-maxlength="3">
+            <input name="zipcode" ng-model="profile.zipcode" placeholder="100" ng-required="true" 
+                                  ng-pattern="/^[0-9]{3}$/" md-maxlength="3">
             <div ng-messages="myform.postalCode.$error" role="alert" multiple="">
               <div ng-message="required" class="my-message">You must supply a postal code.</div>
               <div ng-message="pattern" class="my-message">That doesn't look like a valid postal

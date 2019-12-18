@@ -77,25 +77,13 @@
           <a class="navbar-brand" href="#">Care Worker</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">語言
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#" ng-click="changeLanguage('en')" data-toggle="collapse"
-                  data-target=".navbar-collapse">English</a></li>
-                  <li><a href="#" ng-click="changeLanguage('zh')" data-toggle="collapse"
-                  data-target=".navbar-collapse">中文</a></li>
-                </ul>
-              </li>
-            </ul>
             <ul class="nav navbar-nav navbar-right" ng-hide="authenticated">
               <li><a href="#!/register" data-toggle="collapse" data-target=".navbar-collapse"><span
               class="glyphicon glyphicon-user">Sign Up</a></li>
               <li><a href="#!/login" data-toggle="collapse" data-target=".navbar-collapse"><span
               class="glyphicon glyphicon-log-in">Login</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right ng-hide" ng-show="authenticated">
+            <ul class="nav navbar-nav navbar-left ng-hide" ng-show="authenticated">
               <!-- for employer -->
               <li><a href="#!/searchWR" data-toggle="collapse" data-target=".navbar-collapse">search WR profile</a></li>
               <li><a href="#!/createHR" data-toggle="collapse" data-target=".navbar-collapse">create HR jobs</a></li>
@@ -105,6 +93,18 @@
               data-target=".navbar-collapse">{{username}} profile</a></li>
               <li><a href="#!/" data-toggle="collapse" data-target=".navbar-collapse" careworker-logout>Logout</a></li>
             </ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">語言
+					<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#" ng-click="changeLanguage('en')" data-toggle="collapse"
+						data-target=".navbar-collapse">English</a></li>
+						<li><a href="#" ng-click="changeLanguage('zh')" data-toggle="collapse"
+						data-target=".navbar-collapse">中文</a></li>
+					</ul>
+				</li>
+				</ul>
           </div>
           <!--/.navbar-collapse -->
         </div>
