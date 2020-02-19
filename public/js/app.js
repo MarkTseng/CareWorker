@@ -45,8 +45,8 @@ careworkerApp.run(function ($rootScope, $location, AuthService, FlashService, Se
 	var routesThatRequireAuth = ['/ask'];
 
 	$rootScope.authenticated = SessionService.get('authenticated');
-	$rootScope.username = SessionService.get('username');
-	$rootScope.userId = SessionService.get('userId');
+	$rootScope.user = JSON.parse(SessionService.get('user'));
+    //console.log("App run")
 
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		FlashService.clear()
@@ -87,7 +87,7 @@ careworkerApp.factory("SessionService", function () {
 			return sessionStorage.getItem(key);
 		},
 		set: function (key, val) {
-			return sessionStorage.setItem(key, val);
+			return sessionStorage.setItem(key, JSON.stringify(val));
 		},
 		unset: function (key) {
 			return sessionStorage.removeItem(key);
@@ -99,23 +99,18 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 	function ($rootScope, $http, $location, SessionService, FlashService) {
 
 		var cacheSession = function (response) {
+            console.log("sessionservice save")
 			SessionService.set('authenticated', true);
-			SessionService.set('username', response.data.Username);
-			SessionService.set('userId', response.data.UserId);
+		    SessionService.set('user',response.data);
 			$rootScope.authenticated = true;
-			$rootScope.user = response.data;
-			$rootScope.username = response.data.Username;
-			$rootScope.userId = response.data.UserId;
+			$rootScope.user = JSON.parse(SessionService.get('user'));
 		}
 
 		var uncacheSession = function () {
 			SessionService.unset('authenticated');
-			SessionService.unset('username');
-			SessionService.unset('userId');
+			SessionService.unset('user');
 			$rootScope.authenticated = false;
 			$rootScope.user = {};
-			$rootScope.username = "";
-			$rootScope.userId = "";
 		}
 
 		var loginError = function (res) {
@@ -200,10 +195,11 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 					register.then(successfn, errorfn);
 
 			},
+            // update profile data
 			profile: function (profile, successfn, errorfn) {
                 
-		        profile['userId'] = SessionService.get('userId');
-                console.log(profile)
+                var user = JSON.parse(SessionService.get('user'));
+		        profile['userId'] = user.UserId;
 				var profile = $http.post("/u/profile", profile);
 				if ((typeof successfn === "function") && (typeof errorfn === "function"))
 					profile.then(successfn, errorfn);
