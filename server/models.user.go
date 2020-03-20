@@ -3,7 +3,10 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 	//"log"
 	"fmt"
@@ -19,6 +22,7 @@ type user_account struct {
 	Email        string        `json:"email" form:"email" binding:"required" bson:"email"`
 	Status       string        `json:"status" form:"status" binding:"required" bson:"status"`
 	Salt         string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
+	ResetCode    string        `json:"resetcode" form:"resetcode" binding:"required" bson:"resetcode"`
 	LastActivity time.Time
 	CreatedOn    time.Time     `json:"created_on" bson:"created_on"`
 	Level        int64         `json:"level" bson:"level"`
@@ -50,6 +54,7 @@ func isUserValid(cws *careWorkerServer, email, password string) *user_account {
 	err := cws.collection["user_account"].Find(bson.M{"email": email}).One(&queryUser)
 	if err != nil {
 		panic(err)
+		return nil
 	}
 	dbgMessage("queryUser.Email:%s, Password:%s\n", queryUser.Email, queryUser.Password)
 
@@ -97,9 +102,12 @@ func isUserEmailAvailable(cws *careWorkerServer, email string) bool {
 func isUserSaltAvailable(cws *careWorkerServer, email string) (*user_account, bool) {
 	saltUser := new(user_account)
 	err := cws.collection["user_account"].Find(bson.M{"email": email}).One(&saltUser)
+
 	if err != nil {
-		panic(err)
+		//panic(err)
+		return nil, false
 	}
+
 	if saltUser.Email == email {
 		return saltUser, true
 	}
@@ -129,4 +137,86 @@ func getUserProfile(cws *careWorkerServer, userId string) (*user_profile, error)
 	}
 
 	return userProfile, nil
+}
+
+func GenerateToken(email string) string {
+	hash, err := bcrypt.GenerateFromPassword([]byte(email), bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Hash to store:", string(hash))
+
+	hasher := md5.New()
+	hasher.Write(hash)
+	return hex.EncodeToString(hasher.Sum(nil))
+}
+
+func setResetCode(cws *careWorkerServer, email string) (string, bool) {
+	userAccount := new(user_account)
+
+	cws.collection["user_account"].Find(bson.M{"email": email}).One(&userAccount)
+
+	// get resetcode
+	userAccount.ResetCode = GenerateToken(email)
+
+	// set resetcode
+	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
+	if err != nil {
+		panic(err)
+		return "", false
+	}
+
+	return userAccount.ResetCode, true
+}
+
+func clearResetCode(cws *careWorkerServer, email string) (string, bool) {
+	userAccount := new(user_account)
+
+	cws.collection["user_account"].Find(bson.M{"email": email}).One(&userAccount)
+
+	// get resetcode
+	userAccount.ResetCode = ""
+
+	// set resetcode
+	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
+	if err != nil {
+		panic(err)
+		return "", false
+	}
+
+	return userAccount.ResetCode, true
+}
+
+func verifyResetCode(cws *careWorkerServer, email string, resetCode string) bool {
+	userAccount := new(user_account)
+
+	err := cws.collection["user_account"].Find(bson.M{"email": email}).One(&userAccount)
+
+	if err != nil {
+		panic(err)
+		return false
+	}
+
+	if userAccount.ResetCode == resetCode {
+		return true
+	}
+
+	return false
+}
+
+func resetPassword(cws *careWorkerServer, email string, password string) (string, bool) {
+	userAccount := new(user_account)
+
+	cws.collection["user_account"].Find(bson.M{"email": email}).One(&userAccount)
+
+	userAccount.Password = password
+
+	// set resetcode
+	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
+	if err != nil {
+		panic(err)
+		return "", false
+	}
+
+	return userAccount.ResetCode, true
 }

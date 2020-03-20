@@ -28,7 +28,7 @@ func (cws *careWorkerServer) getProfile(c *gin.Context) {
 	fmt.Println(userId)
 
 	if userProfile, err := getUserProfile(cws, userId); err == nil {
-		dbgMessage("%s: register success\n", profile.Id.Hex())
+		dbgMessage("%s: getprofile success\n", profile.Id.Hex())
 		c.JSON(http.StatusOK, userProfile)
 
 	} else {
@@ -159,5 +159,45 @@ func (cws *careWorkerServer) registerSalt(c *gin.Context) {
 		Salt["salt"] = queryUser.Salt
 		Salt["username"] = queryUser.Username
 		c.JSON(http.StatusOK, Salt)
+	}
+}
+
+func (cws *careWorkerServer) forgotPassword(c *gin.Context) {
+	userEmail := c.Param("email")
+
+	dbgMessage("forgot email :%s\n", userEmail)
+	// save reset hashcode in user database
+	resetCode, err := setResetCode(cws, userEmail)
+
+	if err == false {
+		c.JSON(http.StatusOK, "Fail")
+	}
+
+	// send mail
+	sendPasswordResetMail(userEmail, resetCode)
+
+	c.JSON(http.StatusOK, "Success")
+}
+
+func (cws *careWorkerServer) resetPassword(c *gin.Context) {
+	userEmail := c.Param("email")
+	userResetCode := c.Param("resetcode")
+	userNewPassword := c.Param("newpassword")
+
+	// resetcode is correct
+	dbgMessage("userEmail: %s, resetcode:%s, password:%s\n", userEmail, userResetCode, userNewPassword)
+
+	// check resetcode flow
+	ret := verifyResetCode(cws, userEmail, userResetCode)
+
+	// resetcode is fail
+	if ret == false {
+		c.JSON(http.StatusOK, "Verify Failed")
+	} else {
+		// clear resetCode
+		clearResetCode(cws, userEmail)
+		// update password
+		resetPassword(cws, userEmail, userNewPassword)
+		c.JSON(http.StatusOK, "Success")
 	}
 }

@@ -58,7 +58,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 
 careworkerControllers.controller('LoginCtrl', ['$scope', '$http', '$location', 'AuthService',
 	function ($scope, $http, $location, AuthService) {
-		var credentials = { "Username": "", "Password": "", "Salt": "", "Email": "" }
+		var credentials = { "Password": "", "Salt": "", "Email": "" }
 
 		$scope.credentials = credentials
 		$scope.processForm = function () {
@@ -73,6 +73,58 @@ careworkerControllers.controller('LoginCtrl', ['$scope', '$http', '$location', '
 		}
 	}
 ]);
+
+careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'AuthService',
+	function ($scope, $http, $routeParams, $location, AuthService) {
+		var credentials = { "Password": "", "email": "", "resetCode":"" }
+        $scope.credentials = credentials
+
+        console.log($routeParams)
+        credentials["email"] = $routeParams.email
+        credentials["resetCode"] = $routeParams.resetcode
+        console.log(credentials)
+		$scope.processForm = function () {
+            console.log("reset password")
+			// We don't need this to be passed along
+			delete $scope.credentials.confirmPassword;
+
+			AuthService.resetPassword($scope.credentials, function successCallback(resopnse) {
+				$location.path("/login");
+			}, function errorCallback(response) {
+				console.log(response.data)
+				$scope.errorComment = response.data
+			});
+		}
+	}
+]);
+
+careworkerControllers.controller('ForgotPasswordCtrl', ['$scope', '$http', '$location', 'AuthService',
+	function ($scope, $http, $location, AuthService) {
+		var credentials = { "email": "" }
+        $scope.credentials = credentials
+
+		$scope.processForm = function () {
+            $http.defaults.headers.common['Accept'] = 'application/json';
+			$scope.errorComment = ""
+			// Default to a non error state
+			var err = false;
+
+			// Make sure they have entered a password that matches
+			if ($scope.credentials.email === "") {
+				err = true;
+				return;
+			}
+			if (err)
+				return;
+
+
+	        $http.get('/u/forgotpassword/' + $scope.credentials.email).then(function (resopnse) {
+				$location.path("/login");
+		    });
+		}
+	}
+]);
+
 
 careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {

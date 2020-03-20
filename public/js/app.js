@@ -35,6 +35,14 @@ careworkerApp.config(['$routeProvider',
 				templateUrl: 'partials/profile.html',
 				controller: 'ProfileCtrl'
 			}).
+			when('/resetpassword/:resetcode/email/:email', {
+				templateUrl: 'partials/resetPassword.html',
+				controller: 'ResetPasswordCtrl'
+			}).
+			when('/forgotpassword', {
+				templateUrl: 'partials/forgotPassword.html',
+				controller: 'ForgotPasswordCtrl'
+			}).
 			otherwise({
 				redirectTo: '/questions'
 			});
@@ -193,6 +201,30 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 				});
 				if ((typeof successfn === "function") && (typeof errorfn === "function"))
 					register.then(successfn, errorfn);
+
+			},
+			resetPassword: function (credentials, successfn, errorfn) {
+
+				// Friendly vars
+				var e = credentials.email;
+				var p = credentials.password;
+				var r = credentials.resetCode;
+
+				credentials.email = "";
+				credentials.password = "";
+				credentials.resetCode = "";
+
+				// Get a salt for this session
+				$http.post("/u/register/salt", { "email": e })
+                .then(function (response) {
+                    // Produce the "Password" to send
+                    var salt = response.data.salt;
+                    p = protect(e + p, salt);
+
+                    var resetpassword = $http.get("/u/resetpassword/"+e+"/"+r+"/"+p);
+                    if ((typeof successfn === "function") && (typeof errorfn === "function"))
+                        resetpassword.then(successfn, errorfn);
+                    })
 
 			},
             // update profile data

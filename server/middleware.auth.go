@@ -3,7 +3,7 @@
 package main
 
 import (
-	//	"github.com/gin-gonic/contrib/sessions"
+	//"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -27,7 +27,13 @@ func (cws *careWorkerServer) ensureNotLoggedIn() gin.HandlerFunc {
 		loggedInInterface, _ := c.Get("is_logged_in")
 		loggedIn := loggedInInterface.(bool)
 		if loggedIn {
-			c.AbortWithStatus(http.StatusUnauthorized)
+
+			//RespUser := make(map[string]string)
+			//RespUser["Username"] = username.(string)
+			//dbgMessage("RespUser[Username]:%s", RespUser["Username"])
+			//c.JSON(http.StatusOK, RespUser)
+			//c.AbortWithStatus(http.StatusUnauthorized)
+			//dbgMessage("Abort connect")
 		}
 	}
 }

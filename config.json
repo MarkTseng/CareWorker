@@ -8,5 +8,8 @@
   "DB_USERNAME": "root", 
   "DB_PASSWORD": "", 
   "DB_HOST": "127.0.0.1", 
-  "DB_PORT": "27017"
+  "DB_PORT": "27017",
+  "EMAIL_ACCOUNT": "chunjen.tseng@gmail.com",
+  "EMAIL_PASSWORD": "rdfdadnloyjsmhwh",
+  "MTA_SERVER": "smtp.gmail.com"
 }

@@ -18,8 +18,11 @@ func initializeRoutes(cws *careWorkerServer) {
 		cws.userRoutes.POST("/register", cws.ensureNotLoggedIn(), cws.register)
 		cws.userRoutes.POST("/register/salt", cws.ensureNotLoggedIn(), cws.registerSalt)
 		cws.userRoutes.POST("/login", cws.ensureNotLoggedIn(), cws.performLogin)
+		cws.userRoutes.GET("/forgotpassword/:email", cws.ensureNotLoggedIn(), cws.forgotPassword)
+		cws.userRoutes.GET("/resetpassword/:email/:resetcode/:newpassword", cws.ensureNotLoggedIn(), cws.resetPassword)
 		cws.userRoutes.POST("/profile", cws.ensureLoggedIn(), cws.profile)
 		cws.userRoutes.GET("/profile/:userId", cws.ensureLoggedIn(), cws.getProfile)
+		//cws.userRoutes.POST("/islogin/:userId", cws.islogin)
 	}
 
 	// Group article related routes together
