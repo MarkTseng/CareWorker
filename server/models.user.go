@@ -197,7 +197,7 @@ func verifyResetCode(cws *careWorkerServer, email string, resetCode string) bool
 		return false
 	}
 
-	if userAccount.ResetCode == resetCode {
+	if userAccount.ResetCode == resetCode && strings.TrimSpace(userAccount.ResetCode) != "" {
 		return true
 	}
 
