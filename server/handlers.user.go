@@ -135,10 +135,9 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
-		render(c, gin.H{
-			"payload": err.Error()},
-			"register.html",
-			http.StatusBadRequest)
+		RespErrorMSG := make(map[string]string)
+		RespErrorMSG["Message"] = err.Error()
+		c.JSON(http.StatusUnauthorized, RespErrorMSG)
 	}
 }
 
