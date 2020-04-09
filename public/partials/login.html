@@ -1,19 +1,50 @@
 <div class="row">
 	<div class="careworker-question col-lg-6 col-lg-offset-3">
-		<form role="form" ng-submit="processForm()">
+		<form role="form" name="myform" ng-submit="processForm()">
+            <!--
 			<div class="form-group">
 				<label for="email">Email Adress</label>
 				<input type="text" class="form-control" id="email" name="email" ng-model="credentials.Email"
 					placeholder="Email">
 			</div>
+            -->
+            <label for="email">電子郵件(登入帳號)</label>
+            <input type="email" class="form-control" id="email" name="email" ng-model="credentials.Email"
+                                                                             placeholder="Email">
+            <div class="alert alert-danger" ng-show="myform.email.$dirty && myform.email.$invalid">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Invalid email address
+            </div>
+            <div class="alert alert-danger" ng-show="errorComment">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{errorComment}}
+            </div>
+            <!--
 			<div class="form-group">
 				<label for="password">Password</label>
 				<input type="password" class="form-control" id="password" name="password" ng-model="credentials.Password"
 					placeholder="Password">
 			</div>
+            -->
 			<div class="form-group">
-				<button id="submit" type="submit" class="btn btn-primary pull-right">Login</button>
-                <a href="#!/forgotpassword">Forgot password</a>
+				<label>密碼</label>
+				<input type="password" name="password" class="form-control" ng-model="credentials.Password" ng-minlength="6"
+					required />
+				<br>
+				<div class="alert alert-danger"
+					ng-show="(myform.password.$error.minlength || myform.password.$error.required) 
+                             && (myform.password.$dirty || submitted)">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Password must be at least 6 characters.
+				</div>
+			</div>
+
+			<div class="form-group">
+				<button id="submit" type="submit" class="btn btn-primary pull-right" ng-disabled="myform.$invalid">登入</button>
+                <a href="#!/forgotpassword">忘記密碼</a>
 			</div>
 		</form>
 	</div>

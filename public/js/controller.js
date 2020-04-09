@@ -98,10 +98,11 @@ careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$rout
 	}
 ]);
 
-careworkerControllers.controller('ForgotPasswordCtrl', ['$scope', '$http', '$location', 'AuthService',
-	function ($scope, $http, $location, AuthService) {
+careworkerControllers.controller('ForgotPasswordCtrl', ['$scope', '$http', '$location', 'AuthService', 'FlashService',
+	function ($scope, $http, $location, AuthService, FlashService) {
 		var credentials = { "email": "" }
         $scope.credentials = credentials
+        FlashService.clear()
 
 		$scope.processForm = function () {
             $http.defaults.headers.common['Accept'] = 'application/json';

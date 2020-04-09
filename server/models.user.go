@@ -53,7 +53,7 @@ func isUserValid(cws *careWorkerServer, email, password string) *user_account {
 	queryUser := new(user_account)
 	err := cws.collection["user_account"].Find(bson.M{"email": email}).One(&queryUser)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return nil
 	}
 	dbgMessage("queryUser.Email:%s, Password:%s\n", queryUser.Email, queryUser.Password)

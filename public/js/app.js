@@ -122,7 +122,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 		}
 
 		var loginError = function (res) {
-			FlashService.show(res.Message);
+			FlashService.show(res.data.Message);
 		}
 
 		var protect = function (secret, salt) {
@@ -163,6 +163,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 
 						login.then(cacheSession);
 						login.then(FlashService.clear);
+                        // $http.post('/someUrl', data, config).then(successCallback, errorCallback);
 						login.then(null, loginError);
 
 						if (typeof fn === "function")

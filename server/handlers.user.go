@@ -97,12 +97,9 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		dbgMessage("RespUser[UserId]:%s", RespUser["UserId"])
 		c.JSON(http.StatusOK, RespUser)
 	} else {
-		// If the username/password combination is invalid,
-		// show the error message on the login page
-		render(c, gin.H{
-			"payload": "Invalid credentials provided"},
-			"login.html",
-			http.StatusBadRequest)
+		RespErrorMSG := make(map[string]string)
+		RespErrorMSG["Message"] = "login fail, Please chech account and password"
+		c.JSON(http.StatusUnauthorized, RespErrorMSG)
 	}
 }
 
