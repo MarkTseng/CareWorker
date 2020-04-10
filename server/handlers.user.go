@@ -32,12 +32,9 @@ func (cws *careWorkerServer) getProfile(c *gin.Context) {
 		c.JSON(http.StatusOK, userProfile)
 
 	} else {
-		// If the username/password combination is invalid,
-		// show the error message on the login page
-		render(c, gin.H{
-			"payload": err.Error()},
-			"register.html",
-			http.StatusBadRequest)
+		RespErrorMSG := make(map[string]string)
+		RespErrorMSG["Message"] = "get profile fail"
+		c.JSON(http.StatusBadRequest, RespErrorMSG)
 	}
 }
 
@@ -56,12 +53,9 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 		c.JSON(http.StatusOK, "Success")
 
 	} else {
-		// If the username/password combination is invalid,
-		// show the error message on the login page
-		render(c, gin.H{
-			"payload": err.Error()},
-			"register.html",
-			http.StatusBadRequest)
+		RespErrorMSG := make(map[string]string)
+		RespErrorMSG["Message"] = "update profile fail"
+		c.JSON(http.StatusBadRequest, RespErrorMSG)
 	}
 }
 
@@ -137,7 +131,7 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 		// show the error message on the login page
 		RespErrorMSG := make(map[string]string)
 		RespErrorMSG["Message"] = err.Error()
-		c.JSON(http.StatusUnauthorized, RespErrorMSG)
+		c.JSON(http.StatusBadRequest, RespErrorMSG)
 	}
 }
 
