@@ -73,7 +73,7 @@ careworkerApp.config(['$httpProvider', function ($httpProvider) {
 		var error = function (res) {
 			if (res.status === 401) { // HTTP NotAuthorized
 				SessionService.unset('authenticated')
-				FlashService.show(res.data.Message);
+				FlashService.show(res.data[0].Message);
 				$location.path("/login");
 				return $q.reject(res)
 			} else {
@@ -107,9 +107,8 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 	function ($rootScope, $http, $location, SessionService, FlashService) {
 
 		var cacheSession = function (response) {
-            console.log("sessionservice save")
 			SessionService.set('authenticated', true);
-		    SessionService.set('user',response.data);
+		    SessionService.set('user',response.data[0]);
 			$rootScope.authenticated = true;
 			$rootScope.user = JSON.parse(SessionService.get('user'));
 		}
@@ -122,7 +121,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 		}
 
 		var loginError = function (res) {
-			FlashService.show(res.data.Message);
+			FlashService.show(res.data[0].Message);
 		}
 
 		var protect = function (secret, salt) {
@@ -155,11 +154,11 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 				$http.post("/u/register/salt", { "email": e })
 					.then(function (response) {
 						// Produce the "Password" to send
-						p = protect(e + p, response.data.salt);
+						p = protect(e + p, response.data[0].salt);
 						//p = hash( p , response.data.salt)
 
 						// Try to login
-						var login = $http.post("/u/login", { "email": e, "password": p, "salt": response.data.salt });
+						var login = $http.post("/u/login", { "email": e, "password": p, "salt": response.data[0].salt });
 
 						login.then(cacheSession);
 						login.then(FlashService.clear);
@@ -219,7 +218,7 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 				$http.post("/u/register/salt", { "email": e })
                 .then(function (response) {
                     // Produce the "Password" to send
-                    var salt = response.data.salt;
+                    var salt = response.data[0].salt;
                     p = protect(e + p, salt);
 
                     var resetpassword = $http.get("/u/resetpassword/"+e+"/"+r+"/"+p);

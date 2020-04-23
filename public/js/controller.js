@@ -91,8 +91,7 @@ careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$rout
 			AuthService.resetPassword($scope.credentials, function successCallback(resopnse) {
 				$location.path("/login");
 			}, function errorCallback(response) {
-				console.log(response.data)
-				$scope.errorComment = response.data
+				FlashService.show(response.data[0].Message);
 			});
 		}
 	}
@@ -115,13 +114,15 @@ careworkerControllers.controller('ForgotPasswordCtrl', ['$scope', '$http', '$loc
 				err = true;
 				return;
 			}
+
 			if (err)
 				return;
 
-
-	        $http.get('/u/forgotpassword/' + $scope.credentials.email).then(function (resopnse) {
+	        $http.get('/u/forgotpassword/' + $scope.credentials.email).then(function successCallback(resopnse) {
 				$location.path("/login");
-		    });
+		    }, function errorCallback(response) {
+				FlashService.show(response.data[0].Message);
+			});
 		}
 	}
 ]);
@@ -270,7 +271,7 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 		$scope.response = { "Body": "" }
 		$http.defaults.headers.common['Accept'] = 'application/json';
 		$http.get('/article/view/' + $routeParams.questionId).then(function (resopnse) {
-			$scope.question = resopnse.data;
+			$scope.question = resopnse.data[0];
 			//console.log(resopnse.data)
 		});
 
@@ -381,7 +382,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
         $http.defaults.headers.common['Accept'] = 'application/json';
         var user = JSON.parse(SessionService.get('user'));
 		$http.get('/u/profile/' + user.UserId).then(function (response) {
-			profile = response.data;
+			profile = response.data[0];
 			SessionService.set('profile', response.data);
     
             profile['name'] = user.Username

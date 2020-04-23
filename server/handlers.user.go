@@ -12,6 +12,10 @@ import (
 	"fmt"
 )
 
+type responMSG struct {
+	Message string `json:"Message"`
+}
+
 func generateSessionToken() string {
 	return uuid.New()
 }
@@ -20,21 +24,15 @@ func (cws *careWorkerServer) getProfile(c *gin.Context) {
 	profile := new(user_profile)
 	userId := c.Param("userId")
 	// Obtain the POSTed JSON username and password values
-	//if err := c.ShouldBindJSON(&profile); err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
-	//	return
-	//}
 	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
-	fmt.Println(userId)
 
 	if userProfile, err := getUserProfile(cws, userId); err == nil {
 		dbgMessage("%s: getprofile success\n", profile.Id.Hex())
-		c.JSON(http.StatusOK, userProfile)
+		c.SecureJSON(http.StatusOK, userProfile)
 
 	} else {
-		RespErrorMSG := make(map[string]string)
-		RespErrorMSG["Message"] = "get profile fail"
-		c.JSON(http.StatusBadRequest, RespErrorMSG)
+		ErrMSG := []responMSG{{Message: "get profile fail"}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 	}
 }
 
@@ -42,7 +40,8 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 	profile := new(user_profile)
 	// Obtain the POSTed JSON username and password values
 	if err := c.ShouldBindJSON(&profile); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+		ErrMSG := []responMSG{{Message: err.Error()}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 		return
 	}
 	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
@@ -50,13 +49,18 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 
 	if err := updateUserProfile(cws, profile.UserId, profile); err == nil {
 		dbgMessage("%s: register success\n", profile.Id.Hex())
-		c.JSON(http.StatusOK, "Success")
+		successMSG := []responMSG{{Message: "Success"}}
+		c.SecureJSON(http.StatusOK, successMSG)
 
 	} else {
-		RespErrorMSG := make(map[string]string)
-		RespErrorMSG["Message"] = "update profile fail"
-		c.JSON(http.StatusBadRequest, RespErrorMSG)
+		ErrMSG := []responMSG{{Message: "update profile fail"}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 	}
+}
+
+type responUserInfo struct {
+	Username string `json:"Username"`
+	UserId   string `json:"UserId"`
 }
 
 func (cws *careWorkerServer) performLogin(c *gin.Context) {
@@ -64,7 +68,8 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 
 	// Obtain the POSTed JSON username and password values
 	if err := c.ShouldBindJSON(&loginUserAccount); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+		ErrMSG := []responMSG{{Message: err.Error()}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 		return
 	}
 	dbgMessage("performLogin JSON email:%s, password:%s\n", loginUserAccount.Email, loginUserAccount.Password)
@@ -79,21 +84,17 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 		// save username in session
 		session := sessions.Default(c)
 		session.Set("username", user.Username)
-		dbgMessage("set %s to session", user.Username)
+		dbgMessage("set %s to session, token=%s", user.Username, token)
 		err := session.Save()
 		if err != nil {
 			dbgMessage("user session svae failed")
 		}
-		RespUser := make(map[string]string)
-		RespUser["Username"] = user.Username
-		RespUser["UserId"] = user.Id.Hex()
-		dbgMessage("RespUser[Username]:%s", RespUser["Username"])
-		dbgMessage("RespUser[UserId]:%s", RespUser["UserId"])
-		c.JSON(http.StatusOK, RespUser)
+		UserInfo := []responUserInfo{{Username: user.Username, UserId: user.Id.Hex()}}
+		dbgMessage("UserInfo:%s\n", UserInfo)
+		c.SecureJSON(http.StatusOK, UserInfo)
 	} else {
-		RespErrorMSG := make(map[string]string)
-		RespErrorMSG["Message"] = "login fail, Please chech account and password"
-		c.JSON(http.StatusUnauthorized, RespErrorMSG)
+		ErrMSG := []responMSG{{Message: "login fail, Please chech account and password"}}
+		c.SecureJSON(http.StatusUnauthorized, ErrMSG)
 	}
 }
 
@@ -118,37 +119,42 @@ func (cws *careWorkerServer) register(c *gin.Context) {
 	// Obtain the POSTed JSON username and password values
 	if err := c.ShouldBindJSON(&newUserAccount); err != nil {
 		dbgMessage("%s: register fail\n", newUserAccount.Email)
-		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+		ErrMSG := []responMSG{{Message: err.Error()}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 		return
 	}
 
 	if _, err := registerNewUser(cws, newUserAccount); err == nil {
 		dbgMessage("%s: register success\n", newUserAccount.Email)
-		c.JSON(http.StatusOK, "Success")
+		successMSG := []responMSG{{Message: "Success"}}
+		c.SecureJSON(http.StatusOK, successMSG)
 
 	} else {
 		// If the username/password combination is invalid,
 		// show the error message on the login page
-		RespErrorMSG := make(map[string]string)
-		RespErrorMSG["Message"] = err.Error()
-		c.JSON(http.StatusBadRequest, RespErrorMSG)
+		ErrMSG := []responMSG{{Message: err.Error()}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 	}
+}
+
+type responUserSalt struct {
+	Salt     string `json:"salt"`
+	Username string `json:"username"`
 }
 
 func (cws *careWorkerServer) registerSalt(c *gin.Context) {
 	// Obtain the POSTed JSON username and password values
 	saltUser := new(user_account)
 	if err := c.ShouldBindJSON(&saltUser); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"payload": err.Error()})
+		ErrMSG := []responMSG{{Message: err.Error()}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 		return
 	}
 	dbgMessage("register JSON email:%s\n", saltUser.Email)
 
 	if queryUser, err := isUserSaltAvailable(cws, saltUser.Email); err == true {
-		Salt := make(map[string]string)
-		Salt["salt"] = queryUser.Salt
-		Salt["username"] = queryUser.Username
-		c.JSON(http.StatusOK, Salt)
+		UserSalt := []responUserSalt{{Salt: queryUser.Salt, Username: queryUser.Username}}
+		c.SecureJSON(http.StatusOK, UserSalt)
 	}
 }
 
@@ -160,13 +166,16 @@ func (cws *careWorkerServer) forgotPassword(c *gin.Context) {
 	resetCode, err := setResetCode(cws, userEmail)
 
 	if err == false {
-		c.JSON(http.StatusOK, "Fail")
+		ErrMSG := []responMSG{{Message: "Wrong email address"}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
+	} else {
+
+		// send mail
+		sendPasswordResetMail(userEmail, resetCode)
+
+		successMSG := []responMSG{{Message: "Success"}}
+		c.SecureJSON(http.StatusOK, successMSG)
 	}
-
-	// send mail
-	sendPasswordResetMail(userEmail, resetCode)
-
-	c.JSON(http.StatusOK, "Success")
 }
 
 func (cws *careWorkerServer) resetPassword(c *gin.Context) {
@@ -182,12 +191,14 @@ func (cws *careWorkerServer) resetPassword(c *gin.Context) {
 
 	// resetcode is fail
 	if ret == false {
-		c.JSON(http.StatusOK, "Verify Failed")
+		ErrMSG := []responMSG{{Message: "Verify Failed"}}
+		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 	} else {
 		// clear resetCode
 		clearResetCode(cws, userEmail)
 		// update password
 		resetPassword(cws, userEmail, userNewPassword)
-		c.JSON(http.StatusOK, "Success")
+		successMSG := []responMSG{{Message: "Success"}}
+		c.SecureJSON(http.StatusOK, successMSG)
 	}
 }

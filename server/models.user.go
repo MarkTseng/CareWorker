@@ -127,11 +127,12 @@ func updateUserProfile(cws *careWorkerServer, userId bson.ObjectId, profile *use
 	return nil
 }
 
-func getUserProfile(cws *careWorkerServer, userId string) (*user_profile, error) {
-	userProfile := new(user_profile)
+func getUserProfile(cws *careWorkerServer, userId string) ([]user_profile, error) {
+	//userProfile := new(user_profile)
+	var userProfile []user_profile
 	fmt.Printf("getUserProfile: %s", userId)
 
-	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).One(&userProfile)
+	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).All(&userProfile)
 	if err != nil {
 		panic(err)
 	}
@@ -162,7 +163,7 @@ func setResetCode(cws *careWorkerServer, email string) (string, bool) {
 	// set resetcode
 	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return "", false
 	}
 
