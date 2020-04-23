@@ -11,8 +11,8 @@ careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 	}
 ]);
 
-careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', 'AuthService',
-	function ($scope, $http, $location, AuthService) {
+careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location', 'AuthService', 'FlashService',
+	function ($scope, $http, $location, AuthService, FlashService) {
 		var credentials = {
 			confirmPassword: "",
 			email: "",
@@ -45,8 +45,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 			AuthService.register($scope.credentials, function successCallback(resopnse) {
 				$location.path("/login");
 			}, function errorCallback(response) {
-				console.log(response.data)
-				$scope.errorComment = response.data
+				FlashService.show(response.data[0].Message);
 			});
 
 			// Make sure we wipe out the credentials
@@ -74,8 +73,8 @@ careworkerControllers.controller('LoginCtrl', ['$scope', '$http', '$location', '
 	}
 ]);
 
-careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'AuthService',
-	function ($scope, $http, $routeParams, $location, AuthService) {
+careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$routeParams', '$location', 'AuthService', 'FlashService',
+	function ($scope, $http, $routeParams, $location, AuthService, FlashService) {
 		var credentials = { "Password": "", "email": "", "resetCode":"" }
         $scope.credentials = credentials
 
@@ -362,8 +361,8 @@ careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$h
 	}
 ]);
 
-careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce', '$location', 'AuthService', 'SessionService',
-	function ($scope, $routeParams, $http, $window, $sce, $location, AuthService, SessionService) {
+careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce', '$location', 'AuthService', 'SessionService', 'FlashService',
+	function ($scope, $routeParams, $http, $window, $sce, $location, AuthService, SessionService, FlashService) {
 		var profile = {
 			birthday: "",
 			userId: "",
@@ -383,7 +382,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
         var user = JSON.parse(SessionService.get('user'));
 		$http.get('/u/profile/' + user.UserId).then(function (response) {
 			profile = response.data[0];
-			SessionService.set('profile', response.data);
+			SessionService.set('profile', response.data[0]);
     
             profile['name'] = user.Username
             $scope.updateBirthday = function () {
@@ -538,8 +537,8 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
                 AuthService.profile($scope.profile, function successCallback(resopnse) {
                     $location.path("/profile");
                 }, function errorCallback(response) {
-                    console.log(response.data)
-                    $scope.errorComment = response.data
+                    $scope.errorComment = response.data[0].Message
+					FlashService.show(response.data[0].Message);
                 });
             }
 		});
