@@ -128,16 +128,17 @@ func updateUserProfile(cws *careWorkerServer, userId bson.ObjectId, profile *use
 }
 
 func getUserProfile(cws *careWorkerServer, userId string) ([]user_profile, error) {
-	//userProfile := new(user_profile)
-	var userProfile []user_profile
+	userProfile := user_profile{}
+	//var userProfile []user_profile
 	fmt.Printf("getUserProfile: %s", userId)
 
-	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).All(&userProfile)
+	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).One(&userProfile)
 	if err != nil {
 		panic(err)
 	}
 
-	return userProfile, nil
+	userProfileResult := []user_profile{userProfile}
+	return userProfileResult, nil
 }
 
 func GenerateToken(email string) string {

@@ -21,17 +21,13 @@ func generateSessionToken() string {
 }
 
 func (cws *careWorkerServer) getProfile(c *gin.Context) {
-	profile := new(user_profile)
 	userId := c.Param("userId")
-	// Obtain the POSTed JSON username and password values
-	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
 
 	if userProfile, err := getUserProfile(cws, userId); err == nil {
-		dbgMessage("%s: getprofile success\n", profile.Id.Hex())
 		c.SecureJSON(http.StatusOK, userProfile)
 
 	} else {
-		ErrMSG := []responMSG{{Message: "get profile fail"}}
+		ErrMSG := []responMSG{{Message: "get user profile fail"}}
 		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 	}
 }
