@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
 	//"log"
-	"fmt"
+	//"fmt"
 	"strings"
 	"time"
 )
@@ -129,8 +129,8 @@ func updateUserProfile(cws *careWorkerServer, userId bson.ObjectId, profile *use
 
 func getUserProfile(cws *careWorkerServer, userId string) ([]user_profile, error) {
 	userProfile := user_profile{}
-	//var userProfile []user_profile
-	fmt.Printf("getUserProfile: %s", userId)
+
+	dbgMessage("getUserProfile: %s", userId)
 
 	err := cws.collection["user_profile"].Find(bson.M{"userId": bson.ObjectIdHex(userId)}).One(&userProfile)
 	if err != nil {
@@ -146,7 +146,7 @@ func GenerateToken(email string) string {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Hash to store:", string(hash))
+	dbgMessage("Hash to store: %s\n", string(hash))
 
 	hasher := md5.New()
 	hasher.Write(hash)
