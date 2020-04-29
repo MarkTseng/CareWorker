@@ -11,8 +11,18 @@
 		</md-input-container>
 
 		<md-input-container class="md-block" ng-show="profile.idtype == 'CW'">
-			<label>Test</label>
-			<input ng-model="profile.test" type="text" ng-required="true">
+			<label>CW</label>
+			<input ng-model="profile.cw" type="text" ng-required="true">
+		</md-input-container>
+		
+		<md-input-container class="md-block" ng-show="profile.idtype == 'HK'">
+			<label>HK</label>
+			<input ng-model="profile.hk" type="text" ng-required="true">
+		</md-input-container>
+
+		<md-input-container class="md-block" ng-show="profile.idtype == 'Carrer'">
+			<label>Carrer</label>
+			<input ng-model="profile.carrer" type="text" ng-required="true">
 		</md-input-container>
 
 		<md-input-container class="md-block">
