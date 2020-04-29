@@ -26,9 +26,9 @@
 			<div flex="100" flex-gt-sm="50" layout="column">
 				<div>
 					<fieldset class="standard" >
-						<legend>服務類型</legend>
+						<legend>需求服務類型</legend>
 						<md-input-container style="margin-right: 10px;">
-							<md-select ng-model="hrJob.serviceType">
+							<md-select ng-model="carrer.serviceType">
 								<md-option ng-repeat="serviceType in serviceTypes" value="{{serviceType}}">{{serviceType}}</md-option>
 							</md-select>
 						</md-input-container>
@@ -53,7 +53,7 @@
 						<legend>托育位置</legend>
 						<md-input-container style="margin-right: 10px;">
 							<md-input-container class="md-block" flex-gt-sm>
-								<input ng-model="hrJob.location">
+								<input ng-model="carrer.location">
 							</md-input-container>
 						</md-input-container>
 					</fieldset>
@@ -64,7 +64,7 @@
 					<fieldset class="standard" >
 						<legend>寶寶出生日期</legend>
 						<md-input-container style="margin-right: 10px;">
-							<md-datepicker ng-model="hrJob.birthday" md-placeholder="Enter date"></md-datepicker>
+							<md-datepicker ng-model="carrer.birthday" md-placeholder="Enter date"></md-datepicker>
 						</md-input-container>
 					</fieldset>
 				</div>
@@ -116,7 +116,7 @@
 		</div>
 		<div>
 			<h4>HR Jobs form select</h4>
-			<pre>{{hrJob | json}}</pre>
+			<pre>{{carrer | json}}</pre>
 		</div>
 	</div>
 

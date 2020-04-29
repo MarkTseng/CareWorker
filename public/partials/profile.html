@@ -1,6 +1,20 @@
 <div layout="column" layout-padding ng-cloak>
 	<form role="form" name="myform" ng-submit="processForm()">
 	<md-content class="md-no-momentum">
+		<md-input-container class="md-block" flex-gt-sm="">
+		<label>服務類型</label>
+			<md-select ng-model="profile.idtype" ng-required="true">
+				<md-option value="CW">Care Worker</md-option>
+				<md-option value="HK">House Keeper</md-option>
+				<md-option value="Carrer">CarrerHR</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container class="md-block" ng-show="profile.idtype == 'CW'">
+			<label>Test</label>
+			<input ng-model="profile.test" type="text" ng-required="true">
+		</md-input-container>
+
 		<md-input-container class="md-block">
 			<label>姓名</label>
 			<input ng-model="profile.name" type="text" ng-required="true">

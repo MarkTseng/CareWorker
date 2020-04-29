@@ -28,16 +28,18 @@ type article struct {
 
 func getAllArticles(cws *careWorkerServer) []article {
 	var results []article
-	cws.collection["articles"].Find(nil).Sort("-timestamp").All(&results)
+	cws.collection["articles"].Find(nil).Sort("-timestamp").Limit(10).All(&results)
 
 	return results
 }
 
-func getArticleByID(cws *careWorkerServer, id uint64) (*article, error) {
+func getArticleByID(cws *careWorkerServer, id uint64) ([]article, error) {
 	result := article{}
+
 	cws.collection["articles"].Find(bson.M{"_id": id}).One(&result)
 	if result.Id == id {
-		return &result, nil
+		resultArray := []article{result}
+		return resultArray, nil
 	}
 
 	return nil, errors.New("Article not found")

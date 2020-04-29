@@ -42,7 +42,7 @@ careworkerControllers.controller('RegisterCtrl', ['$scope', '$http', '$location'
 			delete $scope.credentials.confirmPassword;
 
 			// Register the user and redirect them to the login page
-			AuthService.register($scope.credentials, function successCallback(resopnse) {
+			AuthService.register($scope.credentials, function successCallback(response) {
 				$location.path("/login");
 			}, function errorCallback(response) {
 				FlashService.show(response.data[0].Message);
@@ -78,16 +78,14 @@ careworkerControllers.controller('ResetPasswordCtrl', ['$scope', '$http', '$rout
 		var credentials = { "Password": "", "email": "", "resetCode":"" }
         $scope.credentials = credentials
 
-        console.log($routeParams)
         credentials["email"] = $routeParams.email
         credentials["resetCode"] = $routeParams.resetcode
-        console.log(credentials)
 		$scope.processForm = function () {
-            console.log("reset password")
+            //console.log("reset password")
 			// We don't need this to be passed along
 			delete $scope.credentials.confirmPassword;
 
-			AuthService.resetPassword($scope.credentials, function successCallback(resopnse) {
+			AuthService.resetPassword($scope.credentials, function successCallback(response) {
 				$location.path("/login");
 			}, function errorCallback(response) {
 				FlashService.show(response.data[0].Message);
@@ -117,7 +115,7 @@ careworkerControllers.controller('ForgotPasswordCtrl', ['$scope', '$http', '$loc
 			if (err)
 				return;
 
-	        $http.get('/u/forgotpassword/' + $scope.credentials.email).then(function successCallback(resopnse) {
+	        $http.get('/u/forgotpassword/' + $scope.credentials.email).then(function successCallback(response) {
 				$location.path("/login");
 		    }, function errorCallback(response) {
 				FlashService.show(response.data[0].Message);
@@ -182,14 +180,14 @@ careworkerControllers.controller('QuestionAskCtrl', ['$scope', '$http', '$window
 	}
 ]);
 
-careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce', '$location',
+careworkerControllers.controller('carrerCtrl', ['$scope', '$http', '$window', '$sce', '$location',
 	function ($scope, $http, $window, $sce, $location) {
-		var hrJob = { "serviceType": "保母服務", "location": "", "salary": "", "body": "" }
+		var carrer = { "serviceType": "保母服務", "location": "", "salary": "", "body": "" }
 
 		// service types
 		$scope.serviceTypes = [
-			"保母服務",
-			"坐月子服務",
+			"看護服務",
+			"清潔服務",
 		];
 		$scope.serviceType = $scope.serviceTypes[0];
 
@@ -211,8 +209,8 @@ careworkerControllers.controller('JobCtrl', ['$scope', '$http', '$window', '$sce
 			return list.indexOf(item) > -1;
 		};
 
-		$scope.hrJob = hrJob;
-		$scope.hrJob['requestService'] = $scope.requestServicesSelected
+		$scope.carrer = carrer;
+		$scope.carrer['requestService'] = $scope.requestServicesSelected
 
 		// process HR form table
 		$scope.processForm = function () {
@@ -269,9 +267,9 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 		$scope.comment = { "Body": "" }
 		$scope.response = { "Body": "" }
 		$http.defaults.headers.common['Accept'] = 'application/json';
-		$http.get('/article/view/' + $routeParams.questionId).then(function (resopnse) {
-			$scope.question = resopnse.data[0];
-			//console.log(resopnse.data)
+		$http.get('/article/view/' + $routeParams.questionId).then(function (response) {
+			$scope.question = response.data[0];
+			//console.log(response.data)
 		});
 
 		$scope.voteUp = function () {
@@ -325,13 +323,13 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 		}
 
 		$scope.processForm = function () {
-			console.log($scope.response.Body);
+			//console.log($scope.response.Body);
 			delete $scope.errorMarkdown;
 
 			var err = false;
 
-			if ($scope.response.Body.length < 50) {
-				$scope.errorMarkdown = "Your response must be 50 characters or more."
+			if ($scope.response.Body.length < 5) {
+				$scope.errorMarkdown = "Your response must be 5 characters or more."
 				err = true;
 			}
 
@@ -351,12 +349,11 @@ careworkerControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams'
 	}
 ]);
 
-careworkerControllers.controller('JobDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
+careworkerControllers.controller('carrerDetailCtrl', ['$scope', '$routeParams', '$http', '$window', '$sce',
 	function ($scope, $routeParams, $http, $window, $sce) {
 		$http.defaults.headers.common['Accept'] = 'application/json';
-		$http.get('/article/view/' + $routeParams.jobId).then(function (data) {
-			$scope.job = data;
-			console.log(data)
+		$http.get('/article/view/' + $routeParams.jobId).then(function (response) {
+			$scope.job = response.data[0];
 		});
 	}
 ]);
@@ -366,6 +363,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
 		var profile = {
 			birthday: "",
 			userId: "",
+			idtype: "",
 			birthdayUTC: new Date(2010,0,1),
 			phone: "",
 			city: "",
@@ -401,7 +399,6 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
 
             $scope.updateDistrict = function () {
                 $scope.districts = Object.keys($scope.areas[$scope.profile.city])
-                console.log("update District")
             }
 
             $scope.areas = {
@@ -534,7 +531,7 @@ careworkerControllers.controller('ProfileCtrl', ['$scope', '$routeParams', '$htt
                     $scope.updateBirthday();
                 }
 
-                AuthService.profile($scope.profile, function successCallback(resopnse) {
+                AuthService.profile($scope.profile, function successCallback(response) {
                     $location.path("/profile");
                 }, function errorCallback(response) {
                     $scope.errorComment = response.data[0].Message

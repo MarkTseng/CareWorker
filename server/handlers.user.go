@@ -40,7 +40,7 @@ func (cws *careWorkerServer) profile(c *gin.Context) {
 		c.SecureJSON(http.StatusBadRequest, ErrMSG)
 		return
 	}
-	dbgMessage("profile JSON name:%s, phone:%s\n", profile.Id.Hex(), profile.Phone)
+	dbgMessage("profile JSON name:%s, phone:%s, idtype: %s\n", profile.Id.Hex(), profile.Phone, profile.IdType)
 	fmt.Println(profile)
 
 	if err := updateUserProfile(cws, profile.UserId, profile); err == nil {
@@ -74,7 +74,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	if user := isUserValid(cws, loginUserAccount.Email, loginUserAccount.Password); user != nil {
 		// If the username/password is valid set the token in a cookie
 		token := generateSessionToken()
-		c.SetCookie("token", token, 3600, "", "", false, true)
+		c.SetCookie("token", token, 60, "", "", false, true)
 		c.Set("is_logged_in", true)
 
 		// save username in session
@@ -91,6 +91,27 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	} else {
 		ErrMSG := []responMSG{{Message: "login fail, Please chech account and password"}}
 		c.SecureJSON(http.StatusUnauthorized, ErrMSG)
+	}
+}
+
+func (cws *careWorkerServer) islogin(c *gin.Context) {
+	userId := c.Param("userId")
+
+	dbgMessage("islogin: userId=%s\n", userId)
+	// login
+	if token, err := c.Cookie("token"); err == nil || token != "" {
+
+		session := sessions.Default(c)
+		username := session.Get("username")
+		dbgMessage("islogin: username=%s\n", username)
+		if username != nil {
+			successMSG := []responMSG{{Message: "Success"}}
+			c.SecureJSON(http.StatusOK, successMSG)
+		}
+	} else {
+		// expire time to logout
+		successMSG := []responMSG{{Message: "Session Expire"}}
+		c.SecureJSON(http.StatusUnauthorized, successMSG)
 	}
 }
 

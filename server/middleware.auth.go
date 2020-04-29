@@ -15,7 +15,9 @@ func (cws *careWorkerServer) ensureLoggedIn() gin.HandlerFunc {
 		loggedInInterface, _ := c.Get("is_logged_in")
 		loggedIn := loggedInInterface.(bool)
 		if !loggedIn {
-			c.AbortWithStatus(http.StatusUnauthorized)
+			//c.AbortWithStatus(http.StatusUnauthorized)
+			successMSG := []responMSG{{Message: "Session Expire"}}
+			c.AbortWithStatusJSON(http.StatusUnauthorized, successMSG)
 		}
 	}
 }

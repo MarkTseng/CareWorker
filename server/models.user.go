@@ -15,19 +15,19 @@ import (
 )
 
 type user_account struct {
-	Id           bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	Username     string        `json:"username" form:"username" binding:"required" bson:"username"`
-	Nickname     string        `json:"nickname" form:"nickname" binding:"required" bson:"nickname"`
-	Password     string        `json:"password" form:"password" binding:"required" bson:"password"`
-	Email        string        `json:"email" form:"email" binding:"required" bson:"email"`
-	Status       string        `json:"status" form:"status" binding:"required" bson:"status"`
-	Salt         string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
-	ResetCode    string        `json:"resetcode" form:"resetcode" binding:"required" bson:"resetcode"`
-	LastActivity time.Time
-	CreatedOn    time.Time     `json:"created_on" bson:"created_on"`
-	Level        int64         `json:"level" bson:"level"`
-	UserGroupId  bson.ObjectId `json:"userGroupId" bson:"userGroupId,omitempty"`
-	ProfileId    bson.ObjectId `json:"profileId" bson:"profileId,omitempty"`
+	Id          bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	Username    string        `json:"username" form:"username" binding:"required" bson:"username"`
+	Nickname    string        `json:"nickname" form:"nickname" binding:"required" bson:"nickname"`
+	Password    string        `json:"password" form:"password" binding:"required" bson:"password"`
+	Email       string        `json:"email" form:"email" binding:"required" bson:"email"`
+	Status      string        `json:"status" form:"status" binding:"required" bson:"status"`
+	Salt        string        `json:"salt" form:"salt" binding:"required" bson:"salt"`
+	ResetCode   string        `json:"resetcode" form:"resetcode" binding:"required" bson:"resetcode"`
+	CreatedOn   time.Time     `json:"created_on" bson:"created_on"`
+	VIPEndTime  time.Time     `json:"vip_endtime" bson:"vip_endtime"`
+	Level       int64         `json:"level" bson:"level"`
+	UserGroupId bson.ObjectId `json:"userGroupId" bson:"userGroupId,omitempty"`
+	ProfileId   bson.ObjectId `json:"profileId" bson:"profileId,omitempty"`
 }
 
 type user_group struct {
@@ -38,6 +38,7 @@ type user_group struct {
 type user_profile struct {
 	Id       bson.ObjectId `json:"id,omitempty" bson:"_id,omitempty"`
 	UserId   bson.ObjectId `json:"userId" bson:"userId"`
+	IdType   string        `json:"idtype" form:"idtype" binding:"required" bson:"idtype"`
 	Birthday string        `json:"birthday" form:"birthday" binding:"required" bson:"birthday"`
 	Phone    string        `json:"phone" form:"phone" binding:"required" bson:"phone"`
 	City     string        `json:"city" form:"city" binding:"required" bson:"city"`

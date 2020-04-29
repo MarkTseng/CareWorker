@@ -11,17 +11,17 @@ careworkerApp.config(['$routeProvider',
 				templateUrl: 'partials/question-detail.html',
 				controller: 'QuestionDetailCtrl'
 			}).
-			when('/job/:jobId', {
-				templateUrl: 'partials/job-detail.html',
-				controller: 'JobDetailCtrl'
+			when('/carrer/:carrerId', {
+				templateUrl: 'partials/carrer-detail.html',
+				controller: 'carrerDetailCtrl'
 			}).
 			when('/ask', {
 				templateUrl: 'partials/question-post.html',
 				controller: 'QuestionAskCtrl'
 			}).
-			when('/job', {
-				templateUrl: 'partials/job-post.html',
-				controller: 'JobCtrl'
+			when('/carrer', {
+				templateUrl: 'partials/carrer-post.html',
+				controller: 'carrerCtrl'
 			}).
 			when('/register', {
 				templateUrl: 'partials/register.html',
@@ -49,44 +49,75 @@ careworkerApp.config(['$routeProvider',
 	}
 ]);
 
-careworkerApp.run(function ($rootScope, $location, AuthService, FlashService, SessionService) {
-	var routesThatRequireAuth = ['/ask'];
+careworkerApp.run(function ($rootScope, $window, $location, AuthService, FlashService, SessionService) {
+	var routesThatRequireAuth = ['/profile','/ask'];
 
 	$rootScope.authenticated = SessionService.get('authenticated');
 	$rootScope.user = JSON.parse(SessionService.get('user'));
-    //console.log("App run")
-
+    console.log("App run")
+	
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		FlashService.clear()
 		if (_(routesThatRequireAuth).contains($location.path()) && !AuthService.isLoggedIn()) {
+		//if (!AuthService.isLoggedIn()) {
+    		console.log("Please login to continue")
 			FlashService.show("Please login to continue");
-			$location.path('/login');
+			$location.path('/login')
 		}
 	});
 });
 
 careworkerApp.config(['$httpProvider', function ($httpProvider) {
+	console.log("httpProvider");
 	var logsOutUserOn401 = function ($location, $q, SessionService, FlashService) {
-		var success = function (res) {
-			return res;
-		}
-		var error = function (res) {
-			if (res.status === 401) { // HTTP NotAuthorized
-				SessionService.unset('authenticated')
-				FlashService.show(res.data[0].Message);
-				$location.path("/login");
-				return $q.reject(res)
-			} else {
-				return $q.reject(res)
+		return {
+			// optional method
+			'request': function(config) {
+				console.log('request');
+				// do something on success
+				return config;
+			},
+
+			// optional method
+			'requestError': function(rejection) {
+				console.log('requestError');
+				// do something on error
+				if (canRecover(rejection)) {
+					return responseOrNewPromise
+				}
+				return $q.reject(rejection);
+			},
+
+			// optional method
+			'response': function(response) {
+				console.log('reponse');
+				// do something on success
+				return response;
+			},
+
+			// optional method
+			'responseError': function(rejection) {
+				console.log('reponseError');
+				console.log(rejection.status);
+				// do something on error
+				if (rejection.status === 401) { // HTTP NotAuthorized
+					console.log("responseError 401");
+					SessionService.unset('authenticated')
+					FlashService.show(rejection.data[0].Message);
+					$location.path("/login");
+					return $q.reject(rejection)
+				}
+
+				if (canRecover(rejection)) {
+					return responseOrNewPromise
+				}
+				return $q.reject(rejection);
 			}
-		}
+		};
 
-		return function (promise) {
-			return promise.then(success, error)
-		}
 	}
-
 	$httpProvider.interceptors.push(logsOutUserOn401);
+	//$httpProvider.interceptors.push('myHttpInterceptor');
 }])
 
 careworkerApp.factory("SessionService", function () {
@@ -98,6 +129,7 @@ careworkerApp.factory("SessionService", function () {
 			return sessionStorage.setItem(key, JSON.stringify(val));
 		},
 		unset: function (key) {
+			console.log("SessionService unset")
 			return sessionStorage.removeItem(key);
 		}
 	}
@@ -239,6 +271,21 @@ careworkerApp.factory("AuthService", ['$rootScope', '$http', '$location', 'Sessi
 			},
 			isLoggedIn: function () {
                 // to do check session login
+				/*
+				if(!SessionService.get('authenticated')){
+					return false
+				}
+                var user = JSON.parse(SessionService.get('user'));
+				$http.get('/u/islogin/' + user.UserId).then(function successCallback(response) {
+					console.log("isLoggedIn")
+				}, function errorCallback(response) {
+					console.log("isLoggedIn error")
+					if (response.status === 401) { // HTTP NotAuthorized
+						SessionService.unset('authenticated')
+						FlashService.show(response.data[0].Message);
+					}
+				});
+				*/
 				return SessionService.get('authenticated');
 			},
 			currentUser: function () {
