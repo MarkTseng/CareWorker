@@ -54,13 +54,12 @@ careworkerApp.run(function ($rootScope, $window, $location, AuthService, FlashSe
 
 	$rootScope.authenticated = SessionService.get('authenticated');
 	$rootScope.user = JSON.parse(SessionService.get('user'));
-    console.log("App run")
+    //console.log("App run")
 	
 	$rootScope.$on('$routeChangeStart', function (event, next, current) {
 		FlashService.clear()
 		if (_(routesThatRequireAuth).contains($location.path()) && !AuthService.isLoggedIn()) {
-		//if (!AuthService.isLoggedIn()) {
-    		console.log("Please login to continue")
+    		//console.log("Please login to continue")
 			FlashService.show("Please login to continue");
 			$location.path('/login')
 		}
@@ -68,40 +67,28 @@ careworkerApp.run(function ($rootScope, $window, $location, AuthService, FlashSe
 });
 
 careworkerApp.config(['$httpProvider', function ($httpProvider) {
-	console.log("httpProvider");
+	//console.log("httpProvider");
 	var logsOutUserOn401 = function ($location, $q, SessionService, FlashService) {
 		return {
-			// optional method
 			'request': function(config) {
-				console.log('request');
-				// do something on success
+				//console.log('request');
 				return config;
 			},
-
-			// optional method
 			'requestError': function(rejection) {
-				console.log('requestError');
-				// do something on error
+				//console.log('requestError');
 				if (canRecover(rejection)) {
 					return responseOrNewPromise
 				}
 				return $q.reject(rejection);
 			},
-
-			// optional method
 			'response': function(response) {
-				console.log('reponse');
-				// do something on success
+				//console.log('reponse');
 				return response;
 			},
-
-			// optional method
 			'responseError': function(rejection) {
-				console.log('reponseError');
-				console.log(rejection.status);
+				//console.log('reponseError');
 				// do something on error
 				if (rejection.status === 401) { // HTTP NotAuthorized
-					console.log("responseError 401");
 					SessionService.unset('authenticated')
 					FlashService.show(rejection.data[0].Message);
 					$location.path("/login");
@@ -129,7 +116,6 @@ careworkerApp.factory("SessionService", function () {
 			return sessionStorage.setItem(key, JSON.stringify(val));
 		},
 		unset: function (key) {
-			console.log("SessionService unset")
 			return sessionStorage.removeItem(key);
 		}
 	}
