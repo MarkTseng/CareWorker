@@ -17,7 +17,6 @@ import (
 type user_account struct {
 	Id          bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Username    string        `json:"username" form:"username" binding:"required" bson:"username"`
-	Nickname    string        `json:"nickname" form:"nickname" binding:"required" bson:"nickname"`
 	Password    string        `json:"password" form:"password" binding:"required" bson:"password"`
 	Email       string        `json:"email" form:"email" binding:"required" bson:"email"`
 	Status      string        `json:"status" form:"status" binding:"required" bson:"status"`
@@ -77,6 +76,8 @@ func registerNewUser(cws *careWorkerServer, newUserAccount *user_account) (*user
 	}
 
 	newUserAccount.Id = bson.NewObjectId()
+	newUserAccount.CreatedOn = time.Now()
+
 	err := cws.collection["user_account"].Insert(newUserAccount)
 	if err != nil {
 		panic(err)

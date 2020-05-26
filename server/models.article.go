@@ -23,7 +23,6 @@ type article struct {
 	CreatedOn int64  `json:"created_on" bson:"created_on"`
 	UpdatedOn int64  `json:"updated_on" bson:"updated_on"`
 	State     int    `json:"state"`
-	Tag       string `json:"tag"`
 }
 
 func getAllArticles(cws *careWorkerServer) []article {

@@ -10,21 +10,6 @@
 			</md-select>
 		</md-input-container>
 
-		<md-input-container class="md-block" ng-show="profile.idtype == 'CW'">
-			<label>CW</label>
-			<input ng-model="profile.cw" type="text" ng-required="true">
-		</md-input-container>
-		
-		<md-input-container class="md-block" ng-show="profile.idtype == 'HK'">
-			<label>HK</label>
-			<input ng-model="profile.hk" type="text" ng-required="true">
-		</md-input-container>
-
-		<md-input-container class="md-block" ng-show="profile.idtype == 'Carrer'">
-			<label>Carrer</label>
-			<input ng-model="profile.carrer" type="text" ng-required="true">
-		</md-input-container>
-
 		<md-input-container class="md-block">
 			<label>姓名</label>
 			<input ng-model="profile.name" type="text" ng-required="true">
@@ -89,18 +74,37 @@
           <input ng-model="profile.street" ng-required="true"> 
         </md-input-container>
 
+		<md-input-container class="md-block" ng-show="profile.idtype == 'CW'">
+			<md-input-container class="md-block">
+				<label>證照</label>
+				<textarea ng-model="profile.license" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+			</md-input-container>
 
-        <md-input-container class="md-block">
-			<label>證照</label>
-          	<textarea ng-model="profile.license" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+			<md-input-container class="md-block">
+				<label>工作經歷</label>
+				<textarea ng-model="profile.jobbrew" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+			</md-input-container>
+		</md-input-container>
+		
+		<md-input-container class="md-block" ng-show="profile.idtype == 'HK'">
+			<md-input-container class="md-block">
+				<label>證照</label>
+				<textarea ng-model="profile.license" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+			</md-input-container>
+
+			<md-input-container class="md-block">
+				<label>工作經歷</label>
+				<textarea ng-model="profile.jobbrew" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+			</md-input-container>
 		</md-input-container>
 
-        <md-input-container class="md-block">
-			<label>工作經歷</label>
-          	<textarea ng-model="profile.jobbrew" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+		<md-input-container class="md-block" ng-show="profile.idtype == 'Carrer'">
+			<label>需求項目</label>
+			<textarea ng-model="profile.carrerbrew" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
 		</md-input-container>
 
-		<!--
+
+   		<!--
 		<div class="col-md-6">
 			<h4>selection</h4>
 			<pre>{{profile|json}}</pre>
