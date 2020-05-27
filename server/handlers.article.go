@@ -5,42 +5,27 @@ package main
 import (
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/mgo.v2/bson"
 	"net/http"
-	"strconv"
 )
 
 func (cws *careWorkerServer) showIndexPage(c *gin.Context) {
 	articles := getAllArticles(cws)
-
-	/*
-		render(c, gin.H{
-			"title":   "Care Worker",
-			"payload": articles},
-			"index.html",
-			http.StatusOK)
-	*/
 	c.SecureJSON(http.StatusOK, articles)
 }
 
 func (cws *careWorkerServer) getArticle(c *gin.Context) {
 	// Check if the article ID is valid
-	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
+	if bson.IsObjectIdHex(c.Param("article_id")) == true {
+		articleObjID := bson.ObjectIdHex(c.Param("article_id"))
 		// Check if the article exists
-		if article, err := getArticleByID(cws, uint64(articleID)); err == nil {
-			// Call the render function with the title, article and the name of the template
-			/*
-				render(c, gin.H{
-					"title":   article.Title,
-					"payload": article}, "article.html",
-					http.StatusOK)
-			*/
+		if article, err := getArticleByID(cws, articleObjID); err == nil {
 			c.SecureJSON(http.StatusOK, article)
 
 		} else {
 			// If the article is not found, abort with an error
 			c.AbortWithError(http.StatusNotFound, err)
 		}
-
 	} else {
 		// If an invalid article ID is specified in the URL, abort with an error
 		c.AbortWithStatus(http.StatusNotFound)
@@ -103,13 +88,6 @@ func (cws *careWorkerServer) deleteArticle(c *gin.Context) {
 	if username != nil {
 		if err := deleteOldArticle(cws, id, username.(string)); err == nil {
 			// If the article is delete successfully, show success message
-			/*
-				render(c, gin.H{
-					"title": "Submission Successful"},
-					"submission-delete-successful.html",
-					http.StatusOK)
-			*/
-
 			RespErrorMSG := make(map[string]string)
 			RespErrorMSG["Message"] = "delete successful"
 			c.SecureJSON(http.StatusOK, RespErrorMSG)
@@ -137,12 +115,6 @@ func (cws *careWorkerServer) updateArticle(c *gin.Context) {
 	if username != nil {
 		if a, err := updateOldArticle(cws, id, title, content, username.(string)); err == nil {
 			// If the article is created successfully, show success message
-			/*
-				render(c, gin.H{
-					"title":   "Submission Successful",
-					"payload": a}, "submission-successful.html",
-					http.StatusOK)
-			*/
 			c.SecureJSON(http.StatusOK, a)
 		} else {
 			// if there was an error while creating the article, abort with an error

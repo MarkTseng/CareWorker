@@ -74,7 +74,7 @@ func (cws *careWorkerServer) performLogin(c *gin.Context) {
 	if user := isUserValid(cws, loginUserAccount.Email, loginUserAccount.Password); user != nil {
 		// If the username/password is valid set the token in a cookie
 		token := generateSessionToken()
-		c.SetCookie("token", token, 60, "", "", false, true)
+		c.SetCookie("token", token, 3600, "", "", false, true)
 		c.Set("is_logged_in", true)
 
 		// save username in session

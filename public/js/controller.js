@@ -5,6 +5,8 @@ careworkerControllers.controller('QuestionListCtrl', ['$scope', 'Questions',
 		Questions.List()
 			.then(function successCallback(data) {
 				$scope.questions = data;
+                $scope.time = new Date();
+				console.log($scope.time);
 			}, function errorCallback(error) {
 				$scope.error = 'Unable to load questions';
 			});

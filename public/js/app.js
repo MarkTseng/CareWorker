@@ -1,4 +1,4 @@
-var careworkerApp = angular.module('careworker', ['careworkerControllers', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
+var careworkerApp = angular.module('careworker', ['careworkerControllers', 'ngMaterial', 'ngMessages', 'ngRoute', 'ngCookies', 'pascalprecht.translate', 'angularMoment']);
 
 careworkerApp.config(['$routeProvider',
 	function ($routeProvider) {
@@ -49,9 +49,10 @@ careworkerApp.config(['$routeProvider',
 	}
 ]);
 
-careworkerApp.run(function ($rootScope, $window, $location, AuthService, FlashService, SessionService) {
+careworkerApp.run(function ($rootScope, $window, $location, amMoment, AuthService, FlashService, SessionService) {
 	var routesThatRequireAuth = ['/profile','/ask'];
 
+	amMoment.changeLocale('zh-tw');
 	$rootScope.authenticated = SessionService.get('authenticated');
 	$rootScope.user = JSON.parse(SessionService.get('user'));
     //console.log("App run")
