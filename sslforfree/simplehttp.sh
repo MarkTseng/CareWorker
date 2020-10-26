@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo python -m http.server --cgi 80
+sudo python3 -m http.server --cgi 80
