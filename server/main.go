@@ -58,7 +58,7 @@ func deinit(sigs chan os.Signal, cws *careWorkerServer) {
 func DBconnect(cws *careWorkerServer) {
 	session, err := mgo.Dial(MongoDBUrl)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		os.Exit(2)
 	}
 

@@ -6,8 +6,10 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
+
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
+
 	//"log"
 	//"fmt"
 	"strings"
@@ -184,7 +186,7 @@ func clearResetCode(cws *careWorkerServer, email string) (string, bool) {
 	// set resetcode
 	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return "", false
 	}
 
@@ -197,7 +199,7 @@ func verifyResetCode(cws *careWorkerServer, email string, resetCode string) bool
 	err := cws.collection["user_account"].Find(bson.M{"email": email}).One(&userAccount)
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return false
 	}
 
@@ -218,7 +220,7 @@ func resetPassword(cws *careWorkerServer, email string, password string) (string
 	// set resetcode
 	err := cws.collection["user_account"].Update(bson.M{"email": userAccount.Email}, userAccount)
 	if err != nil {
-		panic(err)
+		//panic(err)
 		return "", false
 	}
 
